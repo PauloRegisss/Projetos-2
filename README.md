@@ -4,7 +4,7 @@
 
 ## 📌 Tema
 
-Educar empresas sobre a importância de coletar dados operacionais por meio de IoT para melhorar a gestão e a tomada de decisão.
+Educar empresas sobre a importância de coletar dados operacionais por meio de IoT para melhorar a gestão, performance e a tomada de decisão.
 
 ## 📝 Descrição do Projeto
 
