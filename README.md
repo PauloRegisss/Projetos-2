@@ -41,6 +41,10 @@ Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 
 - **Jira:** https://projeto-2-grupo-9.atlassian.net/jira/projects?page=1&sortKey=name&sortOrder=ASC&types=software%2Cbusiness
 
+## Entregavel 1 FDS
+
+- **Print do Backlog:** 
+
 ## 🛠️ Tecnologias
 
 > _[A definir]_
