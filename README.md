@@ -36,7 +36,7 @@ Educar empresas sobre a importância de coletar dados operacionais por meio de I
 ## 🏢 Empresa Parceira
 
 **BzuTech** — IoT para eficiência máxima.
-
+Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 ## 📋 Gestão do Projeto
 
 - **Jira:** https://projeto-2-grupo-9.atlassian.net/jira/projects?page=1&sortKey=name&sortOrder=ASC&types=software%2Cbusiness
