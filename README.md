@@ -41,7 +41,8 @@ Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 
 - **Jira:** https://projeto-2-grupo-9.atlassian.net/jira/projects?page=1&sortKey=name&sortOrder=ASC&types=software%2Cbusiness
 
-## Entregavel 1 FDS
+## Entregável 1 FDS 
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Captura%20de%20tela%202026-08-28%20181230.png)
 
 - **Print do Backlog:** 
 
