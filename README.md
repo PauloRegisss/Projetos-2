@@ -1,4 +1,4 @@
-# [NOME DO PROJETO]
+# GRUPO 9
 
 > Projeto desenvolvido em parceria com a **BzuTech** (empresa de IoT), como parte da disciplina de Projetos do 2º período — CESAR School.
 
