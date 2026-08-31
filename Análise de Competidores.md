@@ -21,8 +21,7 @@ Analisar os competidores da BZU Tech objetivando os diferenciais competitivos de
 | Bauzi Tech | [https://www.bauzitech.com.br/products/2](https://www.bauzitech.com.br/products/2) | Microempresa | Saneamento / Indústrias 4.0 |
 | Fox IOT                 | [Fox IoT: Soluções em Medição Inteligente Energia](https://foxiot.com.br/en/)  [https://bottomu](https://bottomup.com.br/) [p.com.br/](https://bottomup.com.br/)                      | Microempresa |  Setor elétrico |
 | BottomUP       Technology   | [Home \- BottomUP Technology](https://bottomup.com.br/)  | Pequena/Média  | Lugares públicos |
-| Tebe | [https://tebesensores.com](https://tebesensores.com) | Pequena/Média  | Industrial 
-(sensores) |
+| Tebe | [https://tebesensores.com](https://tebesensores.com) | Pequena/Média  | Industrial (sensores) |
 
 ## **3\. Análise individual**
 
@@ -58,9 +57,9 @@ Analisar os competidores da BZU Tech objetivando os diferenciais competitivos de
 
 * **Faixa de preço:** Não divulgada publicamente, empresas interessadas preenchem um formulário para uma apresentação da proposta.
 
-* **Canais de aquisição: (**Site, redes sociais, Indicação).
+* **Canais de aquisição:** Site, redes sociais, Indicação.
 
-* **Presença digital:** (site, redes sociais, eventos digitais).
+* **Presença digital:** site, redes sociais, eventos digitais.
 
 * **Pontos fortes:** Especialização em saúde e ambientes críticos**,** Forte atuação em cadeia fria, Monitoramento contínuo e alertas, boa proposta de valor para ambientes críticos.
 
@@ -200,7 +199,7 @@ Analisar os competidores da BZU Tech objetivando os diferenciais competitivos de
 
 ## 
 
-| Competidores | Preço | Qualidade percebida | Presençça Online | Diferencial | Atendimento |
+| Competidores | Preço | Qualidade percebida | Presença Online | Diferencial | Atendimento |
 | :---- | :---- | :---- | :---- | :---- | :---- |
 | Tractian | R$150-$290 | Alta \- marca forte, plataforma completa | Forte \- SEO, LinkedIn, midia paga | IA para diagnóstico preditivo unificado | Comercial ativo, demos, cases |
 | Sensorweb | Sob Consulta (Formulario) | Alta \- especializada em ambientes críticos | Moderada \- site, rede sociais e eventos | Foco em cadeia fria e certificações de saúde | Apresentação personalizada via formulário |
@@ -209,11 +208,7 @@ Analisar os competidores da BZU Tech objetivando os diferenciais competitivos de
 | BottomUp Technology | Sob consulta (cotação) | Alta \- 4.8/5 no Google, ANATEL, ISO 9001 | Forte \- site, Linkedin, eventos | Fabricação 100% nacional, múltiplas conectividades  | Majoritariamente via integradores/parceiros |
 | Tebe | Não informado | Moderada \- bom produto, portfolio limitado | Moderada \- site, Whatsapp, Instagram | IA com loop de feedback do técnico  | Direto \- e-mail, telefone, Whatsapp |
 
-## 
-
-## 
-
-## ---
+##
 
 ## **5\. Oportunidades identificadas**
 
