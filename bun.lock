@@ -4,6 +4,9 @@
   "workspaces": {
     "": {
       "name": "projetos-2",
+      "dependencies": {
+        "@types/node": "^26.5.1",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },
