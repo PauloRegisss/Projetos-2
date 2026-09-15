@@ -44,7 +44,7 @@ async function main() {
 		cwd: BACKEND_DIR,
 
 		env: {
-			...process.env,
+			...Bun.env,
 		},
 
 		stdin: "inherit",
