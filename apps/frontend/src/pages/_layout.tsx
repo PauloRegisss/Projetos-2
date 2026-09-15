@@ -21,7 +21,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
 const getData = async () => {
 	const data = {
-		description: "An internet website!",
+		description: "Projeto Nexus, venha conhecer!",
 		icon: "/images/favicon.png",
 	};
 
