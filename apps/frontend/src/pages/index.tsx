@@ -25,7 +25,9 @@
 
 export default function HomePage() {
 	return (
-		<></>
+		<>
+			<p>asdas</p>
+		</>
 		// <div className="relative overflow-hidden bg-background">
 		// 	<div className="pointer-events-none absolute inset-x-0 top-0 h-[720px] bg-[radial-gradient(circle_at_70%_20%,rgba(125,81,254,.22),transparent_38%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
 
