@@ -1,14 +1,23 @@
-import { ArrowLeft, BellRing, CheckCircle2, CircleAlert, Gauge, Radio, Thermometer, Wifi } from "lucide-react";
+// import {
+// 	ArrowLeft,
+// 	BellRing,
+// 	CheckCircle2,
+// 	CircleAlert,
+// 	Gauge,
+// 	Radio,
+// 	Thermometer,
+// 	Wifi,
+// } from "lucide-react";
 
-const machines = [
-	{ name: "Linha de envase 01", status: "Operando", value: "92%", color: "text-primary" },
-	{ name: "Câmara fria 02", status: "Atenção", value: "7.8°C", color: "text-accent" },
-	{ name: "Compressor 04", status: "Operando", value: "68%", color: "text-primary" },
-];
+// const machines = [
+// 	{ name: "Linha de envase 01", status: "Operando", value: "92%", color: "text-primary" },
+// 	{ name: "Câmara fria 02", status: "Atenção", value: "7.8°C", color: "text-accent" },
+// 	{ name: "Compressor 04", status: "Operando", value: "68%", color: "text-primary" },
+// ];
 
 export default function ShowroomPage() {
-	return (
-		<div className="min-h-screen bg-background px-6 pb-16 pt-32 lg:px-10">
+	return <></>;
+	/*<div className="min-h-screen bg-background px-6 pb-16 pt-32 lg:px-10">
 			<div className="mx-auto max-w-7xl">
 				<div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end"><div><a className="mb-8 inline-flex items-center gap-2 text-sm text-white/50 transition hover:text-primary" href="/"><ArrowLeft size={16} /> Voltar para a NEXUS</a><p className="font-mono text-[.68rem] font-bold leading-none tracking-[.12em] text-primary uppercase">Nexus / Showroom</p><h1 className="mt-5 text-4xl font-black tracking-[-.06em] text-white sm:text-6xl">A diferença em tempo real.</h1><p className="mt-5 max-w-xl text-lg leading-relaxed text-white/50">Uma amostra de como sua operação pode sair do modo reativo e começar a antecipar decisões.</p></div><div className="flex items-center gap-3 rounded-full border border-primary/30 bg-primary/[.06] px-4 py-3 text-sm text-primary"><span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#AAFF00]" /> Dados simulados ao vivo</div></div>
 
@@ -18,8 +27,7 @@ export default function ShowroomPage() {
 
 				<div className="mt-4 rounded-3xl border border-white/10 bg-card p-5 sm:p-7"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-white/40">Comparativo Nexus</p><h2 className="mt-2 text-xl font-bold text-white">O que muda quando você conecta?</h2></div><span className="text-sm text-primary">Com IoT / Sem IoT</span></div><div className="mt-8 grid gap-3 sm:grid-cols-3"><div className="rounded-2xl bg-[#ff5c5c]/[.06] p-4"><p className="font-mono text-[10px] uppercase text-[#ff8c8c]">Sem IoT</p><p className="mt-4 text-lg font-bold text-white">Descobrir depois</p><p className="mt-2 text-sm text-white/45">Falha, parada e prejuízo.</p></div><div className="flex items-center justify-center text-white/20">→</div><div className="rounded-2xl bg-primary/[.08] p-4"><p className="font-mono text-[10px] uppercase text-primary">Com NEXUS + IoT</p><p className="mt-4 text-lg font-bold text-white">Agir antes</p><p className="mt-2 text-sm text-white/45">Sinal, contexto e decisão.</p></div></div></div>
 			</div>
-		</div>
-	);
+		</div>*/
 }
 
 export const getConfig = async () => ({ render: "static" as const });
