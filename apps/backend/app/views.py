@@ -1,23 +1,18 @@
 from django.shortcuts import render, redirect
 from .models import ContactMessage
 from django.utils import timezone
-
+import json
+from django.http import JsonResponse
 
 def contato(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        subject = request.POST.get('subject')
-        message = request.POST.get('message')
+    if request.method == "POST":
+        data = json.loads(request.body)
 
         ContactMessage.objects.create(
-            name=name,
-            email=email,
-            subject=subject,
-            message=message,
-            date=timezone.now()
+            name=data["name"],
+            email=data["email"],
+            subject=data["subject"],
+            message=data["message"],
         )
 
-        return redirect('contato')
-
-    return render(request, 'core/contato.html')
+        return JsonResponse({"success": True})
