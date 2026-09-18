@@ -20,14 +20,11 @@ class ContactData(TypedDict):
 def contato(request: HttpRequest):
     if request.method == "POST":
         data: ContactData = json.loads(request.body)
-        # _ = ContactMessage.objects.create(
-        #     name=data["name"],
-        #     email=data["email"],
-        #     subject=data["subject"],
-        #     message=data["message"],
-        # )
-        contacts = ContactMessage.objects.all()
-        for test in contacts:
-            print(test.date)
+        _ = ContactMessage.objects.create(
+            name=data["name"],
+            email=data["email"],
+            subject=data["subject"],
+            message=data["message"],
+        )
         return JsonResponse({"success": True})
     return JsonResponse({"error": "Rota desconhecida."})
