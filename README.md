@@ -43,7 +43,7 @@ Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 
 ## Entregável 1 FDS 
 - **Print do Backlog:** 
-![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Captura%20de%20tela%202026-08-28%20181230.png)
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/Captura%20de%20tela%202026-08-28%20181230.png)
 
 - **Análise de Competidores:**
 https://github.com/PauloRegisss/Projetos-2/blob/main/Ana%CC%81lise%20de%20Competidores.md
@@ -57,6 +57,7 @@ https://github.com/PauloRegisss/Projetos-2/blob/main/Ana%CC%81lise%20de%20Compet
 - **Screencast de explicação do código Django:**
 
 - **Print do Backlog:**
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/Captura%20de%20tela%202026-09-18%20202254.png)
 
 ## 🛠️ Tecnologias
 
