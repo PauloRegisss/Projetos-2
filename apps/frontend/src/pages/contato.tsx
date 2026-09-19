@@ -17,6 +17,7 @@ import {
 import { Input } from "../components/ui/input";
 
 export default function ContactPage() {
+	const backend = import.meta.env.BACKEND_URL;
 	return (
 		<div className="relative min-h-screen overflow-hidden bg-background px-6 pb-24 pt-32 lg:px-10 lg:pt-40">
 			<div className="pointer-events-none absolute inset-x-0 top-0 h-[760px] bg-[radial-gradient(circle_at_75%_20%,rgba(125,81,254,.2),transparent_34%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
@@ -83,7 +84,7 @@ export default function ContactPage() {
 								<MessageSquare size={22} />
 							</div>
 						</div>
-						<form className="space-y-6">
+						<form className="space-y-6" action={`${backend}/contato`}>
 							<FieldSet>
 								<FieldGroup>
 									<Field>
