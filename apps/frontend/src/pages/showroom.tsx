@@ -1,38 +1,23 @@
-import {
-	ArrowLeft,
-	BellRing,
-	CheckCircle2,
-	CircleAlert,
-	Gauge,
-	Radio,
-	Thermometer,
-	Wifi,
-} from "lucide-react";
+// import {
+// 	ArrowLeft,
+// 	BellRing,
+// 	CheckCircle2,
+// 	CircleAlert,
+// 	Gauge,
+// 	Radio,
+// 	Thermometer,
+// 	Wifi,
+// } from "lucide-react";
 
-const machines = [
-	{
-		name: "Linha de envase 01",
-		status: "Operando",
-		value: "92%",
-		color: "text-primary",
-	},
-	{
-		name: "Câmara fria 02",
-		status: "Atenção",
-		value: "7.8°C",
-		// color: "text-accent",
-	},
-	{
-		name: "Compressor 04",
-		status: "Operando",
-		value: "68%",
-		color: "text-primary",
-	},
-];
+// const machines = [
+// 	{ name: "Linha de envase 01", status: "Operando", value: "92%", color: "text-primary" },
+// 	{ name: "Câmara fria 02", status: "Atenção", value: "7.8°C", color: "text-accent" },
+// 	{ name: "Compressor 04", status: "Operando", value: "68%", color: "text-primary" },
+// ];
 
 export default function ShowroomPage() {
-	return (
-		<div className="min-h-screen bg-background px-6 pb-16 pt-32 lg:px-10">
+	return <></>;
+	/*<div className="min-h-screen bg-background px-6 pb-16 pt-32 lg:px-10">
 			<div className="mx-auto max-w-7xl">
 				<div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
 					<div>
@@ -191,8 +176,7 @@ export default function ShowroomPage() {
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+		</div>*/
 }
 
 export const getConfig = async () => ({ render: "static" as const });

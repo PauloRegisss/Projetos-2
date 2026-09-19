@@ -1,33 +1,42 @@
+// import {
+// 	ArrowRight,
+// 	ArrowUpRight,
+// 	BellRing,
+// 	Check,
+// 	CircleAlert,
+// 	Gauge,
+// 	Radio,
+// 	Wifi,
+// } from "lucide-react";
+
 import {
 	ArrowRight,
 	ArrowUpRight,
 	BellRing,
-	Check,
 	CircleAlert,
 	Gauge,
 	Radio,
 	Wifi,
 } from "lucide-react";
 
-const comparisons = [
-	{
-		label: "Visibilidade da operação",
-		without: "Fragmentada",
-		with: "Em tempo real",
-	},
-	{
-		label: "Resposta a falhas",
-		without: "Depois do prejuízo",
-		with: "Antes da parada",
-	},
-	{ label: "Decisões", without: "No feeling", with: "Baseadas em dados" },
-];
+// const comparisons = [
+// 	{
+// 		label: "Visibilidade da operação",
+// 		without: "Fragmentada",
+// 		with: "Em tempo real",
+// 	},
+// 	{
+// 		label: "Resposta a falhas",
+// 		without: "Depois do prejuízo",
+// 		with: "Antes da parada",
+// 	},
+// 	{ label: "Decisões", without: "No feeling", with: "Baseadas em dados" },
+// ];
 
 export default function HomePage() {
 	return (
 		<div className="relative overflow-hidden bg-background">
 			<div className="pointer-events-none absolute inset-x-0 top-0 h-[720px] bg-[radial-gradient(circle_at_70%_20%,rgba(125,81,254,.22),transparent_38%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-
 			<section className="relative mx-auto grid min-h-[720px] max-w-7xl items-center gap-14 px-6 pb-20 pt-36 lg:grid-cols-[.92fr_1.08fr] lg:px-10 lg:pt-40">
 				<div className="max-w-2xl">
 					<p className="mb-6 flex items-center gap-3 font-mono text-[.68rem] font-bold leading-none tracking-[.12em] text-primary uppercase">
@@ -125,8 +134,7 @@ export default function HomePage() {
 					</div>
 				</div>
 			</section>
-
-			<section
+			{/*<section
 				id="solucoes"
 				className="border-y border-white/10 bg-card px-6 py-24 lg:px-10 lg:py-32"
 			>
@@ -148,24 +156,23 @@ export default function HomePage() {
 							<span className="text-primary">Com IoT</span>
 						</div>
 						{comparisons.map((item) => (
-							<div
-								key={item.label}
-								className="grid gap-3 border-t border-white/10 px-6 py-5 sm:grid-cols-[1.2fr_1fr_1fr] sm:items-center"
-							>
-								<span className="font-bold text-white">{item.label}</span>
-								<span className="flex items-center gap-2 text-sm text-[#ff8c8c]">
-									<CircleAlert size={15} /> {item.without}
-								</span>
-								<span className="flex items-center gap-2 text-sm text-primary">
-									<Check size={15} /> {item.with}
-								</span>
-							</div>
-						))}
+								<div
+									key={item.label}
+									className="grid gap-3 border-t border-white/10 px-6 py-5 sm:grid-cols-[1.2fr_1fr_1fr] sm:items-center"
+								>
+									<span className="font-bold text-white">{item.label}</span>
+									<span className="flex items-center gap-2 text-sm text-[#ff8c8c]">
+										<CircleAlert size={15} /> {item.without}
+									</span>
+									<span className="flex items-center gap-2 text-sm text-primary">
+										<Check size={15} /> {item.with}
+									</span>
+								</div>
+							))}
 					</div>
 				</div>
-			</section>
-
-			<section
+			</section>*/}
+			{/*<section
 				id="como-funciona"
 				className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32"
 			>
@@ -209,8 +216,8 @@ export default function HomePage() {
 						</div>
 					</div>
 				</div>
-			</section>
-
+			</section>*/}
+			{/*
 			<section
 				id="relatos"
 				className="mx-6 mb-24 overflow-hidden rounded-[2rem] bg-primary lg:mx-10"
@@ -232,8 +239,8 @@ export default function HomePage() {
 					</a>
 				</div>
 			</section>
-
-			<footer className="border-t border-white/10 px-6 py-8 lg:px-10">
+			*/}
+			{/*<footer className="border-t border-white/10 px-6 py-8 lg:px-10">
 				<div className="mx-auto flex max-w-7xl flex-col gap-4 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
 					<span className="font-black tracking-[-.05em] text-white">
 						NEXUS<span className="text-primary">.</span>
@@ -241,7 +248,7 @@ export default function HomePage() {
 					<span>Dados que conectam. Decisões que movem.</span>
 					<span>© 2026 NEXUS</span>
 				</div>
-			</footer>
+			</footer>*/}
 		</div>
 	);
 }
