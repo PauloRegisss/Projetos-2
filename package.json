@@ -7,7 +7,7 @@
 		"apps/*"
 	],
 	"scripts": {
-		"setup": "bunx --bun tsx scripts/setup.ts",
+		"setup": "bun scripts/setup.ts",
 		"frontend:dev": "cd apps/frontend && bun run dev",
 		"frontend:build": "cd apps/frontend && bun run build",
 		"frontend:start": "cd apps/frontend && bun run start",
