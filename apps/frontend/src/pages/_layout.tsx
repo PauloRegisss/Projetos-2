@@ -1,8 +1,9 @@
 import "../styles.css";
 
 import type { ReactNode } from "react";
-import Header from "../components/header";
+import { Toaster } from "@/components/ui/toast";
 import FloatingChatButton from "../components/floating-chat-button";
+import Header from "../components/header";
 
 type RootLayoutProps = { children: ReactNode };
 
@@ -16,6 +17,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			<title>Projeto Nexus</title>
 			<Header />
 			<FloatingChatButton />
+			<Toaster />
 			<main>{children}</main>
 		</div>
 	);

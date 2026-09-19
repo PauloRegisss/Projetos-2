@@ -1,12 +1,16 @@
+"use client";
 import {
 	ArrowLeft,
 	ArrowUpRight,
 	Check,
+	Loader2,
 	Mail,
 	MessageSquare,
 	UserRound,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "waku";
+import { toast } from "@/components/ui/toast";
 import {
 	Field,
 	FieldDescription,
@@ -17,7 +21,45 @@ import {
 import { Input } from "../components/ui/input";
 
 export default function ContactPage() {
-	const backend = import.meta.env.BACKEND_URL;
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const backend = import.meta.env.WAKU_PUBLIC_BACKEND_URL;
+
+	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		const form = event.currentTarget as HTMLFormElement;
+		const formData = new FormData(form);
+		console.log(formData);
+		setIsSubmitting(true);
+
+		try {
+			const response = await fetch(`${backend}/contato`, {
+				method: "POST",
+				body: formData,
+			});
+
+			if (!response.ok) {
+				toast.add({
+					title: "Ocorreu um erro ao tentar enviar a mensagem.",
+					description: "Tente novamente mais tarde!",
+				});
+			}
+			toast.add({
+				title: "Mensagem enviada com sucesso.",
+				description: "Aguarda até que a nossa equipe entre em contato!",
+			});
+
+			form.reset();
+		} catch (error) {
+			console.error(error);
+			toast.add({
+				title: "Ocorreu um erro ao tentar enviar a mensagem.",
+				description: "Tente novamente mais tarde!",
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 	return (
 		<div className="relative min-h-screen overflow-hidden bg-background px-6 pb-24 pt-32 lg:px-10 lg:pt-40">
 			<div className="pointer-events-none absolute inset-x-0 top-0 h-[760px] bg-[radial-gradient(circle_at_75%_20%,rgba(125,81,254,.2),transparent_34%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
@@ -84,7 +126,11 @@ export default function ContactPage() {
 								<MessageSquare size={22} />
 							</div>
 						</div>
-						<form className="space-y-6" action={`${backend}/contato`}>
+						<form
+							className="space-y-6"
+							onSubmit={handleSubmit}
+							action={`${backend}/contato`}
+						>
 							<FieldSet>
 								<FieldGroup>
 									<Field>
@@ -155,10 +201,12 @@ export default function ContactPage() {
 								</FieldGroup>
 							</FieldSet>
 							<button
+								disabled={isSubmitting}
 								type="submit"
 								className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:bg-[#c1ff52] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
 							>
-								Enviar mensagem <ArrowUpRight size={18} />
+								{isSubmitting && <Loader2 className="animate-spin" />} Enviar
+								mensagem <ArrowUpRight size={18} />
 							</button>
 							<p className="text-center text-xs leading-relaxed text-white/30">
 								Sem compromisso. Este formulário é apenas uma demonstração.
@@ -171,4 +219,4 @@ export default function ContactPage() {
 	);
 }
 
-export const getConfig = async () => ({ render: "static" as const });
+// export const getConfig = async () => ({ render: "static" as const });

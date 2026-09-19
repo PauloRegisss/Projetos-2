@@ -4,15 +4,13 @@
 import type { PathsForPages, GetConfigResponse, SearchCodecsForPages } from 'waku/router';
 
 // prettier-ignore
-import type { getConfig as File_Contato_getConfig } from './pages/contato';
-// prettier-ignore
 import type { getConfig as File_Index_getConfig } from './pages/index';
 // prettier-ignore
 import type { getConfig as File_Showroom_getConfig } from './pages/showroom';
 
 // prettier-ignore
 type Page =
-| ({ path: '/contato' } & GetConfigResponse<typeof File_Contato_getConfig>)
+| { path: '/contato'; render: 'static' }
 | ({ path: '/' } & GetConfigResponse<typeof File_Index_getConfig>)
 | ({ path: '/showroom' } & GetConfigResponse<typeof File_Showroom_getConfig>);
 
