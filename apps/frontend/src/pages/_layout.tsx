@@ -13,7 +13,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			<meta name="description" content={data.description} />
 			<link rel="icon" type="image/png" href={data.icon} />
 			<title>Projeto Nexus</title>
-			{/*<Header />*/}
+			<Header />
 			<main>{children}</main>
 		</div>
 	);

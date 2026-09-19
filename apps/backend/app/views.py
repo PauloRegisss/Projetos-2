@@ -1,6 +1,4 @@
 import json
-from sqlite3 import Date
-from time import timezone
 from typing import TypedDict
 
 from django.http import HttpRequest, JsonResponse

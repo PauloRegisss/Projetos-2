@@ -10,6 +10,7 @@ import type { getConfig as File_Showroom_getConfig } from './pages/showroom';
 
 // prettier-ignore
 type Page =
+| { path: '/contato'; render: 'static' }
 | ({ path: '/' } & GetConfigResponse<typeof File_Index_getConfig>)
 | ({ path: '/showroom' } & GetConfigResponse<typeof File_Showroom_getConfig>);
 

@@ -19,25 +19,27 @@ export default function Header() {
 					className="hidden items-center gap-8 text-sm text-white/60 md:flex"
 				>
 					<a className="transition-colors hover:text-primary" href="#solucoes">
-						Soluções
+						Contato
 					</a>
 					<a
 						className="transition-colors hover:text-primary"
 						href="#como-funciona"
 					>
-						Como funciona
+						Sobre a NEXUS
 					</a>
-					<a className="transition-colors hover:text-primary" href="#relatos">
+					{/*<a className="transition-colors hover:text-primary" href="#relatos">
 						O que muda
-					</a>
+					</a>*/}
 				</nav>
-				<a
-					className={buttonVariants({ className: "hidden min-h-11 md:inline-flex" })}
+				{/*<a
+					className={buttonVariants({
+						className: "hidden min-h-11 md:inline-flex",
+					})}
 					href="/showroom"
 				>
 					Acessar showroom
 					<ArrowUpRight aria-hidden="true" className="size-3" />
-				</a>
+				</a>*/}
 				<details className="relative md:hidden">
 					<summary className="flex min-h-11 min-w-11 cursor-pointer list-none items-center justify-center rounded-full border border-white/15 text-white transition hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
 						<span className="sr-only">Abrir menu</span>
