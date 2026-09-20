@@ -24,7 +24,8 @@ export default function LoginForm() {
 			});
 			if (!csrfResponse.ok) throw new Error("CSRF");
 			const { csrfToken } = (await csrfResponse.json()) as { csrfToken: string };
-			document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax`;
+			const secureCookie = window.location.protocol === "https:" ? "; Secure" : "";
+			document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax${secureCookie}`;
 
 			const response = await fetch(`${API_URL}/auth/login/`, {
 				method: "POST",
