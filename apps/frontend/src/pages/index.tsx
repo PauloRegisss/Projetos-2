@@ -18,6 +18,7 @@ import {
 	Radio,
 	Wifi,
 } from "lucide-react";
+import Header from "@/components/header";
 
 // const comparisons = [
 // 	{
@@ -35,106 +36,116 @@ import {
 
 export default function HomePage() {
 	return (
-		<div className="relative overflow-hidden bg-background">
-			<div className="pointer-events-none absolute inset-x-0 top-0 h-[720px] bg-[radial-gradient(circle_at_70%_20%,rgba(125,81,254,.22),transparent_38%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
-			<section className="relative mx-auto grid min-h-[720px] max-w-7xl items-center gap-14 px-6 pb-20 pt-36 lg:grid-cols-[.92fr_1.08fr] lg:px-10 lg:pt-40">
-				<div className="max-w-2xl">
-					<p className="mb-6 flex items-center gap-3 font-mono text-[.68rem] font-bold leading-none tracking-[.12em] text-primary uppercase">
-						<span className="h-px w-8 bg-primary" /> IoT para operações mais
-						inteligentes
-					</p>
-					<h1 className="text-5xl font-black leading-[.94] tracking-[-.07em] text-white sm:text-7xl">
-						Sua máquina está falando.
-						<br />
-						<span className="text-primary">Você está ouvindo?</span>
-					</h1>
-					<p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60 sm:text-xl">
-						A NEXUS é um projeto que incentiva empresas a transformar máquinas e
-						sistemas em uma operação que enxerga problemas antes que eles parem
-						o negócio.
-					</p>
-					<a
-						href="/showroom"
-						className="mt-9 inline-flex min-h-14 items-center gap-3 rounded-full bg-primary px-7 text-sm font-extrabold text-primary-foreground transition hover:bg-[#c1ff52] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-					>
-						Ver a diferença no showroom <ArrowRight size={18} />
-					</a>
-				</div>
+		<>
+			<Header />
+			<div className="relative overflow-hidden bg-background">
+				<div className="pointer-events-none absolute inset-x-0 top-0 h-180 bg-[radial-gradient(circle_at_70%_20%,rgba(125,81,254,.22),transparent_38%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-size-[auto,48px_48px,48px_48px] mask-[linear-gradient(to_bottom,black,transparent)]" />
+				<section className="relative mx-auto grid min-h-180 max-w-7xl items-center gap-14 px-6 pb-20 pt-36 lg:grid-cols-[.92fr_1.08fr] lg:px-10 lg:pt-40">
+					<div className="max-w-2xl">
+						<p className="mb-6 flex items-center gap-3 font-mono text-[.68rem] font-bold leading-none tracking-[.12em] text-primary uppercase">
+							<span className="h-px w-8 bg-primary" /> IoT para operações mais
+							inteligentes
+						</p>
+						<h1 className="text-5xl font-black leading-[.94] tracking-[-.07em] text-white sm:text-7xl">
+							Sua máquina está falando.
+							<br />
+							<span className="text-primary">Você está ouvindo?</span>
+						</h1>
+						<p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60 sm:text-xl">
+							A NEXUS é um projeto que incentiva empresas a transformar máquinas
+							e sistemas em uma operação que enxerga problemas antes que eles
+							parem o negócio.
+						</p>
+						<a
+							href="/showroom"
+							className="mt-9 inline-flex min-h-14 items-center gap-3 rounded-full bg-primary px-7 text-sm font-extrabold text-primary-foreground transition hover:bg-[#c1ff52] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+						>
+							Ver a diferença no showroom <ArrowRight size={18} />
+						</a>
+					</div>
 
-				<div className="relative rounded-[2rem] border border-white/10 bg-card/90 p-4 shadow-2xl shadow-black/30 backdrop-blur sm:p-6">
-					<div className="mb-5 flex items-center justify-between">
-						<div>
-							<p className="font-mono text-[10px] uppercase tracking-[.18em] text-white/40">
-								Nexus / Comparativo
-							</p>
-							<p className="mt-2 text-lg font-bold text-white">
-								Duas operações. Um futuro.
-							</p>
+					<div className="relative rounded-[2rem] border border-white/10 bg-card/90 p-4 shadow-2xl shadow-black/30 backdrop-blur sm:p-6">
+						<div className="mb-5 flex items-center justify-between">
+							<div>
+								<p className="font-mono text-[10px] uppercase tracking-[.18em] text-white/40">
+									Nexus / Comparativo
+								</p>
+								<p className="mt-2 text-lg font-bold text-white">
+									Duas operações. Um futuro.
+								</p>
+							</div>
+							<span className="rounded-full border border-primary/30 px-3 py-1 font-mono text-[10px] text-primary">
+								AO VIVO
+							</span>
 						</div>
-						<span className="rounded-full border border-primary/30 px-3 py-1 font-mono text-[10px] text-primary">
-							AO VIVO
-						</span>
-					</div>
-					<div className="grid gap-3 sm:grid-cols-2">
-						<div className="rounded-2xl border border-[#ff5c5c]/25 bg-[#ff5c5c]/[.06] p-5">
-							<div className="flex items-center justify-between">
-								<span className="font-mono text-[10px] uppercase tracking-wider text-[#ff8c8c]">
-									Sem IoT
-								</span>
-								<CircleAlert size={18} className="text-[#ff5c5c]" />
-							</div>
-							<p className="mt-10 text-2xl font-black text-white">Reagir</p>
-							<p className="mt-2 text-sm leading-relaxed text-white/45">
-								A equipe descobre o problema quando o impacto já chegou.
-							</p>
-							<div className="mt-8 grid grid-cols-2 gap-2">
-								<div className="rounded-xl bg-black/20 p-3">
-									<p className="font-mono text-[10px] text-white/40">PARADAS</p>
-									<p className="mt-2 text-xl font-bold text-[#ff8c8c]">+18%</p>
+						<div className="grid gap-3 sm:grid-cols-2">
+							<div className="rounded-2xl border border-[#ff5c5c]/25 bg-[#ff5c5c]/6 p-5">
+								<div className="flex items-center justify-between">
+									<span className="font-mono text-[10px] uppercase tracking-wider text-[#ff8c8c]">
+										Sem IoT
+									</span>
+									<CircleAlert size={18} className="text-[#ff5c5c]" />
 								</div>
-								<div className="rounded-xl bg-black/20 p-3">
-									<p className="font-mono text-[10px] text-white/40">
-										VISIBILIDADE
-									</p>
-									<p className="mt-2 text-xl font-bold text-[#ff8c8c]">32%</p>
+								<p className="mt-10 text-2xl font-black text-white">Reagir</p>
+								<p className="mt-2 text-sm leading-relaxed text-white/45">
+									A equipe descobre o problema quando o impacto já chegou.
+								</p>
+								<div className="mt-8 grid grid-cols-2 gap-2">
+									<div className="rounded-xl bg-black/20 p-3">
+										<p className="font-mono text-[10px] text-white/40">
+											PARADAS
+										</p>
+										<p className="mt-2 text-xl font-bold text-[#ff8c8c]">
+											+18%
+										</p>
+									</div>
+									<div className="rounded-xl bg-black/20 p-3">
+										<p className="font-mono text-[10px] text-white/40">
+											VISIBILIDADE
+										</p>
+										<p className="mt-2 text-xl font-bold text-[#ff8c8c]">32%</p>
+									</div>
+								</div>
+							</div>
+							<div className="rounded-2xl border border-primary/40 bg-primary/8 p-5">
+								<div className="flex items-center justify-between">
+									<span className="font-mono text-[10px] uppercase tracking-wider text-primary">
+										Com NEXUS + IoT
+									</span>
+									<Wifi size={18} className="text-primary" />
+								</div>
+								<p className="mt-10 text-2xl font-black text-white">
+									Antecipar
+								</p>
+								<p className="mt-2 text-sm leading-relaxed text-white/55">
+									A equipe recebe o sinal, entende o contexto e age no tempo
+									certo.
+								</p>
+								<div className="mt-8 grid grid-cols-2 gap-2">
+									<div className="rounded-xl bg-primary/15 p-3">
+										<p className="font-mono text-[10px] text-white/50">
+											EFICIÊNCIA
+										</p>
+										<p className="mt-2 text-xl font-bold text-primary">
+											+28.4%
+										</p>
+									</div>
+									<div className="rounded-xl bg-primary/15 p-3">
+										<p className="font-mono text-[10px] text-white/50">
+											VISIBILIDADE
+										</p>
+										<p className="mt-2 text-xl font-bold text-primary">100%</p>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div className="rounded-2xl border border-primary/40 bg-primary/[.08] p-5">
-							<div className="flex items-center justify-between">
-								<span className="font-mono text-[10px] uppercase tracking-wider text-primary">
-									Com NEXUS + IoT
-								</span>
-								<Wifi size={18} className="text-primary" />
-							</div>
-							<p className="mt-10 text-2xl font-black text-white">Antecipar</p>
-							<p className="mt-2 text-sm leading-relaxed text-white/55">
-								A equipe recebe o sinal, entende o contexto e age no tempo
-								certo.
-							</p>
-							<div className="mt-8 grid grid-cols-2 gap-2">
-								<div className="rounded-xl bg-primary/15 p-3">
-									<p className="font-mono text-[10px] text-white/50">
-										EFICIÊNCIA
-									</p>
-									<p className="mt-2 text-xl font-bold text-primary">+28.4%</p>
-								</div>
-								<div className="rounded-xl bg-primary/15 p-3">
-									<p className="font-mono text-[10px] text-white/50">
-										VISIBILIDADE
-									</p>
-									<p className="mt-2 text-xl font-bold text-primary">100%</p>
-								</div>
-							</div>
+						<div className="mt-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/3 px-4 py-3 text-sm text-white/55">
+							<span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#AAFF00]" />{" "}
+							A diferença é saber antes.
 						</div>
 					</div>
-					<div className="mt-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.03] px-4 py-3 text-sm text-white/55">
-						<span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#AAFF00]" />{" "}
-						A diferença é saber antes.
-					</div>
-				</div>
-			</section>
-			{/*<section
+				</section>
+				{/*<section
 				id="solucoes"
 				className="border-y border-white/10 bg-card px-6 py-24 lg:px-10 lg:py-32"
 			>
@@ -172,7 +183,7 @@ export default function HomePage() {
 					</div>
 				</div>
 			</section>*/}
-			{/*<section
+				{/*<section
 				id="como-funciona"
 				className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32"
 			>
@@ -217,7 +228,7 @@ export default function HomePage() {
 					</div>
 				</div>
 			</section>*/}
-			{/*
+				{/*
 			<section
 				id="relatos"
 				className="mx-6 mb-24 overflow-hidden rounded-[2rem] bg-primary lg:mx-10"
@@ -240,7 +251,7 @@ export default function HomePage() {
 				</div>
 			</section>
 			*/}
-			{/*<footer className="border-t border-white/10 px-6 py-8 lg:px-10">
+				{/*<footer className="border-t border-white/10 px-6 py-8 lg:px-10">
 				<div className="mx-auto flex max-w-7xl flex-col gap-4 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
 					<span className="font-black tracking-[-.05em] text-white">
 						NEXUS<span className="text-primary">.</span>
@@ -249,7 +260,8 @@ export default function HomePage() {
 					<span>© 2026 NEXUS</span>
 				</div>
 			</footer>*/}
-		</div>
+			</div>
+		</>
 	);
 }
 

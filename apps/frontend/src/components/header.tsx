@@ -24,9 +24,9 @@ export default function Header() {
 					>
 						Contato
 					</Link>
-					<a className="transition-colors hover:text-primary" href="/contato">
+					<Link className="transition-colors hover:text-primary" to="/sobre">
 						Sobre a NEXUS
-					</a>
+					</Link>
 				</nav>
 				{/*<a
 					className={buttonVariants({
@@ -73,6 +73,12 @@ export default function Header() {
 							href="/contato"
 						>
 							Contato
+						</a>
+						<a
+							className="rounded-xl px-4 py-3 transition hover:bg-white/5 hover:text-primary"
+							href="/sobre"
+						>
+							Sobre a NEXUS
 						</a>
 						<a
 							className="mt-1 flex items-center justify-between rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground"

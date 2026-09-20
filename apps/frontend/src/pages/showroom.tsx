@@ -9,6 +9,8 @@
 // 	Wifi,
 // } from "lucide-react";
 
+import Header from "@/components/header";
+
 // const machines = [
 // 	{ name: "Linha de envase 01", status: "Operando", value: "92%", color: "text-primary" },
 // 	{ name: "Câmara fria 02", status: "Atenção", value: "7.8°C", color: "text-accent" },
@@ -16,7 +18,12 @@
 // ];
 
 export default function ShowroomPage() {
-	return <></>;
+	return (
+		<>
+			<Header />
+			<div></div>
+		</>
+	);
 	/*<div className="min-h-screen bg-background px-6 pb-16 pt-32 lg:px-10">
 			<div className="mx-auto max-w-7xl">
 				<div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
