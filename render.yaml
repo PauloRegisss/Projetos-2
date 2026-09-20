@@ -5,7 +5,7 @@ services:
       plan: free
       healthCheckPath: /health/
       buildCommand: pip install -r apps/backend/requirements.txt && python apps/backend/manage.py collectstatic --noinput
-      startCommand: python apps/backend/manage.py migrate --noinput && gunicorn --chdir apps/backend --bind 0.0.0.0:$PORT --workers ${GUNICORN_WORKERS:-3} projeto.wsgi:application
+      startCommand: python apps/backend/manage.py migrate --noinput && python apps/backend/manage.py create_superuser_from_env && gunicorn --chdir apps/backend --bind 0.0.0.0:$PORT --workers ${GUNICORN_WORKERS:-3} projeto.wsgi:application
       envVars:
           - key: SECRET_KEY
             generateValue: true
@@ -27,6 +27,12 @@ services:
             fromDatabase:
                 name: nexus-db
                 property: connectionString
+          - key: CREATE_SUPERUSER_USERNAME
+            sync: false
+          - key: CREATE_SUPERUSER_EMAIL
+            sync: false
+          - key: CREATE_SUPERUSER_PASSWORD
+            sync: false
 
     - type: web
       name: nexus-frontend
