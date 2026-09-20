@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 @require_POST
@@ -77,6 +78,7 @@ def logout_view(request: HttpRequest):
     return JsonResponse({"message": "Logout realizado com sucesso"})
 
 
+@ensure_csrf_cookie
 def csrf(request: HttpRequest):
     return JsonResponse(
         {

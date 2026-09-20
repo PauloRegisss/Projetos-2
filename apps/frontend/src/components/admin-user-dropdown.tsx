@@ -27,6 +27,7 @@ export default function AdminUserDropdown({ user }: { user: User }) {
 			});
 			if (!csrf.ok) throw new Error("Não foi possível obter o token CSRF");
 			const { csrfToken } = (await csrf.json()) as { csrfToken: string };
+			document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax`;
 			const response = await fetch(`${API_URL}/auth/logout/`, {
 				method: "POST",
 				credentials: "include",

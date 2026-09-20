@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -67,6 +68,16 @@ CORS_ALLOWED_ORIGINS = [
     if origin.strip()
 ]
 
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = sorted(
+        {
+            *CORS_ALLOWED_ORIGINS,
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://0.0.0.0:3000",
+        }
+    )
+
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
@@ -78,13 +89,26 @@ CSRF_TRUSTED_ORIGINS = [
     if origin.strip()
 ]
 
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = sorted(
+        {
+            *CSRF_TRUSTED_ORIGINS,
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://0.0.0.0:3000",
+        }
+    )
+
 SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 
 SESSION_COOKIE_SECURE = (
     os.environ.get("SESSION_COOKIE_SECURE", "False").lower() == "true"
 )
 
 SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
+CSRF_COOKIE_SAMESITE = "Lax"
 
 ROOT_URLCONF = "projeto.urls"
 
@@ -105,12 +129,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "projeto.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+database_url = os.environ.get("DATABASE_URL")
+if database_url and database_url.startswith("sqlite:///"):
+    sqlite_path = database_url.removeprefix("sqlite:///")
+    if not Path(sqlite_path).is_absolute():
+        database_url = f"sqlite:///{(MONOREPO_ROOT / sqlite_path).resolve()}"
+
+database_config = (
+    dj_database_url.parse(
+        database_url,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+    if database_url
+    else dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+)
+
+DATABASES = {"default": database_config}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -139,6 +178,7 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MAILERS = {
     "default": {

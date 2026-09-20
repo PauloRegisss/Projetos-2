@@ -15,6 +15,11 @@ class ContactData(TypedDict):
     message: str
 
 
+@require_GET
+def health(_request: HttpRequest):
+    return JsonResponse({"status": "ok"})
+
+
 @csrf_exempt
 def contato(request: HttpRequest):
     if request.method == "POST":

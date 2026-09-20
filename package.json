@@ -12,7 +12,9 @@
         "frontend:dev": "cd apps/frontend && bun run dev",
         "frontend:build": "cd apps/frontend && bun run build",
         "frontend:start": "cd apps/frontend && bun run start",
-        "backend:dev": "bunx --bun tsx scripts/dev-backend.ts"
+        "backend:dev": "bunx --bun tsx scripts/dev-backend.ts",
+        "build": "bun scripts/build.ts",
+        "start": "bun scripts/start.ts"
     },
     "devDependencies": {
         "@types/bun": "latest"

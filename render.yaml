@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: nexus-backend
+    runtime: python
+    plan: free
+    healthCheckPath: /health/
+    buildCommand: pip install -r apps/backend/requirements.txt && python apps/backend/manage.py collectstatic --noinput
+    startCommand: python apps/backend/manage.py migrate --noinput && gunicorn --chdir apps/backend --bind 0.0.0.0:$PORT --workers ${GUNICORN_WORKERS:-3} projeto.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: nexus-backend.onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://nexus-frontend.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://nexus-frontend.onrender.com
+      - key: SESSION_COOKIE_SECURE
+        value: "True"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nexus-db
+          property: connectionString
+
+  - type: web
+    name: nexus-frontend
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run --workspace apps/frontend build
+    startCommand: npm run --workspace apps/frontend start
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: WAKU_PUBLIC_BACKEND_URL
+        value: https://nexus-backend.onrender.com
+
+databases:
+  - name: nexus-db
+    plan: free
+    databaseName: nexus
+    user: nexus
