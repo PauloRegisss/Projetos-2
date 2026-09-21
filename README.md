@@ -97,7 +97,7 @@ cd Projetos-2
 ### 2. Instale as dependências
 
 ```bash
-bun install
+bun run setup
 ```
 
 ### 3. Configure as variáveis de ambiente
