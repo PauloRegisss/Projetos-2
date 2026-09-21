@@ -50,14 +50,15 @@ https://github.com/PauloRegisss/Projetos-2/blob/main/Ana%CC%81lise%20de%20Compet
 
 ## Entregável 2 FDS 
 
-- **Issue/bug tracker:**
-
 - **Deployment da infraestrutura em produção:**
 
 - **Screencast de explicação do código Django:**
 
 - **Print do Backlog:**
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/Captura%20de%20tela%202026-09-18%20202254.png)
+
+- **Issue/bug tracker:**
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-09-20_213144532.png)
 
 ## 🛠️ Tecnologias
 
