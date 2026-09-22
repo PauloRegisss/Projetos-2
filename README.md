@@ -1,4 +1,4 @@
-# GRUPO 9
+# Projeto Nexus
 
 > Projeto desenvolvido em parceria com a **BzuTech** (empresa de IoT), como parte da disciplina de Projetos do 2º período — CESAR School.
 
@@ -8,7 +8,11 @@ Educar empresas sobre a importância de coletar dados operacionais por meio de I
 
 ## 📝 Descrição do Projeto
 
-> _[Descrição a ser definida]_
+Muitas empresas ainda tomam decisões operacionais com base em observação manual e experiência, sem dados concretos sobre o que realmente acontece no dia a dia da operação — seja no chão de fábrica, na lavoura, na cadeia de frios ou na frota de transporte. Esse projeto, desenvolvido em parceria com a BzuTech, tem como objetivo mostrar de forma clara e visual o diferencial que a aplicação de IoT (Internet das Coisas) traz para diferentes setores de negócio.
+
+A plataforma apresenta uma landing page introdutória, explicando de forma simples o que é IoT e como sensores conectados transformam dados físicos em decisões de gestão. A partir dela, o usuário é direcionado para uma dashboard interativa, que exibe o comparativo de "antes e depois" da aplicação de IoT em diversos setores — como agro, indústria, saúde, energia, transporte e varejo — evidenciando ganhos em eficiência, redução de custos e antecipação de problemas.
+
+O projeto conta ainda com um canal de contato integrado ao backend, permitindo que visitantes enviem mensagens que ficam disponíveis para a equipe através de um painel administrativo próprio.
 
 ## 👥 Integrantes
 
