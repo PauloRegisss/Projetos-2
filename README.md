@@ -51,8 +51,10 @@ https://github.com/PauloRegisss/Projetos-2/blob/main/Ana%CC%81lise%20de%20Compet
 ## Entregável 2 FDS 
 
 - **Deployment da infraestrutura em produção:**
+https://www.youtube.com/watch?v=sYD3GoiuwKU
 
 - **Screencast de explicação do código Django:**
+https://youtu.be/cQkOwgvnDnk
 
 - **Print do Backlog:**
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/Captura%20de%20tela%202026-09-18%20202254.png)
