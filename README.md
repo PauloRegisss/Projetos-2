@@ -55,10 +55,10 @@ Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 ## Entregável 2 FDS 
 
 - **Deployment da infraestrutura em produção:**
-https://www.youtube.com/watch?v=sYD3GoiuwKU
+https://www.youtube.com/watch?v=cQkOwgvnDnk
 
 - **Screencast de explicação do código Django:**
-https://youtu.be/cQkOwgvnDnk
+https://www.youtube.com/watch?v=sYD3GoiuwKU
 
 - **Print do Backlog:**
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/Captura%20de%20tela%202026-09-18%20202254.png)
