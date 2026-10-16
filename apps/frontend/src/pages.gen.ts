@@ -4,6 +4,8 @@
 import type { PathsForPages, GetConfigResponse, SearchCodecsForPages } from 'waku/router';
 
 // prettier-ignore
+import type { getConfig as File_Root_getConfig } from './pages/_root';
+// prettier-ignore
 import type { getConfig as File_AdminIndex_getConfig } from './pages/admin/index';
 // prettier-ignore
 import type { getConfig as File_AuthIndex_getConfig } from './pages/auth/index';
@@ -16,6 +18,7 @@ import type { getConfig as File_Sobre_getConfig } from './pages/sobre';
 
 // prettier-ignore
 type Page =
+| ({ path: '/_root' } & GetConfigResponse<typeof File_Root_getConfig>)
 | ({ path: '/admin' } & GetConfigResponse<typeof File_AdminIndex_getConfig>)
 | ({ path: '/auth' } & GetConfigResponse<typeof File_AuthIndex_getConfig>)
 | { path: '/contato'; render: 'static' }

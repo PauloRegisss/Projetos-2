@@ -1,12 +1,8 @@
 import "../styles.css";
 
-import path from "node:path/win32";
 import type { ReactNode } from "react";
-import { unstable_getHeaders } from "waku/router/server";
 import { Toaster } from "@/components/ui/toast";
 import FloatingChatButton from "../components/floating-chat-button";
-import Header from "../components/header";
-import { ThemeProvider } from 'next-themes';
 
 type RootLayoutProps = { children: ReactNode };
 
@@ -19,9 +15,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			<title>Projeto Nexus</title>
 			<FloatingChatButton />
 			<Toaster />
-			<ThemeProvider>	<main>{children}</main> 
-			</ThemeProvider>
-		
+			<main>{children}</main>
 		</div>
 	);
 }
