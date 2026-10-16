@@ -33,9 +33,9 @@ export default function ThemeSwitcher() {
 			onClick={() => setTheme(isDark ? "light" : "dark")}
 			aria-label={`Ativar tema ${isDark ? "claro" : "escuro"}`}
 			title={`Ativar tema ${isDark ? "claro" : "escuro"}`}
-			className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-white/10"
+			className="cursor-pointer flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-white/10"
 		>
 			{isDark ? <Sun size={18} /> : <Moon size={18} />}
 		</button>
-	);
+		);
 }
