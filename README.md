@@ -12,6 +12,8 @@ Muitas empresas ainda tomam decisões operacionais com base em observação manu
 
 A plataforma apresenta uma landing page introdutória, explicando de forma simples o que é IoT e como sensores conectados transformam dados físicos em decisões de gestão. A partir dela, o usuário é direcionado para uma dashboard interativa, que exibe o comparativo de "antes e depois" da aplicação de IoT em diversos setores — como agro, indústria, saúde, energia, transporte e varejo — evidenciando ganhos em eficiência, redução de custos e antecipação de problemas.
 
+Uma plataforma interativa que utiliza Inteligência Artificial para mensurar o impacto do IoT no seu negócio. Por meio de um chatbot conversacional estilo autoatendimento, a IA analisa o cenário atual da sua empresa e gera um Showroom Interativo, comparando métricas reais de desempenho e eficiência do seu negócio com e sem a aplicação de IoT.
+
 O projeto conta ainda com um canal de contato integrado ao backend, permitindo que visitantes enviem mensagens que ficam disponíveis para a equipe através de um painel administrativo próprio.
 
 ## 👥 Integrantes
