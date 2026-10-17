@@ -2,6 +2,7 @@
 
 import { ArrowRight, LoaderCircle, LockKeyhole, UserRound } from "lucide-react";
 import { useState } from "react";
+import { signIn } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import {
 	Field,
@@ -11,8 +12,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
-
-const API_URL = import.meta.env.WAKU_PUBLIC_BACKEND_URL;
 
 export default function LoginForm() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,28 +23,9 @@ export default function LoginForm() {
 		setIsSubmitting(true);
 
 		try {
-			const csrfResponse = await fetch(`${API_URL}/auth/csrf/`, {
-				credentials: "include",
-			});
-			if (!csrfResponse.ok) throw new Error("CSRF");
-			const { csrfToken } = (await csrfResponse.json()) as {
-				csrfToken: string;
-			};
-			const secureCookie =
-				window.location.protocol === "https:" ? "; Secure" : "";
-			document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax${secureCookie}`;
-
-			const response = await fetch(`${API_URL}/auth/login/`, {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-					"X-CSRFToken": csrfToken,
-				},
-				body: JSON.stringify({
-					username: formData.get("username"),
-					password: formData.get("password"),
-				}),
+			const response = await signIn({
+				username: String(formData.get("username") ?? ""),
+				password: String(formData.get("password") ?? ""),
 			});
 
 			if (!response.ok) {

@@ -1,12 +1,5 @@
 import { api } from "./api";
 
-interface User {
-	id: number;
-	username: string;
-	email: string;
-	is_staff: boolean;
-}
-
 export async function getCsrfToken() {
 	const response = await api("/auth/csrf/");
 
@@ -28,6 +21,12 @@ export async function signIn({
 }) {
 	const csrfToken = await getCsrfToken();
 
+	if (typeof document !== "undefined") {
+		const secureCookie =
+			window.location.protocol === "https:" ? "; Secure" : "";
+		document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax${secureCookie}`;
+	}
+
 	return await api("/auth/login/", {
 		method: "POST",
 		headers: {
@@ -39,17 +38,4 @@ export async function signIn({
 			password,
 		}),
 	});
-}
-
-export async function getSession(): Promise<User | null> {
-	const response = await api("/auth/me/");
-	if (response.status === 401) {
-		return null;
-	}
-
-	if (!response.ok) {
-		throw new Error("Erro ao verificar autenticação");
-	}
-	const json = await response.json();
-	return (json.user ?? null) as User | null;
 }

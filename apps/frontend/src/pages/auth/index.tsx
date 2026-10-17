@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "waku";
 import { unstable_redirect } from "waku/router/server";
-import { getSession } from "@/auth/auth";
+import { getSession } from "@/auth/session";
 import LoginForm from "@/components/login-form";
 
 export default async function AuthPage() {
