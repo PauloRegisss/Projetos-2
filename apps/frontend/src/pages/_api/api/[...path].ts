@@ -12,6 +12,8 @@ const FORWARDED_REQUEST_HEADERS = [
 	"origin",
 	"referer",
 	"x-csrftoken",
+	// IP original do navegador, usado pelo rate limit do backend.
+	"x-forwarded-for",
 ];
 
 // O `fetch` do servidor já descomprime o corpo, então esses headers da

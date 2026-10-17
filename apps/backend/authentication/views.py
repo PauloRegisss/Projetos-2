@@ -6,9 +6,19 @@ from django.middleware.csrf import get_token
 from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from app.ratelimit import is_rate_limited
+
+LOGIN_RATE_LIMIT = 10  # tentativas por minuto, por IP
+
 
 @require_POST
 def login_view(request: HttpRequest):
+    if is_rate_limited(request, "login", LOGIN_RATE_LIMIT):
+        return JsonResponse(
+            {"error": "Muitas tentativas de login. Tente novamente em instantes."},
+            status=429,
+        )
+
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:

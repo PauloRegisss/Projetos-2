@@ -1,18 +1,13 @@
 import json
-from typing import TypedDict
 
 from django.http import HttpRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 
+from .forms import ContactForm
 from .models import ContactMessage
+from .ratelimit import is_rate_limited
 
-
-class ContactData(TypedDict):
-    name: str
-    email: str
-    subject: str
-    message: str
+CONTACT_RATE_LIMIT = 5  # mensagens por minuto, por IP
 
 
 @require_GET
@@ -20,18 +15,34 @@ def health(_request: HttpRequest):
     return JsonResponse({"status": "ok"})
 
 
-@csrf_exempt
+@require_POST
 def contato(request: HttpRequest):
-    if request.method == "POST":
-        data: ContactData = json.loads(request.body)
-        _ = ContactMessage.objects.create(
-            name=data["name"],
-            email=data["email"],
-            subject=data["subject"],
-            message=data["message"],
+    if is_rate_limited(request, "contato", CONTACT_RATE_LIMIT):
+        return JsonResponse(
+            {"error": "Muitas mensagens enviadas. Tente novamente em instantes."},
+            status=429,
         )
-        return JsonResponse({"success": True})
-    return JsonResponse({"error": "Rota desconhecida."})
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "JSON inválido."}, status=400)
+
+    if not isinstance(data, dict):
+        return JsonResponse({"error": "JSON inválido."}, status=400)
+
+    form = ContactForm(data)
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                "error": "Dados inválidos.",
+                "fields": form.errors.get_json_data(),
+            },
+            status=400,
+        )
+
+    _ = form.save()
+    return JsonResponse({"success": True}, status=201)
 
 
 @require_GET

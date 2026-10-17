@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { Link } from "waku";
 import { api } from "@/auth/api";
+import { getCsrfToken } from "@/auth/auth";
 import Header from "@/components/header";
 import { toast } from "@/components/ui/toast";
 import {
@@ -33,10 +34,12 @@ export default function ContactPage() {
 		setIsSubmitting(true);
 
 		try {
+			const csrfToken = await getCsrfToken();
 			const response = await api("/contato/", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					"X-CSRFToken": csrfToken,
 				},
 				body: JSON.stringify({
 					name: formData.get("nome"),
@@ -45,6 +48,22 @@ export default function ContactPage() {
 					message: formData.get("mensagem"),
 				}),
 			});
+
+			if (response.status === 400) {
+				toast.add({
+					title: "Não foi possível enviar a mensagem.",
+					description: "Confira se todos os campos e o e-mail estão corretos.",
+				});
+				return;
+			}
+
+			if (response.status === 429) {
+				toast.add({
+					title: "Muitas mensagens enviadas.",
+					description: "Aguarde um minuto e tente novamente.",
+				});
+				return;
+			}
 
 			if (!response.ok) {
 				toast.add({
