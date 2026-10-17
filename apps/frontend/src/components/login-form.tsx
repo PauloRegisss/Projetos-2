@@ -54,13 +54,13 @@ export default function LoginForm() {
 		<form onSubmit={handleSubmit} className="space-y-6">
 			<FieldGroup>
 				<Field>
-					<FieldLabel htmlFor="username" className="text-white/80">
+					<FieldLabel htmlFor="username" className="text-foreground/80">
 						Usuário
 					</FieldLabel>
 					<div className="relative">
 						<UserRound
 							aria-hidden="true"
-							className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/35"
+							className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
 						/>
 						<Input
 							id="username"
@@ -68,18 +68,18 @@ export default function LoginForm() {
 							autoComplete="username"
 							placeholder="Seu usuário"
 							required
-							className="h-11 border-white/10 bg-white/[.04] pl-10 text-white placeholder:text-white/30"
+							className="h-11 border-border bg-foreground/[.03] pl-10 text-foreground placeholder:text-muted-foreground/70"
 						/>
 					</div>
 				</Field>
 				<Field>
-					<FieldLabel htmlFor="password" className="text-white/80">
+					<FieldLabel htmlFor="password" className="text-foreground/80">
 						Senha
 					</FieldLabel>
 					<div className="relative">
 						<LockKeyhole
 							aria-hidden="true"
-							className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/35"
+							className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
 						/>
 						<Input
 							id="password"
@@ -88,10 +88,10 @@ export default function LoginForm() {
 							autoComplete="current-password"
 							placeholder="Sua senha"
 							required
-							className="h-11 border-white/10 bg-white/[.04] pl-10 text-white placeholder:text-white/30"
+							className="h-11 border-border bg-foreground/[.03] pl-10 text-foreground placeholder:text-muted-foreground/70"
 						/>
 					</div>
-					<FieldDescription className="text-white/35">
+					<FieldDescription className="text-muted-foreground">
 						Acesso restrito à área administrativa.
 					</FieldDescription>
 				</Field>

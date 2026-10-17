@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/auth/api";
 import AdminUserDropdown from "./admin-user-dropdown";
 import NexusIcon from "./nexus-icon";
+import ThemeSwitcher from "./theme-switch";
 
 type User = {
 	username: string;
@@ -28,12 +29,15 @@ export default function AdminHeader() {
 
 	return (
 		<header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-10">
-			<div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-[#141414]/85 px-5 py-3 backdrop-blur-xl sm:px-7">
-				<div className="flex items-center gap-2 text-xl font-black tracking-[0.1em] text-white">
+			<div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-border/80 bg-background/85 px-5 py-3 shadow-sm shadow-black/5 backdrop-blur-xl sm:px-7 dark:border-white/10 dark:shadow-none">
+				<div className="flex items-center gap-2 text-xl font-black tracking-[0.1em] text-foreground">
 					<NexusIcon width={30} height={30} />
 					<p>NEXUS</p>
 				</div>
-				{user && <AdminUserDropdown user={user} />}
+				<div className="flex items-center gap-3">
+					<ThemeSwitcher />
+					{user && <AdminUserDropdown user={user} />}
+				</div>
 			</div>
 		</header>
 	);
