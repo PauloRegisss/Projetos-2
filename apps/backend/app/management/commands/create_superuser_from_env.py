@@ -1,7 +1,9 @@
 import os
 
 from django.contrib.auth import get_user_model
-from django.core.management.base import BaseCommand
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):
@@ -17,18 +19,27 @@ class Command(BaseCommand):
             return
 
         user_model = get_user_model()
-        user, created = user_model.objects.get_or_create(
-            username=username,
-            defaults={"email": email},
-        )
-
-        if not created:
+        if user_model.objects.filter(username=username).exists():
             self.stdout.write(f"Superusuário '{username}' já existe; pulando.")
             return
 
-        user.email = email
-        user.is_staff = True
-        user.is_superuser = True
+        user = user_model(
+            username=username,
+            email=email,
+            is_staff=True,
+            is_superuser=True,
+        )
+
+        # Valida antes de salvar, para nunca criar um admin com senha fraca
+        # (usa os validadores de AUTH_PASSWORD_VALIDATORS do settings.py).
+        try:
+            validate_password(password, user=user)
+        except ValidationError as error:
+            raise CommandError(
+                "CREATE_SUPERUSER_PASSWORD é fraca; superusuário não foi criado. "
+                + " ".join(error.messages)
+            ) from error
+
         user.set_password(password)
-        user.save(update_fields=["email", "is_staff", "is_superuser", "password"])
+        user.save()
         self.stdout.write(self.style.SUCCESS(f"Superusuário '{username}' criado."))

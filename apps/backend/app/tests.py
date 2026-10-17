@@ -1,7 +1,12 @@
 import json
+import os
+from io import StringIO
+from unittest import mock
 
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import Client, TestCase
 
 from .models import ContactMessage
@@ -117,3 +122,53 @@ class LoginRateLimitTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 429)
+
+
+class CreateSuperuserFromEnvTests(TestCase):
+    def run_command(self, **env: str) -> str:
+        out = StringIO()
+        with mock.patch.dict(os.environ, env):
+            call_command("create_superuser_from_env", stdout=out)
+        return out.getvalue()
+
+    def test_senha_fraca_aborta_sem_criar_usuario(self):
+        with self.assertRaises(CommandError):
+            _ = self.run_command(
+                CREATE_SUPERUSER_USERNAME="admin",
+                CREATE_SUPERUSER_PASSWORD="admin1234",
+            )
+
+        self.assertFalse(get_user_model().objects.filter(username="admin").exists())
+
+    def test_senha_forte_cria_superusuario(self):
+        _ = self.run_command(
+            CREATE_SUPERUSER_USERNAME="admin",
+            CREATE_SUPERUSER_EMAIL="admin@exemplo.com",
+            CREATE_SUPERUSER_PASSWORD="Nexus-Painel-2026!",
+        )
+
+        user = get_user_model().objects.get(username="admin")
+        self.assertTrue(user.is_superuser)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.check_password("Nexus-Painel-2026!"))
+
+    def test_usuario_existente_e_mantido(self):
+        get_user_model().objects.create_user("admin", password="Senha-Antiga-123!")
+
+        output = self.run_command(
+            CREATE_SUPERUSER_USERNAME="admin",
+            CREATE_SUPERUSER_PASSWORD="admin1234",
+        )
+
+        self.assertIn("já existe", output)
+        user = get_user_model().objects.get(username="admin")
+        self.assertTrue(user.check_password("Senha-Antiga-123!"))
+
+    def test_sem_senha_pula(self):
+        output = self.run_command(
+            CREATE_SUPERUSER_USERNAME="admin",
+            CREATE_SUPERUSER_PASSWORD="",
+        )
+
+        self.assertIn("pulando", output)
+        self.assertFalse(get_user_model().objects.exists())
