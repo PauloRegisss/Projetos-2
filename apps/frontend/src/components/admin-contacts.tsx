@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { api } from "@/auth/api";
 
-const API_URL = import.meta.env.WAKU_PUBLIC_BACKEND_URL;
 type Contact = { id: number; name: string; email: string; subject: string; message: string; date: string };
 
 export default function AdminContacts() {
@@ -11,7 +11,7 @@ export default function AdminContacts() {
 	const [hasError, setHasError] = useState(false);
 
 	useEffect(() => {
-		fetch(`${API_URL}/contatos/`, { credentials: "include" })
+		api("/contatos/")
 			.then(async (response) => {
 				if (response.status === 401 || response.status === 403) {
 					window.location.href = "/auth";

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { api } from "@/auth/api";
 import AdminUserDropdown from "./admin-user-dropdown";
 import NexusIcon from "./nexus-icon";
 
@@ -9,13 +10,11 @@ type User = {
 	email: string;
 };
 
-const API_URL = import.meta.env.WAKU_PUBLIC_BACKEND_URL;
-
 export default function AdminHeader() {
 	const [user, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
-		fetch(`${API_URL}/auth/me/`, { credentials: "include" })
+		api("/auth/me/")
 			.then(async (response) => {
 				if (!response.ok) throw new Error("Sessão inválida");
 				const data = (await response.json()) as { user?: User & { is_staff?: boolean } };

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "waku";
+import { api } from "@/auth/api";
 import Header from "@/components/header";
 import { toast } from "@/components/ui/toast";
 import {
@@ -24,7 +25,6 @@ import { Input } from "../components/ui/input";
 
 export default function ContactPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const backend = import.meta.env.WAKU_PUBLIC_BACKEND_URL;
 
 	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -33,7 +33,7 @@ export default function ContactPage() {
 		setIsSubmitting(true);
 
 		try {
-			const response = await fetch(`${backend}/contato/`, {
+			const response = await api("/contato/", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -152,7 +152,7 @@ export default function ContactPage() {
 							<form
 								className="space-y-6"
 								onSubmit={handleSubmit}
-								action={`${backend}/contato`}
+								action="/api/contato/"
 							>
 								<FieldSet>
 									<FieldGroup>

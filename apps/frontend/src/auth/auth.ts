@@ -21,12 +21,6 @@ export async function signIn({
 }) {
 	const csrfToken = await getCsrfToken();
 
-	if (typeof document !== "undefined") {
-		const secureCookie =
-			window.location.protocol === "https:" ? "; Secure" : "";
-		document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax${secureCookie}`;
-	}
-
 	return await api("/auth/login/", {
 		method: "POST",
 		headers: {
@@ -37,5 +31,16 @@ export async function signIn({
 			username,
 			password,
 		}),
+	});
+}
+
+export async function signOut() {
+	const csrfToken = await getCsrfToken();
+
+	return await api("/auth/logout/", {
+		method: "POST",
+		headers: {
+			"X-CSRFToken": csrfToken,
+		},
 	});
 }

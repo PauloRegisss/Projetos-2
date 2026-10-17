@@ -2,6 +2,7 @@
 
 import { LoaderCircle, LogOut, UserRound } from "lucide-react";
 import { useState } from "react";
+import { signOut } from "@/auth/auth";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,7 +15,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type User = { username: string; email: string };
-const API_URL = import.meta.env.WAKU_PUBLIC_BACKEND_URL;
 
 export default function AdminUserDropdown({ user }: { user: User }) {
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -22,18 +22,7 @@ export default function AdminUserDropdown({ user }: { user: User }) {
 	const logout = async () => {
 		setIsLoggingOut(true);
 		try {
-			const csrf = await fetch(`${API_URL}/auth/csrf/`, {
-				credentials: "include",
-			});
-			if (!csrf.ok) throw new Error("Não foi possível obter o token CSRF");
-			const { csrfToken } = (await csrf.json()) as { csrfToken: string };
-			const secureCookie = window.location.protocol === "https:" ? "; Secure" : "";
-			document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; Path=/; SameSite=Lax${secureCookie}`;
-			const response = await fetch(`${API_URL}/auth/logout/`, {
-				method: "POST",
-				credentials: "include",
-				headers: { "X-CSRFToken": csrfToken },
-			});
+			const response = await signOut();
 			if (!response.ok) throw new Error("Não foi possível fazer logout");
 			window.location.href = "/auth";
 		} catch (error) {
