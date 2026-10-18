@@ -40,6 +40,7 @@ if render_hostname and render_hostname not in ALLOWED_HOSTS:
 INSTALLED_APPS = [
     "app",
     "authentication",
+    "chatbot",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
