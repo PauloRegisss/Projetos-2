@@ -68,11 +68,13 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 
 ## Entregável 3 FDS
 - **Print do Backlog:**
-- ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-16_181635211.png)
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-16_181635211.png)
   
 - **Issue/bug tracker:**
-- ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-17_213726095.png)
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-17_213726095.png)
 
+- **Print da Sprint**
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-18_202158615.png)
 
 - **Histórias de usuário**
 1. Como usuário da plataforma, eu quero poder alternar entre o modo claro e o modo escuro na interface, para que eu possa adaptar a visualização à minha preferência e conforto visual durante a navegação.
