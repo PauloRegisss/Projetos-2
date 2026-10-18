@@ -5,6 +5,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from app.ratelimit import is_rate_limited
 
+from .calculos import calcular_metricas
 from .questions import QUESTIONS
 from .validation import validar_respostas
 
@@ -19,7 +20,7 @@ def perguntas(_request: HttpRequest):
 
 @require_POST
 def simular_view(request: HttpRequest):
-    """Recebe e valida as respostas do chat. Por enquanto só devolve as respostas validadas."""
+    """Recebe e valida as respostas do chat e devolve as métricas com e sem IoT."""
     if is_rate_limited(request, "simular", SIMULATION_RATE_LIMIT):
         return JsonResponse(
             {"error": "Muitas simulações enviadas. Tente novamente em instantes."},
@@ -38,4 +39,4 @@ def simular_view(request: HttpRequest):
     if erros:
         return JsonResponse({"error": "Respostas inválidas.", "fields": erros}, status=400)
 
-    return JsonResponse({"respostas": respostas})
+    return JsonResponse({"respostas": respostas, **calcular_metricas(respostas)})
