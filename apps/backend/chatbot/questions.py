@@ -1,9 +1,10 @@
 # Perguntas do chatbot, na ordem em que são feitas.
-# Perguntas numéricas têm `min` e, quando faz sentido, `max`: o frontend usa os
+# Perguntas numéricas têm `min` e, quando faz sentido, `max` e `integer`: o frontend usa os
 # limites no campo e o backend usa na validação das respostas.
 QUESTIONS = [
     {"key": "setor", "text": "Qual o setor da sua empresa?", "type": "text", "max_length": 80},
-    {"key": "funcionarios", "text": "Quantos funcionários a empresa tem?", "type": "number", "min": 1},
+    {"key": "funcionarios", "text": "Quantos funcionários a empresa tem?", "type": "number",
+     "min": 1, "integer": True},
     {"key": "faturamento", "text": "Qual o faturamento mensal aproximado (R$)?", "type": "number", "min": 0},
     {"key": "energia", "text": "Quanto a empresa gasta por mês com energia (R$)?", "type": "number", "min": 0},
     {"key": "manutencao", "text": "Quanto gasta por mês com manutenção (R$)?", "type": "number", "min": 0},
