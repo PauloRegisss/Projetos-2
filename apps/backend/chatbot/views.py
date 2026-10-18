@@ -1,19 +1,16 @@
 import json
 
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
 
 from .questions import QUESTIONS
 
 
-def chat(request):
-    """Tela do chatbot conversacional: ponto de partida da avaliação de impacto do IoT."""
-    context = {
-        "first_question": QUESTIONS[0],
-        "total_questions": len(QUESTIONS),
-    }
-    return render(request, "chatbot/chat.html", context)
+@require_GET
+def perguntas(_request: HttpRequest):
+    """Perguntas do chat, para o frontend montar a conversa."""
+    return JsonResponse({"perguntas": QUESTIONS})
 
 
 @csrf_exempt
