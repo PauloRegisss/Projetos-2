@@ -43,7 +43,7 @@ O projeto conta ainda com um canal de contato integrado ao backend, permitindo q
 Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 ## 📋 Gestão do Projeto
 
-- **Jira:** https://projeto-2-grupo-9.atlassian.net/jira/projects?page=1&sortKey=name&sortOrder=ASC&types=software%2Cbusiness
+- **Jira:** https://cesar-team-fds-cc.atlassian.net/jira/software/projects/SCRUM/boards/1?filter=&groupBy=none&atlOrigin=eyJpIjoiYTQ0MDkxMzk1MTkzNDQ3NmJhY2RkNDM1ODJiYTcxYTEiLCJwIjoiaiJ9
 
 ## Entregável 1 FDS 
 - **Print do Backlog:** 
