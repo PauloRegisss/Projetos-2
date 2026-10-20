@@ -12,8 +12,8 @@ export default function FloatingChatButton({
 }: FloatingChatButtonProps) {
 	return (
 		<button
-			 type="button"
-			 aria-label="Abrir assistente NEXUS"
+			type="button"
+			aria-label="Abrir assistente NEXUS"
 			onClick={(event) => {
 				window.dispatchEvent(new CustomEvent("nexus-chatbot:open"));
 				onClick?.(event);

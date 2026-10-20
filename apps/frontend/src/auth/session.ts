@@ -1,4 +1,4 @@
-import { unstable_getHeaders } from "waku/router/server";
+import { unstable_getHeaders, unstable_redirect } from "waku/router/server";
 import { api } from "./api";
 
 export interface User {
@@ -21,8 +21,9 @@ export async function getSession(): Promise<User | null> {
 	}
 
 	if (!response.ok) {
-		throw new Error("Erro ao verificar autenticação");
+		unstable_redirect("/auth");
 	}
 	const json = await response.json();
+	if (!json.user.is_staff) return unstable_redirect("/auth");
 	return (json.user ?? null) as User | null;
 }

@@ -2,7 +2,10 @@
 
 import { LoaderCircle, LogOut, UserRound } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "waku";
 import { signOut } from "@/auth/auth";
+import type { User } from "@/auth/session";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -12,19 +15,21 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
-type User = { username: string; email: string };
+import { toast } from "./ui/toast";
 
 export default function AdminUserDropdown({ user }: { user: User }) {
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
-
+	const route = useRouter();
 	const logout = async () => {
+		"use server";
 		setIsLoggingOut(true);
 		try {
 			const response = await signOut();
-			if (!response.ok) throw new Error("Não foi possível fazer logout");
-			window.location.href = "/auth";
+			if (!response.ok)
+				toast.add({
+					title: "Ocorreu um erro ao tentar sair da conta.",
+				});
+			route.push("/auth");
 		} catch (error) {
 			console.error("Falha ao fazer logout", error);
 		} finally {
@@ -51,7 +56,9 @@ export default function AdminUserDropdown({ user }: { user: User }) {
 				<DropdownMenuGroup>
 					<DropdownMenuLabel className="px-2 pb-3">
 						<p className="font-semibold">{user.username}</p>
-						<p className="mt-1 truncate font-normal text-muted-foreground">{user.email}</p>
+						<p className="mt-1 truncate font-normal text-muted-foreground">
+							{user.email}
+						</p>
 					</DropdownMenuLabel>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator className="bg-border" />
