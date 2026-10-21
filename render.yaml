@@ -18,7 +18,7 @@ services:
           - key: CSRF_TRUSTED_ORIGINS
             value: https://nexus-frontend-5ip8.onrender.com
           - key: SESSION_COOKIE_SECURE
-            value: "True"
+            value: "True"e
           - key: SESSION_COOKIE_SAMESITE
             value: "Lax"
           - key: CSRF_COOKIE_SAMESITE
@@ -32,6 +32,8 @@ services:
           - key: CREATE_SUPERUSER_EMAIL
             sync: false
           - key: CREATE_SUPERUSER_PASSWORD
+            sync: false
+          - key: ANTHROPIC_API_KEY
             sync: false
 
     - type: web
