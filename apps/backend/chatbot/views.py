@@ -5,11 +5,12 @@ from django.views.decorators.http import require_GET, require_POST
 
 from app.ratelimit import is_rate_limited
 
+from .analise import gerar_analise
+from .calculos import calcular_metricas
 from .questions import QUESTIONS
 from .validation import validar_respostas
 
-SIMULATION_RATE_LIMIT = 5  # simulações por minuto, por IP
-
+SIMULATION_RATE_LIMIT = 5  
 
 @require_GET
 def perguntas(_request: HttpRequest):
@@ -37,3 +38,12 @@ def simular_view(request: HttpRequest):
     respostas, erros = validar_respostas(data)
     if erros:
         return JsonResponse({"error": "Respostas inválidas.", "fields": erros}, status=400)
+
+    resultado = calcular_metricas(respostas)
+    return JsonResponse(
+        {
+            "respostas": respostas,
+            **resultado,
+            "analise": gerar_analise(respostas, resultado),
+        }
+    )

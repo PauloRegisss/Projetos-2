@@ -55,6 +55,7 @@ class SimularViewTests(TestCase):
     def setUp(self):
         cache.clear()
         self.client = Client(enforce_csrf_checks=True)
+        
         patcher = mock.patch.dict(os.environ)
         patcher.start()
         self.addCleanup(patcher.stop)
@@ -156,6 +157,7 @@ class SimularViewTests(TestCase):
 
         self.assertEqual(response.status_code, 429)
 
+
 class CalculosTests(SimpleTestCase):
     def metrica(self, resultado, key):
         return next(m for m in resultado["metricas"] if m["key"] == key)
@@ -182,7 +184,9 @@ class CalculosTests(SimpleTestCase):
 
     def test_quem_ja_usa_sensores_ganha_menos(self):
         manual = calcular_metricas({**VALID_RESPOSTAS, "monitoramento": "Manual"})
-        sensores = calcular_metricas({**VALID_RESPOSTAS, "monitoramento": "Já uso sensores"})
+        sensores = calcular_metricas(
+            {**VALID_RESPOSTAS, "monitoramento": "Já uso sensores"}
+        )
         self.assertLess(sensores["economia_mensal"], manual["economia_mensal"])
 
     def test_energia_manual_aplica_reducao_cheia(self):
@@ -192,6 +196,8 @@ class CalculosTests(SimpleTestCase):
     def test_economia_anual_e_12x_a_mensal(self):
         r = calcular_metricas(VALID_RESPOSTAS)
         self.assertAlmostEqual(r["economia_anual"], r["economia_mensal"] * 12, places=1)
+
+    # --- #24: premissas do cálculo alinhadas com as perguntas ---
 
     def test_fatores_cobrem_todas_as_opcoes_de_monitoramento(self):
         pergunta = next(q for q in QUESTIONS if q["key"] == "monitoramento")
@@ -204,7 +210,10 @@ class CalculosTests(SimpleTestCase):
     def test_resultado_marca_como_estimativa(self):
         self.assertIs(calcular_metricas(VALID_RESPOSTAS)["estimativa"], True)
 
+
 class AnaliseTests(SimpleTestCase):
+    """#20: análise com IA, sempre com a API simulada (nunca chama a rede)."""
+
     def setUp(self):
         patcher = mock.patch.dict(os.environ)
         patcher.start()
