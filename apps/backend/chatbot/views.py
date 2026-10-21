@@ -5,7 +5,6 @@ from django.views.decorators.http import require_GET, require_POST
 
 from app.ratelimit import is_rate_limited
 
-from .calculos import calcular_metricas
 from .questions import QUESTIONS
 from .validation import validar_respostas
 
@@ -38,5 +37,3 @@ def simular_view(request: HttpRequest):
     respostas, erros = validar_respostas(data)
     if erros:
         return JsonResponse({"error": "Respostas inválidas.", "fields": erros}, status=400)
-
-    return JsonResponse({"respostas": respostas, **calcular_metricas(respostas)})
