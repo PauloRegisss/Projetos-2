@@ -1,9 +1,14 @@
 import json
+import os
+from types import SimpleNamespace
+from unittest import mock
 
 from django.core.cache import cache
-from django.test import Client, TestCase
+from django.test import Client, SimpleTestCase, TestCase
 from django.urls import reverse
 
+from . import analise
+from .calculos import FATOR_MONITORAMENTO, HORAS_POR_MES, calcular_metricas
 from .questions import QUESTIONS
 from .views import SIMULATION_RATE_LIMIT
 
@@ -50,6 +55,10 @@ class SimularViewTests(TestCase):
     def setUp(self):
         cache.clear()
         self.client = Client(enforce_csrf_checks=True)
+        patcher = mock.patch.dict(os.environ)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        os.environ.pop("ANTHROPIC_API_KEY", None)
 
     def csrf_token(self) -> str:
         return self.client.get("/auth/csrf/").json()["csrfToken"]
@@ -77,6 +86,13 @@ class SimularViewTests(TestCase):
         self.assertEqual(
             response.json()["respostas"], {**VALID_RESPOSTAS, "setor": "Indústria"}
         )
+
+    def test_resposta_traz_metricas_estimativa_e_analise(self):
+        data = self.post_respostas().json()
+
+        self.assertTrue(data["estimativa"])
+        self.assertIn("metricas", data)
+        self.assertTrue(data["analise"])
 
     def test_json_invalido_retorna_400(self):
         response = self.post("abc")
@@ -139,3 +155,82 @@ class SimularViewTests(TestCase):
         response = self.post_respostas()
 
         self.assertEqual(response.status_code, 429)
+
+class CalculosTests(SimpleTestCase):
+    def metrica(self, resultado, key):
+        return next(m for m in resultado["metricas"] if m["key"] == key)
+
+    def test_mesmas_respostas_mesmo_resultado(self):
+        self.assertEqual(
+            calcular_metricas(VALID_RESPOSTAS), calcular_metricas(VALID_RESPOSTAS)
+        )
+
+    def test_com_iot_nunca_negativo_nem_maior_que_sem_iot(self):
+        for monitoramento in ["Manual", "Parcialmente automatizado", "Já uso sensores"]:
+            for valor in [0, 1, 100]:
+                respostas = {
+                    **VALID_RESPOSTAS,
+                    "monitoramento": monitoramento,
+                    "energia": valor,
+                    "manutencao": valor,
+                    "paradas": min(valor, 744),
+                    "desperdicio": min(valor, 100),
+                }
+                for m in calcular_metricas(respostas)["metricas"]:
+                    self.assertGreaterEqual(m["com_iot"], 0)
+                    self.assertLessEqual(m["com_iot"], m["sem_iot"])
+
+    def test_quem_ja_usa_sensores_ganha_menos(self):
+        manual = calcular_metricas({**VALID_RESPOSTAS, "monitoramento": "Manual"})
+        sensores = calcular_metricas({**VALID_RESPOSTAS, "monitoramento": "Já uso sensores"})
+        self.assertLess(sensores["economia_mensal"], manual["economia_mensal"])
+
+    def test_energia_manual_aplica_reducao_cheia(self):
+        resultado = calcular_metricas({**VALID_RESPOSTAS, "energia": 20000})
+        self.assertEqual(self.metrica(resultado, "energia")["com_iot"], 16000)
+
+    def test_economia_anual_e_12x_a_mensal(self):
+        r = calcular_metricas(VALID_RESPOSTAS)
+        self.assertAlmostEqual(r["economia_anual"], r["economia_mensal"] * 12, places=1)
+
+    def test_fatores_cobrem_todas_as_opcoes_de_monitoramento(self):
+        pergunta = next(q for q in QUESTIONS if q["key"] == "monitoramento")
+        self.assertEqual(set(FATOR_MONITORAMENTO), set(pergunta["choices"]))
+
+    def test_horas_por_mes_igual_ao_maximo_de_paradas(self):
+        pergunta = next(q for q in QUESTIONS if q["key"] == "paradas")
+        self.assertEqual(HORAS_POR_MES, pergunta["max"])
+
+    def test_resultado_marca_como_estimativa(self):
+        self.assertIs(calcular_metricas(VALID_RESPOSTAS)["estimativa"], True)
+
+class AnaliseTests(SimpleTestCase):
+    def setUp(self):
+        patcher = mock.patch.dict(os.environ)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        os.environ.pop("ANTHROPIC_API_KEY", None)
+        self.resultado = calcular_metricas(VALID_RESPOSTAS)
+
+    def test_sem_chave_usa_texto_padrao(self):
+        texto = analise.gerar_analise(VALID_RESPOSTAS, self.resultado)
+
+        self.assertEqual(texto, analise.analise_padrao(self.resultado))
+
+    def test_com_chave_usa_o_texto_da_ia(self):
+        os.environ["ANTHROPIC_API_KEY"] = "chave-falsa"
+        with mock.patch.object(analise, "anthropic") as fake:
+            fake.Anthropic.return_value.messages.create.return_value = SimpleNamespace(
+                content=[SimpleNamespace(type="text", text="Análise da IA.")]
+            )
+            texto = analise.gerar_analise(VALID_RESPOSTAS, self.resultado)
+
+        self.assertEqual(texto, "Análise da IA.")
+
+    def test_falha_da_api_cai_no_texto_padrao(self):
+        os.environ["ANTHROPIC_API_KEY"] = "chave-falsa"
+        with mock.patch.object(analise, "anthropic") as fake:
+            fake.Anthropic.return_value.messages.create.side_effect = RuntimeError
+            texto = analise.gerar_analise(VALID_RESPOSTAS, self.resultado)
+
+        self.assertEqual(texto, analise.analise_padrao(self.resultado))
