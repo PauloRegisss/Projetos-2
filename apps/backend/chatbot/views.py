@@ -7,10 +7,22 @@ from app.ratelimit import is_rate_limited
 
 from .analise import gerar_analise
 from .calculos import calcular_metricas
+from .models import Simulacao
 from .questions import QUESTIONS
 from .validation import validar_respostas
 
-SIMULATION_RATE_LIMIT = 5  
+SIMULATION_RATE_LIMIT = 5  # simulações por minuto, por IP
+
+
+def _serializar(simulacao: Simulacao) -> dict:
+    """Mesmo formato no POST e no GET, para o frontend tratar os dois igual."""
+    return {
+        "id": str(simulacao.id),
+        "respostas": simulacao.respostas,
+        **simulacao.resultado,
+        "criado_em": simulacao.criado_em.isoformat(),
+    }
+
 
 @require_GET
 def perguntas(_request: HttpRequest):
@@ -20,7 +32,7 @@ def perguntas(_request: HttpRequest):
 
 @require_POST
 def simular_view(request: HttpRequest):
-    """Recebe e valida as respostas do chat e devolve as métricas com e sem IoT."""
+    """Valida as respostas do chat, salva a simulação e devolve id + métricas."""
     if is_rate_limited(request, "simular", SIMULATION_RATE_LIMIT):
         return JsonResponse(
             {"error": "Muitas simulações enviadas. Tente novamente em instantes."},
@@ -39,11 +51,17 @@ def simular_view(request: HttpRequest):
     if erros:
         return JsonResponse({"error": "Respostas inválidas.", "fields": erros}, status=400)
 
-    resultado = calcular_metricas(respostas)
-    return JsonResponse(
-        {
-            "respostas": respostas,
-            **resultado,
-            "analise": gerar_analise(respostas, resultado),
-        }
-    )
+    metricas = calcular_metricas(respostas)
+    resultado = {**metricas, "analise": gerar_analise(respostas, metricas)}
+    simulacao = Simulacao.objects.create(respostas=respostas, resultado=resultado)
+    return JsonResponse(_serializar(simulacao))
+
+
+@require_GET
+def simulacao_detalhe(_request: HttpRequest, simulacao_id):
+    """Simulação salva, para o Showroom abrir por URL própria."""
+    try:
+        simulacao = Simulacao.objects.get(pk=simulacao_id)
+    except Simulacao.DoesNotExist:
+        return JsonResponse({"error": "Simulação não encontrada."}, status=404)
+    return JsonResponse(_serializar(simulacao))

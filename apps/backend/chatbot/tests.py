@@ -12,6 +12,10 @@ from .calculos import FATOR_MONITORAMENTO, HORAS_POR_MES, calcular_metricas
 from .questions import QUESTIONS
 from .views import SIMULATION_RATE_LIMIT
 
+import uuid
+from django.contrib import admin
+from .models import Simulacao
+
 VALID_RESPOSTAS = {
     "setor": "Indústria",
     "funcionarios": 120,
@@ -149,6 +153,36 @@ class SimularViewTests(TestCase):
 
         self.assertEqual(response.status_code, 403)
 
+    def test_simulacao_valida_e_salva_e_devolve_o_id(self):
+        response = self.post_respostas()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Simulacao.objects.count(), 1)
+        simulacao = Simulacao.objects.get()
+        self.assertEqual(response.json()["id"], str(simulacao.id))
+        self.assertEqual(simulacao.respostas, VALID_RESPOSTAS)
+
+    def test_respostas_invalidas_nao_salvam(self):
+        _ = self.post_respostas(desperdicio=101)
+        _ = self.post("abc")
+
+        self.assertEqual(Simulacao.objects.count(), 0)
+
+    def test_cada_simulacao_tem_um_uuid_aleatorio_diferente(self):
+        ids = [self.post_respostas().json()["id"] for _ in range(3)]
+
+        self.assertEqual(len(set(ids)), 3)
+        for valor in ids:
+            self.assertEqual(uuid.UUID(valor).version, 4)
+
+    def test_get_devolve_o_mesmo_conteudo_do_post(self):
+        criada = self.post_respostas().json()
+
+        response = self.client.get(reverse("chatbot:simulacao", args=[criada["id"]]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), criada)
+
     def test_limite_por_ip_retorna_429(self):
         for _ in range(SIMULATION_RATE_LIMIT):
             self.assertEqual(self.post_respostas().status_code, 200)
@@ -243,3 +277,38 @@ class AnaliseTests(SimpleTestCase):
             texto = analise.gerar_analise(VALID_RESPOSTAS, self.resultado)
 
         self.assertEqual(texto, analise.analise_padrao(self.resultado))
+
+class SimulacaoDetalheTests(TestCase):
+    def setUp(self):
+        self.resultado = {**calcular_metricas(VALID_RESPOSTAS), "analise": "Texto da análise."}
+        self.simulacao = Simulacao.objects.create(
+            respostas=VALID_RESPOSTAS, resultado=self.resultado
+        )
+
+    def url(self, simulacao_id):
+        return reverse("chatbot:simulacao", args=[simulacao_id])
+
+    def test_retorna_200_com_respostas_e_resultado(self):
+        response = self.client.get(self.url(self.simulacao.id))
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["id"], str(self.simulacao.id))
+        self.assertEqual(data["respostas"], VALID_RESPOSTAS)
+        self.assertEqual(data["metricas"], self.resultado["metricas"])
+        self.assertEqual(data["analise"], "Texto da análise.")
+
+    def test_id_inexistente_retorna_404(self):
+        response = self.client.get(self.url(uuid.uuid4()))
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_id_que_nao_e_uuid_retorna_404(self):
+        for valor in ["abc", "1", "123e4567"]:
+            self.assertEqual(self.client.get(f"/chat/simulacoes/{valor}/").status_code, 404)
+
+    def test_post_retorna_405(self):
+        self.assertEqual(self.client.post(self.url(self.simulacao.id)).status_code, 405)
+
+    def test_modelo_esta_registrado_no_admin(self):
+        self.assertTrue(admin.site.is_registered(Simulacao))
