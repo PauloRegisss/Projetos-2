@@ -2,9 +2,12 @@
 
 import { ArrowLeft, ArrowUp, Bot, Loader2, RotateCcw, X } from "lucide-react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { useRouter } from "waku";
 import { api } from "@/auth/api";
+import { enviarSimulacao } from "@/chatbot/enviar-simulacao";
 import type { Pergunta, Respostas } from "@/chatbot/types";
 import { validarResposta } from "@/chatbot/validar";
+import { toast } from "@/components/ui/toast";
 
 // Evento disparado pelo botão flutuante (floating-chat-button.tsx) e pelos
 // botões "Refazer simulação" do Showroom.
@@ -13,6 +16,7 @@ export const EVENTO_ABRIR_CHAT = "nexus-chatbot:open";
 type Estado = "carregando" | "erro" | "pronto";
 
 export default function Chatbot() {
+	const router = useRouter();
 	const [aberto, setAberto] = useState(false);
 	const [estado, setEstado] = useState<Estado>("carregando");
 	const [perguntas, setPerguntas] = useState<Pergunta[]>([]);
@@ -20,6 +24,7 @@ export default function Chatbot() {
 	const [respostas, setRespostas] = useState<Respostas>({});
 	const [entrada, setEntrada] = useState("");
 	const [erro, setErro] = useState<string | null>(null);
+	const [enviando, setEnviando] = useState(false);
 	const fimDaConversa = useRef<HTMLDivElement>(null);
 	const campo = useRef<HTMLInputElement>(null);
 
@@ -93,6 +98,31 @@ export default function Chatbot() {
 	function recomecar() {
 		setRespostas({});
 		irPara(0);
+	}
+
+	async function gerarShowroom() {
+		setEnviando(true);
+		const resultado = await enviarSimulacao(respostas);
+		setEnviando(false);
+
+		if (resultado.ok) {
+			setAberto(false);
+			setRespostas({});
+			setIndice(0);
+			setEntrada("");
+			router.push(`/showroom/${resultado.id}`);
+			return;
+		}
+
+		toast.add({ title: resultado.titulo, description: resultado.descricao });
+
+		// 400: volta para a primeira pergunta com erro e mostra a mensagem.
+		const campoComErro = perguntas.findIndex((p) => resultado.campos?.[p.key]);
+		const pergunta = perguntas[campoComErro];
+		if (pergunta) {
+			irPara(campoComErro);
+			setErro(resultado.campos?.[pergunta.key]?.[0]?.message ?? null);
+		}
 	}
 
 	if (!aberto) return null;
@@ -199,8 +229,9 @@ export default function Chatbot() {
 
 							{terminou && (
 								<BalaoBot>
-									Pronto! Já tenho tudo o que preciso. Se quiser corrigir alguma
-									resposta, use o botão Voltar.
+									Pronto! Já tenho tudo o que preciso. Clique em{" "}
+									<strong>Gerar meu Showroom</strong> para ver o comparativo com e sem
+									IoT.
 								</BalaoBot>
 							)}
 						</>
@@ -273,11 +304,23 @@ export default function Chatbot() {
 							</p>
 						)}
 
+						{terminou && (
+							<button
+								type="button"
+								disabled={enviando}
+								onClick={gerarShowroom}
+								className="inline-flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
+							>
+								{enviando && <Loader2 className="animate-spin" size={18} />}
+								{enviando ? "Gerando sua análise..." : "Gerar meu Showroom"}
+							</button>
+						)}
+
 						<div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
 							<button
 								type="button"
 								onClick={voltar}
-								disabled={indice === 0}
+								disabled={indice === 0 || enviando}
 								className="inline-flex cursor-pointer items-center gap-1 transition hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
 							>
 								<ArrowLeft size={14} /> Voltar
@@ -285,7 +328,7 @@ export default function Chatbot() {
 							<button
 								type="button"
 								onClick={recomecar}
-								disabled={indice === 0}
+								disabled={indice === 0 || enviando}
 								className="inline-flex cursor-pointer items-center gap-1 transition hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
 							>
 								<RotateCcw size={14} /> Recomeçar
