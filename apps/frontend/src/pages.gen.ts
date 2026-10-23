@@ -12,7 +12,9 @@ import type { getConfig as File_AuthIndex_getConfig } from './pages/auth/index';
 // prettier-ignore
 import type { getConfig as File_Index_getConfig } from './pages/index';
 // prettier-ignore
-import type { getConfig as File_Showroom_getConfig } from './pages/showroom';
+import type { getConfig as File_ShowroomId_getConfig } from './pages/showroom/[id]';
+// prettier-ignore
+import type { getConfig as File_ShowroomIndex_getConfig } from './pages/showroom/index';
 // prettier-ignore
 import type { getConfig as File_Sobre_getConfig } from './pages/sobre';
 
@@ -23,7 +25,8 @@ type Page =
 | ({ path: '/auth' } & GetConfigResponse<typeof File_AuthIndex_getConfig>)
 | { path: '/contato'; render: 'static' }
 | ({ path: '/' } & GetConfigResponse<typeof File_Index_getConfig>)
-| ({ path: '/showroom' } & GetConfigResponse<typeof File_Showroom_getConfig>)
+| ({ path: '/showroom/[id]' } & GetConfigResponse<typeof File_ShowroomId_getConfig>)
+| ({ path: '/showroom' } & GetConfigResponse<typeof File_ShowroomIndex_getConfig>)
 | ({ path: '/sobre' } & GetConfigResponse<typeof File_Sobre_getConfig>);
 
 // prettier-ignore
