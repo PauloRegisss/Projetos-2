@@ -2,6 +2,7 @@ import "../styles.css";
 
 import type { ReactNode } from "react";
 import { Toaster } from "@/components/ui/toast";
+import Chatbot from "../components/chatbot";
 import FloatingChatButton from "../components/floating-chat-button";
 
 type RootLayoutProps = { children: ReactNode };
@@ -14,6 +15,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			<link rel="icon" type="image/png" href={data.icon} />
 			<title>Projeto Nexus</title>
 			<FloatingChatButton />
+			<Chatbot />
 			<Toaster />
 			<main>{children}</main>
 		</div>
