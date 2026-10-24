@@ -71,14 +71,14 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-09-20_213144532.png)
 
 ## Entregável 3 FDS
+- **Print da Sprint**
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-18_202158615.png)
+
 - **Print do Backlog:**
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-16_181635211.png)
   
 - **Issue/bug tracker:**
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-17_213726095.png)
-
-- **Print da Sprint**
-![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-18_202158615.png)
 
 - **Histórias de usuário**
 1. Como usuário da plataforma, eu quero poder alternar entre o modo claro e o modo escuro na interface, para que eu possa adaptar a visualização à minha preferência e conforto visual durante a navegação.
@@ -87,6 +87,16 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 4. Como usuário da plataforma, eu quero responder às perguntas enviadas pelo chatbot, para que a IA receba os dados reais da minha empresa como entrada.
 5. Como usuário, eu quero que a IA processe os dados informados e gere um Showroom Interativo, para que o impacto da adoção do IoT no meu negócio seja calculado e estruturado automaticamente.
 6. Como tomador de decisão do negócio, eu quero visualizar o showroom gerado pela IA, para que eu possa comparar as métricas reais de desempenho e eficiência da minha empresa nos cenários com e sem IoT.
+
+- **Histórias de usuário implementadas**
+1. Como usuário da plataforma, eu quero poder alternar entre o modo claro e o modo escuro na interface, para que eu possa adaptar a visualização à minha preferência e conforto visual durante a navegação.
+2. Como tomador de decisão do negócio, eu quero abrir a tela do chatbot conversacional, para que eu possa iniciar o processo de avaliação do impacto do IoT na minha empresa.
+3. Como usuário, eu quero receber perguntas automatizadas sobre a operação do meu negócio através do chatbot, para que a IA possa mapear e compreender o meu cenário empresarial atual.
+
+- **Screencasts**
+  Screencast das histórias de usuário:
+
+  Screencast do deploy das histórias de usuário:
 
 ## 🛠️ Tecnologias
 
