@@ -115,7 +115,7 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 
 ### Screencasts
 
-- **Screencast de explicação do código Django:** _(link do YouTube)_
+- **Screencast de explicação do código Django:** https://youtu.be/BoUk_r2xlSQ
 - **Screencast do deploy das histórias de usuário:** _(link do YouTube)_
 
 ## 🛠️ Tecnologias
