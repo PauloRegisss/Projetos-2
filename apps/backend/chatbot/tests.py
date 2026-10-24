@@ -1,20 +1,19 @@
 import json
 import os
+import uuid
 from types import SimpleNamespace
 from unittest import mock
 
+from django.contrib import admin
 from django.core.cache import cache
 from django.test import Client, SimpleTestCase, TestCase
 from django.urls import reverse
 
 from . import analise
 from .calculos import FATOR_MONITORAMENTO, HORAS_POR_MES, calcular_metricas
+from .models import Simulacao
 from .questions import QUESTIONS
 from .views import SIMULATION_RATE_LIMIT
-
-import uuid
-from django.contrib import admin
-from .models import Simulacao
 
 VALID_RESPOSTAS = {
     "setor": "Indústria",
@@ -59,7 +58,7 @@ class SimularViewTests(TestCase):
     def setUp(self):
         cache.clear()
         self.client = Client(enforce_csrf_checks=True)
-        
+
         patcher = mock.patch.dict(os.environ)
         patcher.start()
         self.addCleanup(patcher.stop)
