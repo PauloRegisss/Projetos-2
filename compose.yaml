@@ -47,6 +47,6 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-  networks:
-    postgres-net:
-      external: true
+networks:
+  postgres-net:
+    external: true
