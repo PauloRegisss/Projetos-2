@@ -88,15 +88,16 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 5. Como usuário, eu quero que a IA processe os dados informados e gere um Showroom Interativo, para que o impacto da adoção do IoT no meu negócio seja calculado e estruturado automaticamente.
 6. Como tomador de decisão do negócio, eu quero visualizar o showroom gerado pela IA, para que eu possa comparar as métricas reais de desempenho e eficiência da minha empresa nos cenários com e sem IoT.
 
-- **Histórias de usuário implementadas**
+- **Histórias implementadas**
 1. Como usuário da plataforma, eu quero poder alternar entre o modo claro e o modo escuro na interface, para que eu possa adaptar a visualização à minha preferência e conforto visual durante a navegação.
 2. Como tomador de decisão do negócio, eu quero abrir a tela do chatbot conversacional, para que eu possa iniciar o processo de avaliação do impacto do IoT na minha empresa.
 3. Como usuário, eu quero receber perguntas automatizadas sobre a operação do meu negócio através do chatbot, para que a IA possa mapear e compreender o meu cenário empresarial atual.
 
 - **Screencasts**
-  Screencast das histórias de usuário:
 
-  Screencast do deploy das histórias de usuário:
+- Screencast das histórias de usuário:
+
+- Screencast do deploy das histórias de usuário:
 
 ## 🛠️ Tecnologias
 
