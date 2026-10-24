@@ -14,7 +14,7 @@ Educar empresas sobre a importância de coletar dados operacionais por meio de I
 
 Muitas empresas ainda tomam decisões operacionais com base em observação manual e experiência, sem dados concretos sobre o que realmente acontece no dia a dia da operação — seja no chão de fábrica, na lavoura, na cadeia de frios ou na frota de transporte. Esse projeto, desenvolvido em parceria com a BzuTech, tem como objetivo mostrar de forma clara e visual o diferencial que a aplicação de IoT (Internet das Coisas) traz para diferentes setores de negócio.
 
-Uma plataforma interativa que utiliza Inteligência Artificial para mensurar o impacto do IoT no seu negócio. Por meio de um chatbot conversacional estilo autoatendimento, a IA analisa o cenário atual da sua empresa e gera um Showroom Interativo, comparando métricas reais de desempenho e eficiência do seu negócio com e sem a aplicação de IoT.
+Uma plataforma interativa que mensura o impacto do IoT no seu negócio. Por meio de um chatbot conversacional estilo autoatendimento, a empresa informa seu cenário atual; a partir das respostas, o sistema calcula as métricas de desempenho e eficiência com e sem a aplicação de IoT, e uma Inteligência Artificial gera uma análise personalizada do resultado. Tudo isso é apresentado em um Showroom Interativo, com link próprio para cada simulação.
 
 O projeto conta ainda com um canal de contato integrado ao backend, permitindo que visitantes enviem mensagens que ficam disponíveis para a equipe através de um painel administrativo próprio.
 
@@ -22,9 +22,9 @@ O projeto conta ainda com um canal de contato integrado ao backend, permitindo q
 
 ### Ciência da Computação
 
-| Nome | Email Institucional | 
+| Nome | Email Institucional |
 |------|----------------------|
-| Guilherme Fernandes de Lima Araújo | gfla@cesar.school 
+| Guilherme Fernandes de Lima Araújo | gfla@cesar.school |
 | Luiz Eduardo Albuquerque Alves de Lima | leaal@cesar.school |
 | Paulo César Regis de Lima | pcrl@cesar.school |
 | Pedro Antonio Beltrão Rihan | pabr@cesar.school |
@@ -54,7 +54,7 @@ Site da BzuTech: [www.bzutech.com.br](https://www.bzutech.com.br)
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/Captura%20de%20tela%202026-08-28%20181230.png)
 
 - **Análise de Competidores:**
-[https://github.com/PauloRegisss/Projetos-2/blob/main/Ana%CC%81lise%20de%20Competidores.md](https://github.com/PauloRegisss/Projetos-2/blob/main/An%C3%A1lise%20de%20Competidores.md)
+[Análise de Competidores.md](./An%C3%A1lise%20de%20Competidores.md)
 
 ## Entregável 2 FDS 
 
@@ -71,50 +71,70 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-09-20_213144532.png)
 
 ## Entregável 3 FDS
-- **Print da Sprint**
-![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-18_202158615.png)
+- **Print da Sprint:**
+![Print da Sprint](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-18_202158615.png)
 
 - **Print do Backlog:**
-![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-16_181635211.png)
+![Print do Backlog](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-16_181635211.png)
   
 - **Issue/bug tracker:**
-![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-17_213726095.png)
+![Print do Issue/Bug Tracker](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-17_213726095.png)
 
-- **Histórias de usuário**
-1. Como usuário da plataforma, eu quero poder alternar entre o modo claro e o modo escuro na interface, para que eu possa adaptar a visualização à minha preferência e conforto visual durante a navegação.
-2. Como tomador de decisão do negócio, eu quero abrir a tela do chatbot conversacional, para que eu possa iniciar o processo de avaliação do impacto do IoT na minha empresa.
-3. Como usuário, eu quero receber perguntas automatizadas sobre a operação do meu negócio através do chatbot, para que a IA possa mapear e compreender o meu cenário empresarial atual.
-4. Como usuário da plataforma, eu quero responder às perguntas enviadas pelo chatbot, para que a IA receba os dados reais da minha empresa como entrada.
-5. Como usuário, eu quero que a IA processe os dados informados e gere um Showroom Interativo, para que o impacto da adoção do IoT no meu negócio seja calculado e estruturado automaticamente.
-6. Como tomador de decisão do negócio, eu quero visualizar o showroom gerado pela IA, para que eu possa comparar as métricas reais de desempenho e eficiência da minha empresa nos cenários com e sem IoT.
+- **Histórias de usuário:** as 6 histórias, com os cenários de validação em BDD (Dado / Quando / Então), estão em **[historias.md](./historias.md)**.
 
-- **Histórias implementadas**
-1. Como usuário da plataforma, eu quero poder alternar entre o modo claro e o modo escuro na interface, para que eu possa adaptar a visualização à minha preferência e conforto visual durante a navegação.
-2. Como tomador de decisão do negócio, eu quero abrir a tela do chatbot conversacional, para que eu possa iniciar o processo de avaliação do impacto do IoT na minha empresa.
-3. Como usuário, eu quero receber perguntas automatizadas sobre a operação do meu negócio através do chatbot, para que a IA possa mapear e compreender o meu cenário empresarial atual.
+### Histórias implementadas
 
-- **Screencasts**
+> **📌 História 1 – Alternar tema claro/escuro**<br>
+> **Como** usuário da plataforma, **quero** alternar entre o modo claro e o modo escuro, **para** adaptar a visualização à minha preferência e conforto visual.<br>
+> **Critérios de aceitação:** botão de tema no cabeçalho do site e do painel administrativo; troca imediata das cores; preferência lembrada ao voltar ao site; na primeira visita, segue o tema do sistema.
 
-- Screencast das histórias de usuário:
+> **📌 História 2 – Abrir o chatbot**<br>
+> **Como** tomador de decisão do negócio, **quero** abrir a tela do chatbot conversacional, **para** iniciar a avaliação do impacto do IoT na minha empresa.<br>
+> **Critérios de aceitação:** botão flutuante em todas as páginas abre o chat; o chat também abre pelo botão "Começar simulação" do Showroom; fecha pelo botão ou pela tecla Esc.<br>
+> **Issues:** #16, #21
 
-- Screencast do deploy das histórias de usuário:
+> **📌 História 3 – Receber as perguntas**<br>
+> **Como** usuário, **quero** receber perguntas automatizadas sobre a operação do meu negócio, **para** que a IA compreenda o meu cenário atual.<br>
+> **Critérios de aceitação:** perguntas carregadas do backend (`GET /chat/perguntas/`); uma pergunta por vez, com barra de progresso; campo adequado a cada tipo (texto, número ou opções).<br>
+> **Issues:** #16, #21
+
+> **📌 História 4 – Responder às perguntas**<br>
+> **Como** usuário da plataforma, **quero** responder às perguntas do chatbot, **para** que a IA receba os dados reais da minha empresa.<br>
+> **Critérios de aceitação:** resposta inválida não avança e mostra o motivo; é possível voltar e recomeçar; o backend valida de novo (`POST /chat/simular/`) e recusa dados inválidos com erro por campo.<br>
+> **Issues:** #17, #21, #22
+
+> **📌 História 5 – Gerar o Showroom**<br>
+> **Como** usuário, **quero** que os dados informados sejam processados e gerem um Showroom Interativo, **para** que o impacto do IoT no meu negócio seja calculado automaticamente.<br>
+> **Critérios de aceitação:** métricas com e sem IoT calculadas no backend; análise personalizada gerada por IA, com texto padrão se a IA estiver indisponível; simulação salva com id próprio; limite de 5 simulações por minuto.<br>
+> **Issues:** #18, #19, #20, #24
+
+> **📌 História 6 – Visualizar o Showroom**<br>
+> **Como** tomador de decisão do negócio, **quero** visualizar o Showroom gerado, **para** comparar as métricas da minha empresa com e sem IoT.<br>
+> **Critérios de aceitação:** economia mensal e anual; comparativo de energia, manutenção, paradas e desperdício; análise e aviso de estimativa; link próprio (`/showroom/<id>`) que pode ser recarregado e compartilhado; mensagem amigável para simulação inexistente.<br>
+> **Issues:** #23
+
+### Screencasts
+
+- **Screencast de explicação do código Django:** _(link do YouTube)_
+- **Screencast do deploy das histórias de usuário:** _(link do YouTube)_
 
 ## 🛠️ Tecnologias
 
 **Backend**
 
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
-![DRF](https://img.shields.io/badge/Django%20REST%20Framework-A30000?style=for-the-badge&logo=django&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Gunicorn](https://img.shields.io/badge/Gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white)
+![Claude](https://img.shields.io/badge/Claude%20(Anthropic%20API)-D97757?style=for-the-badge&logo=anthropic&logoColor=white)
 
 **Frontend**
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Waku](https://img.shields.io/badge/Waku-111111?style=for-the-badge&logo=react&logoColor=white)
 
 **Infraestrutura**
 
@@ -166,9 +186,33 @@ Crie o arquivo `.env` a partir do arquivo de exemplo:
 cp .env.example .env
 ```
 
-Depois, configure as variáveis de ambiente necessárias no arquivo `.env`.
+Depois, configure as variáveis de ambiente necessárias no arquivo `.env`. Para rodar localmente, use:
 
-### 4. Execute o projeto
+```env
+WAKU_PUBLIC_BACKEND_URL="http://localhost:8000"
+DEBUG=True
+ALLOWED_HOSTS="localhost,127.0.0.1"
+```
+
+A variável `ANTHROPIC_API_KEY` é opcional: sem ela, o Showroom usa uma análise padrão no lugar da gerada pela IA.
+
+### 4. Crie o banco de dados
+
+Aplique as migrations (cria as tabelas de contatos e de simulações):
+
+```bash
+apps/backend/.venv/bin/python apps/backend/manage.py migrate
+```
+
+Para acessar o painel administrativo (`/admin`), crie um usuário administrador:
+
+```bash
+apps/backend/.venv/bin/python apps/backend/manage.py createsuperuser
+```
+
+> No Windows, use `apps\backend\.venv\Scripts\python.exe` no lugar de `apps/backend/.venv/bin/python`.
+
+### 5. Execute o projeto
 
 Para iniciar o frontend e o backend em ambiente de desenvolvimento:
 
@@ -198,6 +242,15 @@ bun run frontend:dev
 
 ```bash
 bun run backend:dev
+```
+
+### 🧪 Testes
+
+Para rodar os testes automatizados do backend:
+
+```bash
+cd apps/backend
+.venv/bin/python manage.py test
 ```
 
 ### 🏭 Build
