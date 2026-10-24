@@ -17,8 +17,14 @@ services:
       CSRF_COOKIE_SAMESITE: ${CSRF_COOKIE_SAMESITE:-Lax}
       DATABASE_URL: ${DATABASE_URL:-postgresql://nexus:nexus@db:5432/nexus}
       PORT: "8000"
-    ports:
-      - "8000:8000"
+    networks:
+      - caddy
+      - postgres-net
+    labels:
+      caddy: nexus-backend.rihosting.com.br
+      caddy.reverse_proxy: "{{upstreams 8000}}"
+    # ports:
+    #   - "8000:8000"
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/', timeout=3)\""]
       interval: 30s
@@ -39,11 +45,18 @@ services:
       PORT: "3000"
       HOST: "0.0.0.0"
       WAKU_PUBLIC_BACKEND_URL: ${WAKU_PUBLIC_BACKEND_URL:-http://localhost:8000}
-    ports:
-      - "3000:3000"
+    networks:
+      - caddy
+    labels:
+        caddy: nexus-frontend.rihosting.com.br
+        caddy.reverse_proxy: "{{upstreams 3000}}"
+    # ports:
+    #   - "3000:3000"
     depends_on:
       backend:
         condition: service_healthy
 networks:
   postgres-net:
+    external: true
+  caddy:
     external: true
