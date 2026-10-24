@@ -76,8 +76,10 @@ export default async function AdminPage() {
 }
 
 const getData = async () => {
+	// Repassa só o cookie: com todos os headers (ex.: Host) o Django recusa.
+	const { cookie } = unstable_getHeaders();
 	const res = await api("/contatos/", {
-		headers: unstable_getHeaders(),
+		headers: cookie ? { cookie } : {},
 	});
 	if (!res.ok) unstable_redirect("/auth");
 	return (await res.json()).contacts as Contact[];

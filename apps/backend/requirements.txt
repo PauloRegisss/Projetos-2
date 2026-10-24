@@ -7,4 +7,3 @@ python-dotenv
 anthropic
 gunicorn
 whitenoise
-anthropic

@@ -21,7 +21,6 @@ export default function AdminUserDropdown({ user }: { user: User }) {
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
 	const route = useRouter();
 	const logout = async () => {
-		"use server";
 		setIsLoggingOut(true);
 		try {
 			const response = await signOut();

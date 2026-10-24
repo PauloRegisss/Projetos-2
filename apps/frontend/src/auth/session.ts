@@ -1,4 +1,4 @@
-import { unstable_getHeaders, unstable_redirect } from "waku/router/server";
+import { unstable_getHeaders } from "waku/router/server";
 import { api } from "./api";
 
 export interface User {
@@ -21,9 +21,10 @@ export async function getSession(): Promise<User | null> {
 	}
 
 	if (!response.ok) {
-		unstable_redirect("/auth");
+		throw new Error("Erro ao verificar autenticação");
 	}
-	const json = await response.json();
-	if (!json.user.is_staff) return unstable_redirect("/auth");
-	return (json.user ?? null) as User | null;
+	const json = (await response.json()) as { user?: User };
+	// Só staff acessa o admin. Não redireciona aqui: a página `/auth` também
+	// usa esta função, e redirecionar para ela mesma criaria um loop.
+	return json.user?.is_staff ? json.user : null;
 }
