@@ -6,6 +6,10 @@
 
 Educar empresas sobre a importância de coletar dados operacionais por meio de IoT para melhorar a gestão, performance e a tomada de decisão.
 
+## 🌐 Acesse o Projeto
+
+🔗 **Link do deploy:** [nexus-frontend-5ip8.onrender.com](https://nexus-frontend-5ip8.onrender.com/)
+
 ## 📝 Descrição do Projeto
 
 Muitas empresas ainda tomam decisões operacionais com base em observação manual e experiência, sem dados concretos sobre o que realmente acontece no dia a dia da operação — seja no chão de fábrica, na lavoura, na cadeia de frios ou na frota de transporte. Esse projeto, desenvolvido em parceria com a BzuTech, tem como objetivo mostrar de forma clara e visual o diferencial que a aplicação de IoT (Internet das Coisas) traz para diferentes setores de negócio.
