@@ -1,9 +1,8 @@
 import json
 
+from app.ratelimit import is_rate_limited
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.http import require_GET, require_POST
-
-from app.ratelimit import is_rate_limited
 
 from .analise import gerar_analise
 from .calculos import calcular_metricas
@@ -43,7 +42,6 @@ def simular_view(request: HttpRequest):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "JSON inválido."}, status=400)
-
     if not isinstance(data, dict):
         return JsonResponse({"error": "JSON inválido."}, status=400)
 

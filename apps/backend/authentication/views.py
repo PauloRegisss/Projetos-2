@@ -1,12 +1,11 @@
 import json
 
+from app.ratelimit import is_rate_limited
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, JsonResponse
 from django.middleware.csrf import get_token
-from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
-
-from app.ratelimit import is_rate_limited
+from django.views.decorators.http import require_GET, require_POST
 
 LOGIN_RATE_LIMIT = 10  # tentativas por minuto, por IP
 
