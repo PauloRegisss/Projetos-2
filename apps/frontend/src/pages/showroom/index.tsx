@@ -1,15 +1,14 @@
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { Link } from "waku";
-import AbrirChatButton from "@/components/abrir-chat-button";
 import Header from "@/components/header";
+import { Button } from "@/components/ui/button";
 
-// `/showroom` sem id: não há simulação para mostrar, então convida a abrir o chat.
 export default function ShowroomPage() {
 	return (
 		<>
 			<Header />
 			<div className="min-h-screen bg-background px-6 pt-36 pb-24 lg:px-10">
-				<div className="mx-auto max-w-3xl text-center">
+				<div className="mx-auto max-w-3xl text-center space-y-4">
 					<Link
 						to="/"
 						className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-primary"
@@ -23,12 +22,14 @@ export default function ShowroomPage() {
 						Veja o impacto do IoT no seu negócio.
 					</h1>
 					<p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-						Responda algumas perguntas rápidas no chat e monte o seu Showroom com o
-						comparativo da operação com e sem IoT.
+						Responda algumas perguntas rápidas no chat e monte o seu Showroom
+						com o comparativo da operação com e sem IoT.
 					</p>
-					<AbrirChatButton className="mt-10">
-						<Sparkles size={18} /> Começar simulação
-					</AbrirChatButton>
+					<Link to={"/showroom/new"}>
+						<Button>
+							<Sparkles size={18} /> Começar simulação
+						</Button>
+					</Link>
 				</div>
 			</div>
 		</>

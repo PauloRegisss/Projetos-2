@@ -11,7 +11,6 @@ import { Link } from "waku";
 import type { PageProps } from "waku/router";
 import { api } from "@/auth/api";
 import type { Metrica, Simulacao } from "@/chatbot/types";
-import AbrirChatButton from "@/components/abrir-chat-button";
 import Header from "@/components/header";
 
 export default async function ShowroomSimulacaoPage({
@@ -59,8 +58,8 @@ function Resultado({ simulacao }: { simulacao: Simulacao }) {
 				{simulacao.estimativa && (
 					<p className="flex max-w-sm items-start gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground dark:border-white/10">
 						<Info className="mt-0.5 shrink-0 text-secondary" size={18} />
-						Os valores são estimativas baseadas em percentuais médios de redução e
-						podem variar conforme a realidade da empresa.
+						Os valores são estimativas baseadas em percentuais médios de redução
+						e podem variar conforme a realidade da empresa.
 					</p>
 				)}
 			</div>
@@ -91,7 +90,8 @@ function Resultado({ simulacao }: { simulacao: Simulacao }) {
 					</div>
 					<div className="flex gap-4 text-xs text-muted-foreground">
 						<span className="flex items-center gap-2">
-							<span className="size-2.5 rounded-full bg-muted-foreground/40" /> Sem IoT
+							<span className="size-2.5 rounded-full bg-muted-foreground/40" />{" "}
+							Sem IoT
 						</span>
 						<span className="flex items-center gap-2">
 							<span className="size-2.5 rounded-full bg-primary" /> Com IoT
@@ -110,7 +110,9 @@ function Resultado({ simulacao }: { simulacao: Simulacao }) {
 			<section className="mt-4 rounded-3xl border border-secondary/30 bg-secondary/5 p-5 sm:p-8">
 				<div className="flex items-center gap-3">
 					<Sparkles className="text-secondary" size={22} />
-					<h2 className="text-xl font-bold text-foreground">Análise para o seu negócio</h2>
+					<h2 className="text-xl font-bold text-foreground">
+						Análise para o seu negócio
+					</h2>
 				</div>
 				<p className="mt-4 max-w-3xl whitespace-pre-line leading-relaxed text-foreground/80">
 					{simulacao.analise}
@@ -128,9 +130,7 @@ function Resultado({ simulacao }: { simulacao: Simulacao }) {
 					</p>
 				</div>
 				<div className="flex flex-wrap gap-3">
-					<AbrirChatButton variante="contorno">
-						<RotateCcw size={16} /> Refazer simulação
-					</AbrirChatButton>
+					<RotateCcw size={16} /> Refazer simulação
 					<Link
 						to="/contato"
 						className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95"
@@ -227,7 +227,10 @@ function Barra({
 				<span className="font-mono font-bold text-foreground">{valor}</span>
 			</div>
 			<div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-muted">
-				<div className={`h-full rounded-full ${cor}`} style={{ width: `${largura}%` }} />
+				<div
+					className={`h-full rounded-full ${cor}`}
+					style={{ width: `${largura}%` }}
+				/>
 			</div>
 		</div>
 	);
@@ -237,14 +240,14 @@ function NaoEncontrada() {
 	return (
 		<div className="mx-auto mt-16 max-w-xl rounded-3xl border border-dashed border-border px-6 py-16 text-center">
 			<SearchX className="mx-auto text-muted-foreground" size={36} />
-			<h1 className="mt-6 text-2xl font-black text-foreground">Simulação não encontrada.</h1>
+			<h1 className="mt-6 text-2xl font-black text-foreground">
+				Simulação não encontrada.
+			</h1>
 			<p className="mt-3 text-muted-foreground">
-				O link pode estar incorreto ou a simulação não existe mais. Faça uma nova
-				simulação pelo chat.
+				O link pode estar incorreto ou a simulação não existe mais. Faça uma
+				nova simulação pelo chat.
 			</p>
-			<AbrirChatButton className="mt-8">
-				<RotateCcw size={16} /> Refazer simulação
-			</AbrirChatButton>
+			<RotateCcw size={16} /> Refazer simulação
 		</div>
 	);
 }
