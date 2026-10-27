@@ -1,312 +1,459 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, Clock3, SendHorizontal } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { Link } from "waku";
-import { Bubble, BubbleContent } from "./ui/bubble";
-import { Button } from "./ui/button";
+import {
+	ArrowLeft,
+	ArrowUp,
+	Bot,
+	Loader2,
+	RotateCcw,
+	Sparkles,
+} from "lucide-react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import { useRouter } from "waku";
+import { api } from "@/auth/api";
+import { enviarSimulacao } from "@/chatbot/enviar-simulacao";
+import type { Pergunta, Respostas } from "@/chatbot/types";
+import { validarResposta } from "@/chatbot/validar";
+import { Bubble, BubbleContent } from "@/components/ui/bubble";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupButton,
 	InputGroupTextarea,
-} from "./ui/input-group";
-import { Message, MessageContent, MessageFooter } from "./ui/message";
+} from "@/components/ui/input-group";
+import { Message, MessageContent } from "@/components/ui/message";
 import {
 	MessageScroller,
-	MessageScrollerButton,
 	MessageScrollerContent,
 	MessageScrollerItem,
 	MessageScrollerProvider,
 	MessageScrollerViewport,
-} from "./ui/message-scroller";
+} from "@/components/ui/message-scroller";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "@/components/ui/toast";
 
-type Mensagem = {
-	id: number;
-	role: "assistant" | "user";
-	texto: string;
-	hora: string;
-};
-
-const mensagemVariants: Variants = {
-	initial: { opacity: 0, y: 14, scale: 0.98 },
-	animate: {
-		opacity: 1,
-		y: 0,
-		scale: 1,
-			transition: { type: "spring", stiffness: 420, damping: 30 },
-	},
-};
-
-const MotionMessageScrollerItem = motion.create(MessageScrollerItem);
-
-const SUGESTOES = [
-	"Quero conhecer soluções IoT",
-	"Quero reduzir custos",
-	"Quero automatizar processos",
-	"Ver exemplos do meu setor",
-];
-
-const MENSAGEM_INICIAL: Mensagem = {
-	id: 1,
-	role: "assistant",
-	texto:
-		"Olá, eu sou a NEXUS. Como posso tornar sua operação mais inteligente hoje?",
-	hora: "agora",
-};
+type Estado = "carregando" | "erro" | "pronto";
 
 export default function ShowRoomBot() {
-	const [mensagens, setMensagens] = useState<Mensagem[]>([MENSAGEM_INICIAL]);
+	const router = useRouter();
+	const [estado, setEstado] = useState<Estado>("carregando");
+	const [perguntas, setPerguntas] = useState<Pergunta[]>([]);
+	const [indice, setIndice] = useState(0);
+	const [respostas, setRespostas] = useState<Respostas>({});
 	const [entrada, setEntrada] = useState("");
-	const [digitando, setDigitando] = useState(false);
-	const proximoId = useRef(2);
-	const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-	const shouldReduceMotion = useReducedMotion();
-	const emInicio = mensagens.length === 1;
+	const [erro, setErro] = useState<string | null>(null);
+	const [enviando, setEnviando] = useState(false);
+	const [aberta, setAberta] = useState(false);
+	const fimDaConversa = useRef<HTMLDivElement>(null);
+	const carregando = useRef(false);
 
-	useEffect(() => {
-		return () => timers.current.forEach((timer) => clearTimeout(timer));
+	const carregarPerguntas = useCallback(async () => {
+		if (carregando.current) return;
+		carregando.current = true;
+		setEstado("carregando");
+
+		try {
+			const response = await api("/chat/perguntas/");
+			if (!response.ok) throw new Error(`status ${response.status}`);
+			const data = (await response.json()) as { perguntas: Pergunta[] };
+			setPerguntas(data.perguntas);
+			setEstado("pronto");
+		} catch (error) {
+			console.error(error);
+			setEstado("erro");
+		} finally {
+			carregando.current = false;
+		}
 	}, []);
 
-	function enviarMensagem(valor = entrada) {
-		const texto = valor.trim();
-		if (!texto) return;
+	useEffect(() => {
+		void carregarPerguntas();
+	}, [carregarPerguntas]);
 
-		const agora = new Date().toLocaleTimeString("pt-BR", {
-			hour: "2-digit",
-			minute: "2-digit",
+	const total = perguntas.length;
+	const terminou = total > 0 && indice >= total;
+	const atual = terminou ? null : perguntas[indice];
+	const progresso = total
+		? Math.round((Math.min(indice, total) / total) * 100)
+		: 0;
+	const historico = useMemo(
+		() => perguntas.slice(0, Math.min(indice, total)),
+		[perguntas, indice, total],
+	);
+
+	useEffect(() => {
+		fimDaConversa.current?.scrollIntoView({
+			behavior: "smooth",
+			block: "nearest",
 		});
-		const idDoUsuario = proximoId.current++;
-		setMensagens((atuais) => [
-			...atuais,
-			{ id: idDoUsuario, role: "user", texto, hora: agora },
-		]);
-		setEntrada("");
-		setDigitando(true);
+	}, []);
+	const irPara = useCallback(
+		(novoIndice: number) => {
+			const pergunta = perguntas[novoIndice];
+			const respostaAnterior = pergunta ? respostas[pergunta.key] : undefined;
+			setIndice(novoIndice);
+			setEntrada(
+				respostaAnterior === undefined ? "" : String(respostaAnterior),
+			);
+			setErro(null);
+		},
+		[perguntas, respostas],
+	);
 
-		const timer = setTimeout(() => {
-			setMensagens((atuais) => [
-				...atuais,
-				{
-					id: proximoId.current++,
-					role: "assistant",
-					texto:
-						"Mensagem recebida. Em breve poderei analisar esse ponto com os dados da sua operação.",
-					hora: agora,
-				},
-			]);
-			setDigitando(false);
-		}, shouldReduceMotion ? 160 : 720);
-		timers.current.push(timer);
+	const responder = useCallback(
+		(valor: string) => {
+			if (!atual) return;
+			const resultado = validarResposta(atual, valor);
+			if ("erro" in resultado) {
+				setErro(resultado.erro);
+				return;
+			}
+			setRespostas((atuais) => ({ ...atuais, [atual.key]: resultado.valor }));
+			setIndice((atualIndice) => atualIndice + 1);
+			setEntrada("");
+			setErro(null);
+		},
+		[atual],
+	);
+
+	function recomecar() {
+		setRespostas({});
+		setIndice(0);
+		setEntrada("");
+		setErro(null);
+		setAberta(false);
+	}
+
+	async function gerarShowroom() {
+		setEnviando(true);
+		const resultado = await enviarSimulacao(respostas);
+		setEnviando(false);
+
+		if (resultado.ok) {
+			router.push(`/showroom/${resultado.id}`);
+			return;
+		}
+
+		toast.add({ title: resultado.titulo, description: resultado.descricao });
+		const campoComErro = perguntas.findIndex(
+			(pergunta) => resultado.campos?.[pergunta.key],
+		);
+		const perguntaComErro = perguntas[campoComErro];
+		if (perguntaComErro) {
+			setIndice(campoComErro);
+			setEntrada(String(respostas[perguntaComErro.key] ?? ""));
+			setErro(resultado.campos?.[perguntaComErro.key]?.[0]?.message ?? null);
+		}
 	}
 
 	return (
-		<main className="relative flex h-screen h-dvh max-h-screen max-h-dvh w-full flex-col overflow-hidden bg-[#101010] text-white selection:bg-[#aaff00] selection:text-[#101010]">
-			<Link
-				to="/"
-				aria-label="Voltar para a página principal"
-				className="absolute top-5 left-5 z-20 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-[#171717]/90 px-4 text-xs font-semibold text-white/65 backdrop-blur-sm transition-colors hover:border-[#aaff00]/40 hover:bg-[#202020] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#aaff00] sm:top-7 sm:left-7"
-			>
-				<ArrowLeft aria-hidden="true" className="size-4" />
-				<span>Voltar</span>
-			</Link>
+		<main className="flex h-screen h-dvh max-h-screen max-h-dvh w-full flex-col overflow-hidden bg-[#101010] text-white">
+			<header className="shrink-0 border-b border-white/10 bg-[#101010]/95 px-4 py-4 backdrop-blur sm:px-8">
+				<div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4">
+					<a
+						href="/"
+						className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-4 text-xs font-semibold text-white/65 transition hover:border-[#aaff00]/40 hover:text-white focus-visible:outline-2 focus-visible:outline-[#aaff00]"
+					>
+						<ArrowLeft aria-hidden="true" className="size-4" /> Voltar
+					</a>
+					<div className="flex items-center gap-3">
+						<div className="flex size-9 items-center justify-center rounded-full bg-[#aaff00] text-[#101010]">
+							<Sparkles aria-hidden="true" className="size-4" />
+						</div>
+						<div className="hidden text-right sm:block">
+							<p className="text-sm font-bold">NEXUS Showroom</p>
+							<p className="font-mono text-[10px] uppercase tracking-[.14em] text-white/40">
+								Simulação de impacto
+							</p>
+						</div>
+					</div>
+				</div>
+				{estado === "pronto" && (
+					<div className="mx-auto mt-4 w-full max-w-4xl space-y-2">
+						<div className="flex justify-between font-mono text-[10px] uppercase tracking-[.14em] text-white/45">
+							<span>
+								{terminou
+									? "Pronto para gerar"
+									: `Pergunta ${indice + 1} de ${total}`}
+							</span>
+							<span>{progresso}%</span>
+						</div>
+						<Progress
+							value={progresso}
+							aria-label={`Progresso: ${progresso}%`}
+							className="bg-white/10"
+						/>
+					</div>
+				)}
+			</header>
+			<Separator className="bg-transparent" />
+
 			<MessageScrollerProvider autoScroll>
 				<MessageScroller className="min-h-0 flex-1">
-					<MessageScrollerViewport aria-label="Histórico da conversa">
-						<MessageScrollerContent className="mx-auto min-h-full w-full max-w-3xl gap-8 px-4 pt-16 pb-8 sm:px-8 sm:pt-24">
-							{emInicio && (
-								<motion.div
-									initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ duration: 0.55, ease: "easeOut" }}
-									className="flex min-h-[min(52dvh,470px)] flex-col items-center justify-center text-center"
-								>
-									<div className="relative flex size-36 items-center justify-center rounded-full bg-[#aaff00] shadow-[0_0_0_12px_rgba(170,255,0,.08),0_0_55px_rgba(170,255,0,.18)] sm:size-40">
-										<img
-											src="/images/robo nexus.png"
-											alt="Robô NEXUS"
-											className="size-[118%] object-contain"
-										/>
-									</div>
-									<p className="mt-8 font-mono text-[11px] font-bold uppercase tracking-[.34em] text-[#aaff00] sm:text-xs">
-										Smart IoT Solutions
-									</p>
-									{/*<h1 className="mt-7 max-w-xl text-4xl font-black tracking-[-.055em] text-white sm:text-6xl">
-										Olá, eu sou a NEXUS.
-									</h1>
-									<p className="mt-5 max-w-md text-lg leading-relaxed text-white/55 sm:text-xl">
-										Como posso tornar sua operação mais inteligente hoje?
-									</p>*/}
-								</motion.div>
+					<MessageScrollerViewport aria-label="Histórico da simulação">
+						<MessageScrollerContent className="mx-auto w-full max-w-3xl gap-5 px-4 py-8 sm:px-8 sm:py-10">
+							{estado === "carregando" && (
+								<StatusMessage texto="Preparando sua simulação..." carregando />
 							)}
-
-							{mensagens.map((mensagem) => (
-								<MotionMessageScrollerItem
-									key={mensagem.id}
-									messageId={String(mensagem.id)}
-									scrollAnchor={mensagem.role === "user"}
-									variants={mensagemVariants}
-									initial={shouldReduceMotion ? false : "initial"}
-									animate="animate"
-								>
-									<Message
-										align={mensagem.role === "user" ? "end" : "start"}
-										className={
-											mensagem.role === "user" ? "items-end" : "items-start"
-										}
-									>
-										<MessageContent
-											className={
-												mensagem.role === "user"
-													? "w-fit max-w-[86%] self-end"
-													: "w-fit max-w-[90%] self-start"
-											}
-										>
-											{mensagem.role === "user" ? (
-													<Bubble align="end" variant="secondary" className="max-w-full self-end">
-														<BubbleContent className="max-w-full rounded-2xl rounded-tr-md bg-[#7d51fe] px-4 py-3 font-semibold text-white">
-														{mensagem.texto}
-													</BubbleContent>
-												</Bubble>
-											) : (
-												<Bubble
-													align="start"
-													variant="muted"
-													className="self-start"
-												>
-													<BubbleContent className="rounded-2xl rounded-tl-md px-4 py-3 font-semibold text-white/80">
-														{mensagem.texto}
-													</BubbleContent>
-												</Bubble>
-											)}
-											<MessageFooter className="gap-1 px-1 text-[10px] text-white/35">
-												{mensagem.hora}
-												{mensagem.role === "user" && (
-													<Check
-														aria-label="Enviada"
-														className="size-3 text-[#aaff00]"
-													/>
-												)}
-											</MessageFooter>
-										</MessageContent>
-									</Message>
-								</MotionMessageScrollerItem>
-							))}
-
-							{digitando && (
-								<MotionMessageScrollerItem
-									messageId="typing"
-									variants={mensagemVariants}
-									initial={shouldReduceMotion ? false : "initial"}
-									animate="animate"
-								>
-									<Message>
-										<MessageContent className="w-fit max-w-[90%] self-start">
-											<div className="flex items-center gap-1.5 rounded-2xl rounded-tl-md bg-white/10 px-4 py-4" role="status" aria-label="NEXUS está digitando">
-												{[0, 1, 2].map((dot) => (
-															<motion.span
-																key={dot}
-																className="size-1.5 rounded-full bg-[#aaff00]"
-																{...(shouldReduceMotion
-																	? {}
-																	: {
-																			animate: { y: [0, -4, 0] },
-																		transition: {
-																			duration: 0.7,
-																			repeat: Infinity,
-																			delay: dot * 0.12,
-																		},
-																	})}
-													/>
-												))}
-											</div>
-										</MessageContent>
-									</Message>
-								</MotionMessageScrollerItem>
+							{estado === "erro" && <ErroMessage onRetry={carregarPerguntas} />}
+							{estado === "pronto" && (
+								<>
+									<BalaoBot>
+										Vou fazer {total} perguntas rápidas sobre sua operação para
+										estimar o impacto do IoT.
+									</BalaoBot>
+									{historico.map((pergunta) => (
+										<div key={pergunta.key} className="space-y-2">
+											<BalaoBot>{pergunta.text}</BalaoBot>
+											<BalaoUsuario>
+												{formatarResposta(pergunta, respostas[pergunta.key])}
+											</BalaoUsuario>
+										</div>
+									))}
+									{atual && <BalaoBot>{atual.text}</BalaoBot>}
+									{terminou && (
+										<BalaoBot>
+											Pronto! Revise suas respostas e gere seu comparativo com e
+											sem IoT.
+										</BalaoBot>
+									)}
+								</>
 							)}
+							<div ref={fimDaConversa} aria-hidden="true" />
 						</MessageScrollerContent>
 					</MessageScrollerViewport>
-					<MessageScrollerButton className="border-white/10 bg-[#1b1b1b] text-white hover:bg-[#282828]" />
 				</MessageScroller>
 			</MessageScrollerProvider>
 
-			<footer className="sticky bottom-0 z-10 mx-auto w-full max-w-3xl shrink-0 bg-[#101010] px-4 pb-4 sm:px-8 sm:pb-6">
-				{emInicio && (
-					<motion.div
-						initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.15, duration: 0.4 }}
-						className="mb-4"
-					>
-						<p className="mb-3 pl-0.5 font-mono text-[11px] font-bold uppercase tracking-[.22em] text-white/40">
-							Comece por aqui
-						</p>
-						<div className="grid grid-cols-2 gap-2">
-							{SUGESTOES.map((sugestao) => (
+			<footer className="shrink-0 border-t border-white/10 bg-[#101010] px-4 pt-4 pb-5 sm:px-8">
+				<div className="mx-auto w-full max-w-3xl">
+					{estado === "pronto" && atual?.type === "choice" && (
+						<fieldset className="flex flex-wrap gap-2">
+							<legend className="sr-only">{atual.text}</legend>
+							{atual.choices?.map((opcao) => (
 								<Button
-									key={sugestao}
+									key={opcao}
 									variant="outline"
-									onClick={() => enviarMensagem(sugestao)}
-									className="h-auto min-h-17 justify-between rounded-2xl border-white/10 bg-[#171717] px-4 py-3 text-left text-sm font-medium whitespace-normal text-white/75 hover:border-[#aaff00]/40 hover:bg-[#202020] hover:text-white sm:min-h-16"
+									size="lg"
+									className="rounded-full border-white/15 bg-white/5 text-white hover:border-[#aaff00]/50 hover:bg-[#aaff00] hover:text-[#101010]"
+									onClick={() => responder(opcao)}
 								>
-									<span className="max-w-[85%]">{sugestao}</span>
-									<ArrowRight
-										aria-hidden="true"
-										className="size-5 shrink-0 text-[#aaff00]"
-									/>
+									{opcao}
 								</Button>
 							))}
-						</div>
-					</motion.div>
-				)}
+						</fieldset>
+					)}
 
-				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						enviarMensagem();
-					}}
-				>
-					<label htmlFor="showroom-message" className="sr-only">
-						Digite sua mensagem
-					</label>
-					<InputGroup className="h-auto min-h-20 rounded-2xl border-white/15 bg-[#171717] p-2 shadow-none ring-0 focus-within:border-[#aaff00]/50">
-						<InputGroupTextarea
-							id="showroom-message"
-							value={entrada}
-							onChange={(event) => setEntrada(event.target.value)}
-							onKeyDown={(event) => {
-								if (event.key === "Enter" && !event.shiftKey) {
-									event.preventDefault();
-									enviarMensagem();
-								}
+					{estado === "pronto" && atual && atual.type !== "choice" && (
+						<form
+							onSubmit={(event) => {
+								event.preventDefault();
+								responder(entrada);
 							}}
-							placeholder="Digite sua mensagem..."
-							rows={1}
-							maxLength={1000}
-							className="min-h-14 px-3 py-3 text-base text-white placeholder:text-white/30 focus-visible:ring-0"
-						/>
-						<InputGroupAddon align="inline-end" className="self-end pb-0.5">
-							<InputGroupButton
-								type="submit"
-								size="icon-sm"
-								aria-label="Enviar mensagem"
-								disabled={!entrada.trim()}
-								className="size-16 rounded-2xl bg-[#527c0f] text-[#101010] hover:bg-[#aaff00] disabled:bg-[#30470b] disabled:text-[#101010]/50"
-							>
-								<SendHorizontal
-									aria-hidden="true"
-									className="size-6 -rotate-12"
+						>
+							<label htmlFor="showroom-answer" className="sr-only">
+								{atual.text}
+							</label>
+							<InputGroup className="h-auto min-h-14 rounded-[1.5rem] border-white/15 bg-[#171717] p-1.5 focus-within:border-[#aaff00]/50">
+								<InputGroupTextarea
+									id="showroom-answer"
+									value={entrada}
+									onChange={(event) => {
+										setEntrada(event.target.value);
+										setErro(null);
+									}}
+									onKeyDown={(event) => {
+										if (event.key === "Enter" && !event.shiftKey) {
+											event.preventDefault();
+											responder(entrada);
+										}
+									}}
+									placeholder={atual.placeholder ?? "Digite sua resposta..."}
+									rows={1}
+									maxLength={atual.max_length}
+									inputMode={atual.type === "number" ? "decimal" : "text"}
+									className="max-h-28 min-h-10 px-3 py-2.5 text-base text-white placeholder:text-white/30"
 								/>
-							</InputGroupButton>
-						</InputGroupAddon>
-					</InputGroup>
-					<p className="mt-3 flex items-center justify-center gap-1 text-[11px] text-white/25">
-						<Clock3 aria-hidden="true" className="size-3" /> Enter envia · Shift
-						+ Enter quebra a linha · IA em breve
-					</p>
-				</form>
+								<InputGroupAddon align="inline-end" className="self-end pb-0.5">
+									<InputGroupButton
+										type="submit"
+										size="icon-sm"
+										aria-label="Enviar resposta"
+										className="size-10 rounded-full bg-[#aaff00] text-[#101010] hover:bg-white"
+									>
+										<ArrowUp aria-hidden="true" />
+									</InputGroupButton>
+								</InputGroupAddon>
+							</InputGroup>
+						</form>
+					)}
+
+					{erro && (
+						<p role="alert" className="mt-2 px-2 text-sm text-red-300">
+							{erro}
+						</p>
+					)}
+					{terminou && (
+						<Button
+							disabled={enviando}
+							onClick={gerarShowroom}
+							className="h-12 w-full rounded-full bg-[#aaff00] font-extrabold text-[#101010] hover:bg-white"
+						>
+							{enviando && (
+								<Loader2 aria-hidden="true" className="animate-spin" />
+							)}
+							{enviando ? "Gerando seu Showroom..." : "Gerar meu Showroom"}
+						</Button>
+					)}
+					<div className="mt-3 flex items-center justify-between text-xs text-white/45">
+						<Button
+							variant="ghost"
+							size="sm"
+							disabled={indice === 0 || enviando}
+							onClick={() => irPara(indice - 1)}
+							className="px-1 text-white/55 hover:text-white"
+						>
+							<ArrowLeft aria-hidden="true" /> Voltar
+						</Button>
+						<Button
+							variant="ghost"
+							size="sm"
+							disabled={indice === 0 || enviando}
+							onClick={() => setAberta(true)}
+							className="px-1 text-white/55 hover:text-white"
+						>
+							<RotateCcw aria-hidden="true" /> Recomeçar
+						</Button>
+					</div>
+					{aberta && (
+						<ConfirmarReinicio
+							onCancel={() => setAberta(false)}
+							onConfirm={recomecar}
+						/>
+					)}
+				</div>
 			</footer>
 		</main>
+	);
+}
+
+function ConfirmarReinicio({
+	onCancel,
+	onConfirm,
+}: {
+	onCancel: () => void;
+	onConfirm: () => void;
+}) {
+	return (
+		<div className="fixed inset-0 z-30 flex items-center justify-center bg-black/60 p-5">
+			<div
+				role="dialog"
+				aria-modal="true"
+				className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1b1b1b] p-5 shadow-2xl"
+			>
+				<h2 className="font-bold">Recomeçar simulação?</h2>
+				<p className="mt-2 text-sm text-white/60">
+					Suas respostas atuais serão apagadas.
+				</p>
+				<div className="mt-5 flex justify-end gap-2">
+					<Button variant="ghost" onClick={onCancel}>
+						Cancelar
+					</Button>
+					<Button
+						onClick={onConfirm}
+						className="bg-[#aaff00] text-[#101010] hover:bg-white"
+					>
+						Recomeçar
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+function StatusMessage({
+	texto,
+	carregando = false,
+}: {
+	texto: string;
+	carregando?: boolean;
+}) {
+	return (
+		<p className="flex items-center gap-2 text-sm text-white/60">
+			{carregando && (
+				<Loader2
+					aria-hidden="true"
+					className="size-4 animate-spin text-[#aaff00]"
+				/>
+			)}
+			{texto}
+		</p>
+	);
+}
+
+function ErroMessage({ onRetry }: { onRetry: () => void }) {
+	return (
+		<div className="rounded-2xl border border-red-400/30 bg-red-400/10 p-4 text-sm">
+			<p>Não foi possível carregar as perguntas.</p>
+			<Button
+				variant="link"
+				onClick={onRetry}
+				className="mt-2 h-auto p-0 text-[#aaff00]"
+			>
+				Tentar novamente
+			</Button>
+		</div>
+	);
+}
+
+function formatarResposta(
+	pergunta: Pergunta,
+	valor: Respostas[string] | undefined,
+) {
+	if (valor === undefined) return "";
+	return pergunta.type === "number" && typeof valor === "number"
+		? valor.toLocaleString("pt-BR")
+		: String(valor);
+}
+
+function BalaoBot({ children }: { children: ReactNode }) {
+	return (
+		<Message>
+			<MessageContent className="w-fit max-w-[90%] self-start">
+				<Bubble
+					align="start"
+					variant="default"
+					className="self-start max-w-full"
+				>
+					<BubbleContent className="rounded-2xl rounded-tl-md bg-[#aaff00] px-4 py-3 font-semibold text-[#101010]">
+						{children}
+					</BubbleContent>
+				</Bubble>
+			</MessageContent>
+		</Message>
+	);
+}
+
+function BalaoUsuario({ children }: { children: ReactNode }) {
+	return (
+		<Message align="end" className="items-end">
+			<MessageContent className="w-fit max-w-[86%] self-end">
+				<Bubble align="end" variant="secondary" className="self-end max-w-full">
+					<BubbleContent className="rounded-2xl rounded-tr-md bg-[#7d51fe] px-4 py-3 font-semibold text-white">
+						{children}
+					</BubbleContent>
+				</Bubble>
+			</MessageContent>
+		</Message>
 	);
 }
