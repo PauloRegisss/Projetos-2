@@ -22,4 +22,4 @@ RUN python apps/backend/manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python apps/backend/manage.py migrate --noinput && python apps/backend/manage.py create_superuser_from_env && gunicorn --chdir apps/backend --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS:-3} projeto.wsgi:application"]
+CMD ["sh", "-c", "python apps/backend/manage.py migrate --noinput && python apps/backend/manage.py create_superuser_from_env && gunicorn --chdir apps/backend --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS:-1} --access-logfile - --error-logfile - --capture-output projeto.wsgi:application"]
