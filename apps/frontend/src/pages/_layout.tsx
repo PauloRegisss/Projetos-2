@@ -1,38 +1,37 @@
 import "../styles.css";
-
-import type { ReactNode } from "react";
-import { Toaster } from "@/components/ui/toast";
 import Chatbot from "../components/chatbot";
 import FloatingChatButton from "../components/floating-chat-button";
+import { Toaster } from "@/components/ui/toast";
+import type { ReactNode } from "react";
 
 type RootLayoutProps = { children: ReactNode };
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-	const data = await getData();
-	return (
-		<div className="min-h-screen font-sans">
-			<meta name="description" content={data.description} />
-			<link rel="icon" type="image/png" href={data.icon} />
-			<title>Projeto Nexus</title>
-			<FloatingChatButton />
-			<Chatbot />
-			<Toaster />
-			<main>{children}</main>
-		</div>
-	);
+  const data = await getData();
+  return (
+    <div className="min-h-screen font-sans">
+      <meta name="description" content={data.description} />
+      <link rel="icon" type="image/png" href={data.icon} />
+      <title>Projeto Nexus</title>
+      <FloatingChatButton />
+      <Chatbot />
+      <Toaster />
+      <main>{children}</main>
+    </div>
+  );
 }
 
 const getData = async () => {
-	const data = {
-		description: "Projeto Nexus, venha conhecer!",
-		icon: "/images/favicon.png",
-	};
+  const data = {
+    description: "Projeto Nexus, venha conhecer!",
+    icon: "/images/favicon.png",
+  };
 
-	return data;
+  return data;
 };
 
 export const getConfig = async () => {
-	return {
-		render: "dynamic",
-	} as const;
+  return {
+    render: "dynamic",
+  } as const;
 };
