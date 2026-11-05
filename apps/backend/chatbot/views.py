@@ -6,12 +6,14 @@ from django.views.decorators.http import require_GET, require_POST
 from app.ratelimit import is_rate_limited
 
 from .analise import gerar_analise
+from .assistente import responder, validar_conversa
 from .calculos import calcular_metricas
 from .models import Simulacao
 from .questions import QUESTIONS
 from .validation import validar_respostas
 
 SIMULATION_RATE_LIMIT = 5  # simulações por minuto, por IP
+ASSISTANT_RATE_LIMIT = 20  # mensagens por minuto, por IP
 
 
 def _serializar(simulacao: Simulacao) -> dict:
@@ -66,3 +68,26 @@ def simulacao_detalhe(_request: HttpRequest, simulacao_id):
     except Simulacao.DoesNotExist:
         return JsonResponse({"error": "Simulação não encontrada."}, status=404)
     return JsonResponse(_serializar(simulacao))
+
+
+@require_POST
+def assistente_view(request: HttpRequest):
+    """Responde às dúvidas sobre IoT do chat flutuante."""
+    if is_rate_limited(request, "assistente", ASSISTANT_RATE_LIMIT):
+        return JsonResponse(
+            {"error": "Muitas mensagens enviadas. Tente novamente em instantes."},
+            status=429,
+        )
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "JSON inválido."}, status=400)
+    if not isinstance(data, dict):
+        return JsonResponse({"error": "JSON inválido."}, status=400)
+
+    mensagens, erro = validar_conversa(data)
+    if erro:
+        return JsonResponse({"error": erro}, status=400)
+
+    return JsonResponse({"resposta": responder(mensagens)})
