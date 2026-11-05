@@ -6,12 +6,15 @@
 	"workspaces": [
 		"apps/*"
 	],
+	"engines": {
+		"node": "22.x"
+	},
 	"scripts": {
 		"setup": "bun scripts/setup.ts",
 		"dev": "bun scripts/dev.ts",
-		"frontend:dev": "cd apps/frontend && bun run dev",
+		"frontend:dev": "cd apps/frontend && bun --bun run dev",
 		"frontend:build": "cd apps/frontend && bun run build",
-		"frontend:start": "cd apps/frontend && bun run start",
+		"frontend:start": "cd apps/frontend && bun --bun run start",
 		"backend:dev": "bunx --bun tsx scripts/dev-backend.ts",
 		"build": "bun scripts/build.ts",
 		"start": "bun scripts/start.ts"

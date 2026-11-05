@@ -44,7 +44,7 @@ const processes = [
 	{
 		name: "FRONTEND",
 		command: "bun",
-		args: ["run", "start"],
+		args: ["--bun", "run", "start"],
 		cwd: frontend,
 		env: { ...process.env, PORT: frontendPort },
 	},
