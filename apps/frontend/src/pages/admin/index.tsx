@@ -1,5 +1,7 @@
 import { unstable_getHeaders, unstable_redirect } from "waku/router/server";
 import { api } from "@/auth/api";
+import { Aparecer } from "@/components/movimento/efeitos";
+import Palavras from "@/components/movimento/palavras";
 
 type Contact = {
 	id: number;
@@ -19,7 +21,7 @@ export default async function AdminPage() {
 						Central de contatos
 					</p>
 					<h1 className="mt-3 text-4xl font-black tracking-[-.06em] text-foreground sm:text-5xl">
-						Mensagens recebidas
+						<Palavras texto="Mensagens recebidas" />
 					</h1>
 					<p className="mt-3 max-w-xl text-muted-foreground">
 						Acompanhe os formulários preenchidos pelos visitantes da NEXUS.
@@ -37,9 +39,11 @@ export default async function AdminPage() {
 				</div>
 			) : (
 				<div className="mt-10 grid gap-4 lg:grid-cols-2">
-					{contacts.map((contact) => (
-						<article
+					{contacts.map((contact, indice) => (
+						<Aparecer
+							as="article"
 							key={contact.id}
+							atraso={(indice % 2) * 100}
 							className="rounded-3xl border border-border bg-card p-6 shadow-lg shadow-black/5 dark:border-white/10 dark:shadow-black/10"
 						>
 							<div className="flex items-start justify-between gap-4">
@@ -67,7 +71,7 @@ export default async function AdminPage() {
 							<p className="mt-5 whitespace-pre-wrap border-t border-border pt-5 text-sm leading-relaxed text-card-foreground/80">
 								{contact.message}
 							</p>
-						</article>
+						</Aparecer>
 					))}
 				</div>
 			)}

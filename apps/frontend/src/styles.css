@@ -221,3 +221,275 @@
     -webkit-tap-highlight-color: transparent;
   }
 }
+
+/* Animações do site. Tudo fica desligado para quem pede menos movimento no sistema. */
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes surgir-chat {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.96);
+  }
+}
+
+@keyframes mensagem {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes flutuar {
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes pulso-sinal {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes pulso-ponto {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3.5);
+  }
+}
+
+@keyframes crescer-barra {
+  from {
+    width: 0;
+  }
+}
+
+.ponto-vivo {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entrada {
+    animation: entrada 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .entrada-flutuante {
+    animation:
+      entrada 0.8s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both,
+      flutuar 7s 1.2s ease-in-out infinite;
+  }
+
+  .flutuar {
+    animation: flutuar 4s ease-in-out infinite;
+  }
+
+  .aparecer {
+    animation: aparecer 0.25s ease-out both;
+  }
+
+  .surgir-chat {
+    animation: surgir-chat 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: bottom right;
+  }
+
+  .mensagem {
+    animation: mensagem 0.3s ease-out both;
+  }
+
+  .pulso-sinal {
+    animation: pulso-sinal 2.4s ease-out infinite;
+  }
+
+  .ponto-vivo::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    content: "";
+    animation: pulso-ponto 2s ease-out infinite;
+  }
+}
+
+/* Efeitos da Home e das páginas institucionais. */
+.mascara {
+  display: inline-block;
+  margin-right: -0.08em;
+  margin-bottom: -0.14em;
+  padding-right: 0.08em;
+  padding-bottom: 0.14em;
+  overflow: clip;
+  vertical-align: top;
+}
+
+.palavra {
+  display: inline-block;
+}
+
+.texto-contorno {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+
+.holofote::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    380px circle at var(--holofote-x, 50%) var(--holofote-y, 50%),
+    color-mix(in oklab, var(--primary) 13%, transparent),
+    transparent 70%
+  );
+  content: "";
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.holofote:hover::before {
+  opacity: 1;
+}
+
+.holofote > * {
+  position: relative;
+  z-index: 1;
+}
+
+.profundidade-1 {
+  transform: translateZ(26px);
+}
+
+.profundidade-2 {
+  transform: translateZ(52px);
+}
+
+.onda-escuta {
+  position: absolute;
+  right: 0;
+  bottom: -0.16em;
+  left: 0;
+  height: 0.2em;
+  overflow: hidden;
+  color: var(--primary);
+}
+
+.onda-escuta svg {
+  width: 200%;
+  height: 100%;
+}
+
+@keyframes subir-palavra {
+  from {
+    transform: translateY(112%) rotate(4deg);
+  }
+}
+
+@keyframes correr-onda {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes radar {
+  from {
+    opacity: 0.9;
+    transform: scale(0.12);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes equalizador {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes tracar {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  55%,
+  85% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .palavra {
+    animation: subir-palavra 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    transform-origin: left bottom;
+  }
+
+  .onda-escuta svg {
+    animation: correr-onda 3.5s linear infinite;
+  }
+
+  .radar {
+    animation: radar 2.7s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  }
+
+  .equalizador {
+    animation: equalizador 1.5s ease-in-out infinite;
+  }
+
+  .tracar {
+    stroke-dasharray: 1;
+    animation: tracar 4.5s ease-in-out infinite;
+  }
+}
+
+@keyframes onda-envio {
+  from {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.35, 2.6);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .onda-envio {
+    animation: onda-envio 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+
+  .previa-barra {
+    animation: crescer-barra 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onda-envio {
+    display: none;
+  }
+}

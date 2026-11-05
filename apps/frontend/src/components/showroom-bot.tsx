@@ -4,6 +4,7 @@ import { api } from "@/auth/api";
 import { enviarSimulacao } from "@/chatbot/enviar-simulacao";
 import type { Pergunta, Respostas } from "@/chatbot/types";
 import { validarResposta } from "@/chatbot/validar";
+import CampoDeSinal from "@/components/movimento/campo-de-sinal";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group";
@@ -127,8 +128,12 @@ export default function ShowRoomBot() {
   }
 
   return (
-    <main className="flex h-screen max-h-screen w-full flex-col overflow-hidden bg-[#101010] text-white">
-      <header className="shrink-0 border-b border-white/10 bg-[#101010]/95 px-4 py-4 backdrop-blur sm:px-8">
+    <main className="dark relative flex h-screen max-h-screen w-full flex-col overflow-hidden bg-[#101010] text-white">
+      {/* Cada resposta limpa um pouco do ruído, até o sinal ficar perfeito no fim. */}
+      <div className="absolute inset-0">
+        <CampoDeSinal coerencia={enviando ? 1 : progresso / 100} intensidade={0.55} />
+      </div>
+      <header className="relative z-10 shrink-0 border-b border-white/10 bg-[#101010]/95 px-4 py-4 backdrop-blur sm:px-8">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4">
           <a
             href="/"
@@ -159,7 +164,7 @@ export default function ShowRoomBot() {
       <Separator className="bg-transparent" />
 
       <MessageScrollerProvider autoScroll>
-        <MessageScroller className="min-h-0 flex-1">
+        <MessageScroller className="relative z-10 min-h-0 flex-1">
           <MessageScrollerViewport aria-label="Histórico da simulação">
             <MessageScrollerContent className="mx-auto w-full max-w-3xl gap-5 px-4 py-8 sm:px-8 sm:py-10">
               {estado === "carregando" && <StatusMessage texto="Preparando sua simulação..." carregando />}
@@ -175,7 +180,7 @@ export default function ShowRoomBot() {
                       <BalaoUsuario>{formatarResposta(pergunta, respostas[pergunta.key])}</BalaoUsuario>
                     </div>
                   ))}
-                  {atual && <BalaoBot>{atual.text}</BalaoBot>}
+                  {atual && <BalaoBot key={atual.key}>{atual.text}</BalaoBot>}
                   {terminou && <BalaoBot>Pronto! Revise suas respostas e gere seu comparativo com e sem IoT.</BalaoBot>}
                 </>
               )}
@@ -185,7 +190,7 @@ export default function ShowRoomBot() {
         </MessageScroller>
       </MessageScrollerProvider>
 
-      <footer className="shrink-0 border-t border-white/10 bg-[#101010] px-4 pt-4 pb-5 sm:px-8">
+      <footer className="relative z-10 shrink-0 border-t border-white/10 bg-[#101010] px-4 pt-4 pb-5 sm:px-8">
         <div className="mx-auto w-full max-w-3xl">
           {estado === "pronto" && atual?.type === "choice" && (
             <fieldset className="flex flex-wrap gap-2">
@@ -292,11 +297,11 @@ export default function ShowRoomBot() {
 
 function ConfirmarReinicio({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
   return (
-    <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/60 p-5">
+    <div className="aparecer fixed inset-0 z-30 flex items-center justify-center bg-black/60 p-5">
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#1b1b1b] p-5 shadow-2xl"
+        className="surgir-chat w-full max-w-sm rounded-2xl border border-white/10 bg-[#1b1b1b] p-5 shadow-2xl"
       >
         <h2 className="font-bold">Recomeçar simulação?</h2>
         <p className="mt-2 text-sm text-white/60">Suas respostas atuais serão apagadas.</p>
@@ -340,7 +345,7 @@ function formatarResposta(pergunta: Pergunta, valor: Respostas[string] | undefin
 
 function BalaoBot({ children }: { children: ReactNode }) {
   return (
-    <Message>
+    <Message className="mensagem">
       <MessageContent className="w-fit max-w-[90%] self-start">
         <Bubble align="start" variant="muted" className="self-start max-w-full">
           <BubbleContent className="rounded-2xl rounded-tl-md bg-white/10 px-4 py-3 text-white/80">
@@ -354,7 +359,7 @@ function BalaoBot({ children }: { children: ReactNode }) {
 
 function BalaoUsuario({ children }: { children: ReactNode }) {
   return (
-    <Message align="end" className="items-end">
+    <Message align="end" className="mensagem items-end">
       <MessageContent className="w-fit max-w-[86%] self-end">
         <Bubble align="end" variant="secondary" className="self-end max-w-full">
           <BubbleContent className="rounded-2xl rounded-tr-md bg-[#7d51fe] px-4 py-3 text-white">

@@ -9,7 +9,7 @@ function Progress({ className, ...props }: ProgressPrimitive.Root.Props) {
 			{...props}
 		>
 			<ProgressPrimitive.Track className="size-full">
-				<ProgressPrimitive.Indicator className="size-full bg-primary transition-transform duration-300" />
+				<ProgressPrimitive.Indicator className="size-full bg-primary transition-all duration-300" />
 			</ProgressPrimitive.Track>
 		</ProgressPrimitive.Root>
 	);

@@ -1,6 +1,11 @@
 import { api } from "@/auth/api";
 import type { Metrica, Simulacao } from "@/chatbot/types";
+import ContadorReais from "@/components/contador-reais";
 import Header from "@/components/header";
+import BarraAnimada from "@/components/movimento/barra-animada";
+import CampoDeSinal from "@/components/movimento/campo-de-sinal";
+import { Aparecer, BarraDeProgresso, Holofote, Magnetico, Parallax } from "@/components/movimento/efeitos";
+import Palavras from "@/components/movimento/palavras";
 import { ArrowLeft, ArrowUpRight, Info, RotateCcw, SearchX, Sparkles, TrendingDown } from "lucide-react";
 import { Link } from "waku";
 import type { PageProps } from "waku/router";
@@ -10,9 +15,15 @@ export default async function ShowroomSimulacaoPage({ id }: PageProps<"/showroom
 
   return (
     <>
+      <BarraDeProgresso />
       <Header />
-      <div className="min-h-screen bg-background px-6 pt-32 pb-24 lg:px-10 lg:pt-40">
-        <div className="mx-auto max-w-7xl">
+      <div className="relative min-h-screen overflow-clip bg-background px-6 pt-32 pb-24 lg:px-10 lg:pt-40">
+        {/* Depois da simulação, o sinal já aparece limpo. */}
+        <div className="absolute inset-x-0 top-0 h-160 mask-[linear-gradient(to_bottom,black_55%,transparent)]">
+          <CampoDeSinal coerencia={1} intensidade={0.5} />
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-160 bg-linear-to-r from-background/85 via-background/45 to-transparent" />
+        <div className="relative mx-auto max-w-7xl">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-primary"
@@ -32,34 +43,34 @@ function Resultado({ simulacao }: { simulacao: Simulacao }) {
   return (
     <>
       {/* Título */}
-      <div className="mt-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+      <Parallax velocidade={-50} className="mt-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
         <div>
-          <p className="font-mono text-[.68rem] font-bold tracking-[.14em] text-primary uppercase">Nexus / Showroom</p>
+          <p className="entrada font-mono text-[.68rem] font-bold tracking-[.14em] text-primary uppercase">Nexus / Showroom</p>
           <h1 className="mt-5 text-4xl font-black tracking-[-.06em] text-foreground sm:text-6xl">
-            Sua operação com e sem IoT.
+            <Palavras texto="Sua operação com e sem IoT." atraso={80} />
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+          <p style={{ animationDelay: "420ms" }} className="entrada mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
             Comparativo gerado a partir das respostas da sua empresa
             {setor ? ` (setor: ${setor})` : ""}.
           </p>
         </div>
         {simulacao.estimativa && (
-          <p className="flex max-w-sm items-start gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground dark:border-white/10">
+          <p style={{ animationDelay: "560ms" }} className="entrada flex max-w-sm items-start gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground dark:border-white/10">
             <Info className="mt-0.5 shrink-0 text-secondary" size={18} />
             Os valores são estimativas baseadas em percentuais médios de redução e podem variar conforme a realidade da
             empresa.
           </p>
         )}
-      </div>
+      </Parallax>
 
       {/* Economia */}
-      <div className="mt-12 grid gap-4 sm:grid-cols-2">
+      <div style={{ animationDelay: "420ms" }} className="entrada mt-12 grid gap-4 sm:grid-cols-2">
         <CardEconomia titulo="Economia estimada por mês" valor={simulacao.economia_mensal} destaque />
         <CardEconomia titulo="Economia estimada por ano" valor={simulacao.economia_anual} />
       </div>
 
       {/* Comparativo */}
-      <section className="mt-4 rounded-3xl border border-border bg-card p-5 sm:p-8 dark:border-white/10">
+      <Aparecer as="section" className="mt-4 rounded-3xl border border-border bg-card p-5 sm:p-8 dark:border-white/10">
         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
           <div>
             <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[.18em]">Comparativo Nexus</p>
@@ -76,52 +87,67 @@ function Resultado({ simulacao }: { simulacao: Simulacao }) {
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
-          {simulacao.metricas.map((metrica) => (
-            <CardMetrica key={metrica.key} metrica={metrica} />
+          {simulacao.metricas.map((metrica, indice) => (
+            <Aparecer key={metrica.key} atraso={indice * 90}>
+              <CardMetrica metrica={metrica} />
+            </Aparecer>
           ))}
         </div>
-      </section>
+      </Aparecer>
 
       {/* Análise da IA */}
-      <section className="mt-4 rounded-3xl border border-secondary/30 bg-secondary/5 p-5 sm:p-8">
+      <Aparecer as="section" className="mt-4 rounded-3xl border border-secondary/30 bg-secondary/5 p-5 sm:p-8">
         <div className="flex items-center gap-3">
           <Sparkles className="text-secondary" size={22} />
           <h2 className="text-xl font-bold text-foreground">Análise para o seu negócio</h2>
         </div>
         <p className="mt-4 max-w-3xl whitespace-pre-line leading-relaxed text-foreground/80">{simulacao.analise}</p>
-      </section>
+      </Aparecer>
 
       {/* Chamada para ação */}
-      <div className="mt-4 flex flex-col items-start justify-between gap-6 rounded-3xl bg-foreground p-6 text-background sm:flex-row sm:items-center sm:p-8">
+      <Aparecer className="mt-4 flex flex-col items-start justify-between gap-6 rounded-3xl bg-foreground p-6 text-background sm:flex-row sm:items-center sm:p-8">
         <div>
           <h2 className="text-2xl font-black tracking-[-.04em]">Quer transformar essa estimativa em resultado?</h2>
           <p className="mt-2 text-background/70">Fale com a equipe e entenda como aplicar IoT na sua operação.</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <RotateCcw size={16} /> Refazer simulação
           <Link
-            to="/contato"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95"
+            to="/showroom/new"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-background/25 px-6 text-sm font-bold text-background transition hover:bg-background/10"
           >
-            Falar com a NEXUS <ArrowUpRight size={18} />
+            <RotateCcw size={16} /> Refazer simulação
           </Link>
+          <Magnetico>
+            <Link
+              to="/contato"
+              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95"
+            >
+              Falar com a NEXUS{" "}
+              <ArrowUpRight
+                size={18}
+                className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
+            </Link>
+          </Magnetico>
         </div>
-      </div>
+      </Aparecer>
     </>
   );
 }
 
 function CardEconomia({ titulo, valor, destaque = false }: { titulo: string; valor: number; destaque?: boolean }) {
   return (
-    <div
-      className={`rounded-3xl border p-6 sm:p-8 ${
+    <Holofote
+      className={`relative overflow-hidden rounded-3xl border p-6 sm:p-8 ${
         destaque ? "border-primary/40 bg-primary/10" : "border-border bg-card dark:border-white/10"
       }`}
     >
       <TrendingDown className="text-primary" size={22} />
       <p className="mt-6 text-sm text-muted-foreground">{titulo}</p>
-      <p className="mt-2 text-3xl font-black tracking-[-.04em] text-foreground sm:text-5xl">{formatarReais(valor)}</p>
-    </div>
+      <p className="mt-2 text-3xl font-black tracking-[-.04em] text-foreground sm:text-5xl">
+        <ContadorReais valor={valor} />
+      </p>
+    </Holofote>
   );
 }
 
@@ -132,7 +158,7 @@ function CardMetrica({ metrica }: { metrica: Metrica }) {
   const reducao = sem_iot > 0 ? Math.round((1 - com_iot / sem_iot) * 100) : 0;
 
   return (
-    <article className="rounded-2xl border border-border bg-background/60 p-5 dark:border-white/10">
+    <article className="rounded-2xl border border-border bg-background/60 p-5 transition-colors hover:border-primary/40 dark:border-white/10">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="font-bold text-foreground">{metrica.label}</h3>
@@ -152,13 +178,31 @@ function CardMetrica({ metrica }: { metrica: Metrica }) {
           largura={sem_iot > 0 ? 100 : 0}
           cor="bg-muted-foreground/40"
         />
-        <Barra rotulo="Com IoT" valor={formatarValor(com_iot, metrica.unidade)} largura={largura} cor="bg-primary" />
+        <Barra
+          rotulo="Com IoT"
+          valor={formatarValor(com_iot, metrica.unidade)}
+          largura={largura}
+          cor="bg-primary"
+          atraso={350}
+        />
       </div>
     </article>
   );
 }
 
-function Barra({ rotulo, valor, largura, cor }: { rotulo: string; valor: string; largura: number; cor: string }) {
+function Barra({
+  rotulo,
+  valor,
+  largura,
+  cor,
+  atraso = 100,
+}: {
+  rotulo: string;
+  valor: string;
+  largura: number;
+  cor: string;
+  atraso?: number;
+}) {
   return (
     <div>
       <div className="flex justify-between text-xs">
@@ -166,7 +210,7 @@ function Barra({ rotulo, valor, largura, cor }: { rotulo: string; valor: string;
         <span className="font-mono font-bold text-foreground">{valor}</span>
       </div>
       <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-muted">
-        <div className={`h-full rounded-full ${cor}`} style={{ width: `${largura}%` }} />
+        <BarraAnimada largura={largura} atraso={atraso} className={cor} />
       </div>
     </div>
   );
@@ -174,13 +218,18 @@ function Barra({ rotulo, valor, largura, cor }: { rotulo: string; valor: string;
 
 function NaoEncontrada() {
   return (
-    <div className="mx-auto mt-16 max-w-xl rounded-3xl border border-dashed border-border px-6 py-16 text-center">
+    <div className="entrada mx-auto mt-16 max-w-xl rounded-3xl border border-dashed border-border px-6 py-16 text-center">
       <SearchX className="mx-auto text-muted-foreground" size={36} />
       <h1 className="mt-6 text-2xl font-black text-foreground">Simulação não encontrada.</h1>
       <p className="mt-3 text-muted-foreground">
         O link pode estar incorreto ou a simulação não existe mais. Faça uma nova simulação pelo chat.
       </p>
-      <RotateCcw size={16} /> Refazer simulação
+      <Link
+        to="/showroom/new"
+        className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95"
+      >
+        <RotateCcw size={16} /> Refazer simulação
+      </Link>
     </div>
   );
 }

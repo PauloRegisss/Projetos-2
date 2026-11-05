@@ -14,6 +14,9 @@ import { Link } from "waku";
 import { api } from "@/auth/api";
 import { getCsrfToken } from "@/auth/auth";
 import Header from "@/components/header";
+import CampoDeSinal from "@/components/movimento/campo-de-sinal";
+import { BarraDeProgresso, Holofote, Magnetico } from "@/components/movimento/efeitos";
+import Palavras from "@/components/movimento/palavras";
 import { toast } from "@/components/ui/toast";
 import {
 	Field,
@@ -24,8 +27,18 @@ import {
 } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 
+const CAMPOS = ["nome", "email", "assunto", "mensagem"];
+
+function contarPreenchidos(form: HTMLFormElement) {
+	const dados = new FormData(form);
+	return CAMPOS.filter((campo) => String(dados.get(campo) ?? "").trim()).length;
+}
+
 export default function ContactPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [preenchidos, setPreenchidos] = useState(0);
+	const [transmissoes, setTransmissoes] = useState(0);
+	const [transmitindo, setTransmitindo] = useState(false);
 
 	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -79,6 +92,10 @@ export default function ContactPage() {
 			});
 
 			form.reset();
+			setPreenchidos(0);
+			setTransmissoes((total) => total + 1);
+			setTransmitindo(true);
+			window.setTimeout(() => setTransmitindo(false), 2200);
 		} catch (error) {
 			console.error(error);
 			toast.add({
@@ -92,9 +109,15 @@ export default function ContactPage() {
 
 	return (
 		<>
+			<BarraDeProgresso />
 			<Header />
 
 			<div className="relative min-h-screen overflow-hidden bg-background px-6 pb-24 pt-32 lg:px-10 lg:pt-40">
+				{/* Quanto mais campos preenchidos, mais limpo fica o sinal ao fundo. */}
+				<div className="absolute inset-x-0 top-0 h-[60rem] mask-[linear-gradient(to_bottom,black_70%,transparent)]">
+					<CampoDeSinal coerencia={transmitindo ? 1 : preenchidos / CAMPOS.length} intensidade={0.8} />
+				</div>
+				<div className="pointer-events-none absolute inset-y-0 left-0 w-full bg-linear-to-r from-background/85 via-background/45 to-transparent lg:w-2/3" />
 				<div className="pointer-events-none absolute inset-x-0 top-0 h-190 bg-[radial-gradient(circle_at_75%_20%,rgba(125,81,254,.14),transparent_34%),linear-gradient(rgba(0,0,0,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.035)_1px,transparent_1px)] bg-size-[auto,48px_48px,48px_48px] mask-[linear-gradient(to_bottom,black,transparent)] dark:bg-[radial-gradient(circle_at_75%_20%,rgba(125,81,254,.2),transparent_34%),linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)]" />
 
 				<div className="relative mx-auto max-w-7xl">
@@ -107,22 +130,30 @@ export default function ContactPage() {
 
 					<div className="mt-12 grid gap-14 lg:grid-cols-[.85fr_1.15fr] lg:gap-24">
 						<section className="max-w-xl">
-							<p className="flex items-center gap-3 font-mono text-[.68rem] font-bold leading-none tracking-[.12em] text-primary uppercase">
+							<p className="entrada flex items-center gap-3 font-mono text-[.68rem] font-bold leading-none tracking-[.12em] text-primary uppercase">
 								<span className="h-px w-8 bg-primary" />
 								Fale com a NEXUS
 							</p>
 
 							<h1 className="mt-6 text-5xl font-black leading-[.94] tracking-[-.07em] text-foreground sm:text-7xl">
-								Toda boa decisão começa com uma{" "}
-								<span className="text-primary">conversa.</span>
+								<Palavras texto="Toda boa decisão começa com uma" />
+								<span className="text-primary">
+									<Palavras texto="conversa." atraso={420} />
+								</span>
 							</h1>
 
-							<p className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground">
+							<p
+								style={{ animationDelay: "560ms" }}
+								className="entrada mt-8 max-w-md text-lg leading-relaxed text-muted-foreground"
+							>
 								Quer entender como IoT pode transformar sua operação? Conte um
 								pouco sobre o seu contexto. A gente começa por aí.
 							</p>
 
-							<div className="mt-14 space-y-5 border-t border-border pt-6 dark:border-white/10">
+							<div
+								style={{ animationDelay: "700ms" }}
+								className="entrada mt-14 space-y-5 border-t border-border pt-6 dark:border-white/10"
+							>
 								<p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted-foreground">
 									O que acontece depois
 								</p>
@@ -152,7 +183,8 @@ export default function ContactPage() {
 							</div>
 						</section>
 
-						<section className="rounded-[2rem] border border-border bg-card p-6 shadow-2xl shadow-black/5 sm:p-9 dark:border-white/10 dark:shadow-black/20">
+						<section style={{ animationDelay: "250ms" }} className="entrada">
+							<Holofote className="relative overflow-hidden rounded-[2rem] border border-border bg-card p-6 shadow-2xl shadow-black/5 sm:p-9 dark:border-white/10 dark:shadow-black/20">
 							<div className="mb-8 flex items-start justify-between gap-6">
 								<div>
 									<p className="font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground">
@@ -168,9 +200,31 @@ export default function ContactPage() {
 								</div>
 							</div>
 
+							<div aria-hidden="true" className="mb-7 flex items-center gap-4">
+								<div className="flex h-6 items-end gap-1">
+									{CAMPOS.map((campo, indice) => (
+										<span
+											key={campo}
+											style={{ height: `${(indice + 1) * 25}%` }}
+											className={`w-1.5 rounded-sm transition-colors duration-500 ${
+												indice < preenchidos || transmitindo ? "bg-primary shadow-[0_0_10px_var(--primary)]" : "bg-muted"
+											}`}
+										/>
+									))}
+								</div>
+								<span className="font-mono text-[10px] tracking-[.16em] text-muted-foreground uppercase">
+									{transmitindo
+										? "Sinal transmitido"
+										: preenchidos === CAMPOS.length
+											? "Sinal pronto para enviar"
+											: "Força do sinal"}
+								</span>
+							</div>
+
 							<form
 								className="space-y-6"
 								onSubmit={handleSubmit}
+								onInput={(event) => setPreenchidos(contarPreenchidos(event.currentTarget))}
 								action="/api/contato/"
 							>
 								<FieldSet>
@@ -272,21 +326,39 @@ export default function ContactPage() {
 									</FieldGroup>
 								</FieldSet>
 
-								<button
-									disabled={isSubmitting}
-									type="submit"
-									className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
-								>
-									{isSubmitting && (
-										<Loader2 className="animate-spin" size={18} />
-									)}
-									Enviar mensagem <ArrowUpRight size={18} />
-								</button>
+								<div className="relative">
+									{transmissoes > 0 &&
+										[0, 1, 2].map((onda) => (
+											<span
+												key={`${transmissoes}-${onda}`}
+												aria-hidden="true"
+												style={{ animationDelay: `${onda * 220}ms` }}
+												className="onda-envio pointer-events-none absolute inset-0 rounded-full border-2 border-primary"
+											/>
+										))}
+									<Magnetico forca={0.08} className="w-full">
+										<button
+											disabled={isSubmitting}
+											type="submit"
+											className="group relative inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-extrabold text-primary-foreground transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
+										>
+											{isSubmitting && (
+												<Loader2 className="animate-spin" size={18} />
+											)}
+											Enviar mensagem{" "}
+											<ArrowUpRight
+												size={18}
+												className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+											/>
+										</button>
+									</Magnetico>
+								</div>
 
 								<p className="text-center text-xs leading-relaxed text-muted-foreground">
 									Sem compromisso. Este formulário é apenas uma demonstração.
 								</p>
 							</form>
+							</Holofote>
 						</section>
 					</div>
 				</div>
