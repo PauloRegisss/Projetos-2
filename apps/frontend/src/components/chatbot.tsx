@@ -1,5 +1,6 @@
 "use client";
 
+import { type MensagemAssistente, perguntarAssistente } from "@/chatbot/perguntar-assistente";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group";
@@ -11,18 +12,21 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
-import { ArrowUp, Loader2, X } from "lucide-react";
+import { ArrowUp, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const EVENTO_ABRIR_CHAT = "nexus-chatbot:open";
 
 type Mensagem = { id: number; role: "assistant" | "user"; texto: string };
 
+// Mesmo limite de `MAX_MENSAGENS` no backend (chatbot/assistente.py).
+const LIMITE_HISTORICO = 12;
+
 const SUGESTOES = [
-  "Quero conhecer soluções IoT",
-  "Quero reduzir custos",
-  "Quero automatizar processos",
-  "Ver exemplos do meu setor",
+  "O que é IoT?",
+  "Como o IoT reduz custos?",
+  "O que dá para automatizar com IoT?",
+  "Exemplos de IoT na indústria",
 ];
 
 const MENSAGEM_INICIAL: Mensagem = {
@@ -36,9 +40,8 @@ export default function Chatbot() {
   const [mensagens, setMensagens] = useState<Mensagem[]>([MENSAGEM_INICIAL]);
   const [entrada, setEntrada] = useState("");
   const [digitando, setDigitando] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
   const proximoId = useRef(2);
-  const fimDaConversa = useRef<HTMLDivElement>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const emInicio = mensagens.length === 1;
 
   useEffect(() => {
@@ -51,41 +54,36 @@ export default function Chatbot() {
     return () => {
       window.removeEventListener(EVENTO_ABRIR_CHAT, abrir);
       window.removeEventListener("keydown", fechar);
-      if (timer.current) clearTimeout(timer.current);
     };
   }, []);
 
-  useEffect(() => {
-    fimDaConversa.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-    });
-  }, []);
+  async function pedirResposta(conversa: Mensagem[]) {
+    setDigitando(true);
+    setErro(null);
+    const resultado = await perguntarAssistente(montarHistorico(conversa));
+    setDigitando(false);
+
+    if (!resultado.ok) {
+      setErro(resultado.erro);
+      return;
+    }
+    setMensagens((atuais) => [...atuais, { id: proximoId.current++, role: "assistant", texto: resultado.resposta }]);
+  }
 
   function enviarMensagem(valor = entrada) {
     const texto = valor.trim();
     if (!texto || digitando) return;
 
-    setMensagens((atuais) => [...atuais, { id: proximoId.current++, role: "user", texto }]);
+    const conversa: Mensagem[] = [...mensagens, { id: proximoId.current++, role: "user", texto }];
+    setMensagens(conversa);
     setEntrada("");
-    setDigitando(true);
-    timer.current = setTimeout(() => {
-      setMensagens((atuais) => [
-        ...atuais,
-        {
-          id: proximoId.current++,
-          role: "assistant",
-          texto: responderDuvida(texto),
-        },
-      ]);
-      setDigitando(false);
-    }, 600);
+    void pedirResposta(conversa);
   }
 
   if (!aberto) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-end bg-black/60 sm:p-5 lg:p-8">
+    <div className="aparecer fixed inset-0 z-[60] flex items-end justify-end bg-black/60 sm:p-5 lg:p-8">
       <Button
         variant="ghost"
         aria-label="Fechar assistente"
@@ -96,7 +94,7 @@ export default function Chatbot() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="duvidas-title"
-        className="relative flex h-dvh w-full flex-col overflow-hidden bg-[#101010] text-white shadow-2xl sm:h-[min(720px,calc(100dvh-2.5rem))] sm:max-w-[400px] sm:rounded-[2rem] sm:border sm:border-white/10"
+        className="dark surgir-chat relative flex h-dvh w-full flex-col overflow-hidden bg-[#101010] text-white shadow-2xl sm:h-[min(720px,calc(100dvh-2.5rem))] sm:max-w-[400px] sm:rounded-[2rem] sm:border sm:border-white/10"
       >
         <header className="relative z-10 flex h-[82px] shrink-0 items-center gap-3 border-b border-white/10 bg-[#171717] px-5">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#aaff00] shadow-[0_0_0_6px_rgba(170,255,0,.08),0_0_24px_rgba(170,255,0,.14)]">
@@ -125,7 +123,7 @@ export default function Chatbot() {
               <MessageScrollerContent className="min-h-full gap-4 px-4 py-4">
                 {emInicio && (
                   <div className="flex min-h-[min(38dvh,300px)] flex-col items-center justify-center px-2 text-center">
-                    <div className="flex size-24 items-center justify-center rounded-full bg-[#aaff00] shadow-[0_0_0_8px_rgba(170,255,0,.08),0_0_35px_rgba(170,255,0,.16)]">
+                    <div className="flutuar flex size-24 items-center justify-center rounded-full bg-[#aaff00] shadow-[0_0_0_8px_rgba(170,255,0,.08),0_0_35px_rgba(170,255,0,.16)]">
                       <img src="/images/chat.png" alt="" className="size-[116%] object-contain" />
                     </div>
                     <p className="mt-5 font-mono text-[10px] font-bold uppercase tracking-[.28em] text-[#aaff00]">
@@ -149,15 +147,33 @@ export default function Chatbot() {
                         <div
                           role="status"
                           aria-label="NEXUS está digitando"
-                          className="flex items-center gap-1.5 rounded-2xl rounded-tl-md bg-white/10 px-4 py-4"
+                          className="mensagem flex items-center gap-1.5 rounded-2xl rounded-tl-md bg-white/10 px-4 py-4"
                         >
-                          <Loader2 aria-hidden="true" className="size-4 animate-spin text-[#aaff00]" />
+                          {["0ms", "150ms", "300ms"].map((atraso) => (
+                            <span
+                              key={atraso}
+                              aria-hidden="true"
+                              style={{ animationDelay: atraso }}
+                              className="size-2 animate-bounce rounded-full bg-[#aaff00] motion-reduce:animate-none"
+                            />
+                          ))}
                         </div>
                       </MessageContent>
                     </Message>
                   </MessageScrollerItem>
                 )}
-                <div ref={fimDaConversa} aria-hidden="true" />
+                {erro && !digitando && (
+                  <div role="alert" className="rounded-2xl border border-red-400/30 bg-red-400/10 p-3 text-sm">
+                    <p>{erro}</p>
+                    <Button
+                      variant="link"
+                      onClick={() => void pedirResposta(mensagens)}
+                      className="mt-1 h-auto p-0 text-[#aaff00]"
+                    >
+                      Tentar novamente
+                    </Button>
+                  </div>
+                )}
               </MessageScrollerContent>
             </MessageScrollerViewport>
           </MessageScroller>
@@ -225,7 +241,7 @@ export default function Chatbot() {
             </InputGroup>
           </form>
           <p className="mt-2 text-center text-[10px] tracking-wide text-white/25">
-            Tecnologia NEXUS · Respostas geradas por IA
+            Assistente NEXUS · Confirme decisões importantes com a equipe
           </p>
         </footer>
       </section>
@@ -237,7 +253,7 @@ function MensagemItem({ mensagem }: { mensagem: Mensagem }) {
   return (
     <Message
       align={mensagem.role === "user" ? "end" : "start"}
-      className={mensagem.role === "user" ? "items-end" : "items-start"}
+      className={mensagem.role === "user" ? "mensagem items-end" : "mensagem items-start"}
     >
       <MessageContent
         className={mensagem.role === "user" ? "w-fit max-w-[86%] self-end" : "w-fit max-w-[90%] self-start"}
@@ -250,8 +266,8 @@ function MensagemItem({ mensagem }: { mensagem: Mensagem }) {
           <BubbleContent
             className={
               mensagem.role === "user"
-                ? "rounded-2xl rounded-tr-md bg-[#7d51fe] px-4 py-3 text-white"
-                : "rounded-2xl rounded-tl-md bg-white/10 px-4 py-3 text-white/80"
+                ? "whitespace-pre-line rounded-2xl rounded-tr-md bg-[#7d51fe] px-4 py-3 text-white"
+                : "whitespace-pre-line rounded-2xl rounded-tl-md bg-white/10 px-4 py-3 text-white/80"
             }
           >
             {mensagem.texto}
@@ -262,13 +278,9 @@ function MensagemItem({ mensagem }: { mensagem: Mensagem }) {
   );
 }
 
-function responderDuvida(pergunta: string) {
-  const texto = pergunta.toLocaleLowerCase("pt-BR");
-  if (texto.includes("iot") || texto.includes("internet das coisas"))
-    return "IoT conecta máquinas, sensores e dados para ajudar sua empresa a reduzir desperdícios, antecipar falhas e tomar decisões melhores.";
-  if (texto.includes("custo") || texto.includes("preço") || texto.includes("valor"))
-    return "A NEXUS começa entendendo sua operação. Use o Showroom para receber uma estimativa de economia com e sem IoT.";
-  if (texto.includes("especialista") || texto.includes("contato") || texto.includes("falar"))
-    return "Você pode falar com a equipe NEXUS pela página de contato. Assim, um especialista poderá entender seu cenário com mais detalhes.";
-  return "Posso ajudar com dúvidas sobre IoT, eficiência operacional, custos e o funcionamento do Showroom. Tente perguntar de outro jeito ou escolha uma sugestão acima.";
+// A API recebe uma janela curta da conversa, sempre começando por uma mensagem do usuário.
+function montarHistorico(conversa: Mensagem[]): MensagemAssistente[] {
+  const recentes = conversa.filter((mensagem) => mensagem.id !== MENSAGEM_INICIAL.id).slice(-LIMITE_HISTORICO);
+  const inicio = recentes.findIndex((mensagem) => mensagem.role === "user");
+  return recentes.slice(inicio).map(({ role, texto }) => ({ role, content: texto }));
 }
