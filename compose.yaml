@@ -41,7 +41,7 @@ services:
       context: .
       dockerfile: apps/frontend/Dockerfile
       args:
-        WAKU_PUBLIC_BACKEND_URL: ${WAKU_PUBLIC_BACKEND_URL:-https://nexus-backend.rihosting.com.br}}
+        WAKU_PUBLIC_BACKEND_URL: ${WAKU_PUBLIC_BACKEND_URL:-https://nexus-backend.rihosting.com.br}
     container_name: nexus-frontend
     restart: unless-stopped
     environment:
