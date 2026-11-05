@@ -80,7 +80,7 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 - **Issue/bug tracker:**
 ![Print do Issue/Bug Tracker](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-10-17_213726095.png)
 
-- **Histórias de usuário:** as 6 histórias, com os cenários de validação em BDD (Dado / Quando / Então), estão em **[historias.md](./historias.md)**.
+- **Histórias de usuário:** as histórias, com os cenários de validação em BDD (Dado / Quando / Então), estão em **[historias.md](./historias.md)**.
 
 ### Histórias implementadas
 
@@ -90,7 +90,7 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 
 > **📌 História 2 – Abrir o chatbot**<br>
 > **Como** tomador de decisão do negócio, **quero** abrir a tela do chatbot conversacional, **para** iniciar a avaliação do impacto do IoT na minha empresa.<br>
-> **Critérios de aceitação:** botão flutuante em todas as páginas abre o chat; o chat também abre pelo botão "Começar simulação" do Showroom; fecha pelo botão ou pela tecla Esc.<br>
+> **Critérios de aceitação:** botão flutuante abre o chat, exceto na tela da simulação, que já é um chat; "Começar simulação" leva para a simulação em `/showroom/new`; o chat fecha pelo botão ou pela tecla Esc.<br>
 > **Issues:** #16, #21
 
 > **📌 História 3 – Receber as perguntas**<br>
@@ -112,6 +112,11 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 > **Como** tomador de decisão do negócio, **quero** visualizar o Showroom gerado, **para** comparar as métricas da minha empresa com e sem IoT.<br>
 > **Critérios de aceitação:** economia mensal e anual; comparativo de energia, manutenção, paradas e desperdício; análise e aviso de estimativa; link próprio (`/showroom/<id>`) que pode ser recarregado e compartilhado; mensagem amigável para simulação inexistente.<br>
 > **Issues:** #23
+
+> **📌 História 7 – Tirar dúvidas sobre IoT no chat**<br>
+> **Como** visitante do site, **quero** fazer perguntas sobre IoT para a assistente NEXUS, **para** entender como a tecnologia pode ajudar a minha operação.<br>
+> **Critérios de aceitação:** o chat responde às perguntas sobre IoT usando a IA quando há chave configurada e uma base local de respostas quando não há ou quando a IA falha; assuntos fora do tema são recusados com uma sugestão de pergunta; limite de 20 mensagens por minuto.<br>
+> **Issues:** #25
 
 ### Screencasts
 
@@ -194,7 +199,7 @@ DEBUG=True
 ALLOWED_HOSTS="localhost,127.0.0.1"
 ```
 
-A variável `ANTHROPIC_API_KEY` é opcional: sem ela, o Showroom usa uma análise padrão no lugar da gerada pela IA.
+A variável `ANTHROPIC_API_KEY` é opcional: sem ela, o Showroom usa uma análise padrão no lugar da gerada pela IA, e o chat flutuante responde com uma base local de perguntas sobre IoT.
 
 ### 4. Crie o banco de dados
 
@@ -267,11 +272,13 @@ Para gerar a build apenas do frontend:
 bun run frontend:build
 ```
 
-Para iniciar o frontend após a build:
+Para iniciar o frontend após a build (use `PORT=3000` para manter a mesma porta do ambiente de desenvolvimento):
 
 ```bash
-bun run frontend:start
+PORT=3000 bun run frontend:start
 ```
+
+> Os comandos `bun run` do frontend usam o runtime do Bun, porque as rotas `/api` falham no Node 26. Quem rodar o frontend direto pelo Node deve usar a versão 22, a mesma do deploy (ver `.node-version`).
 
 
 ## 📄 Licença

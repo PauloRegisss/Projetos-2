@@ -10,6 +10,7 @@ Histórias de usuário do Projeto Nexus, com os cenários de validação escrito
 | 4 | [Responder às perguntas](#história-4--responder-às-perguntas) | 3 | ✅ Implementada |
 | 5 | [Gerar o Showroom a partir das respostas](#história-5--gerar-o-showroom-a-partir-das-respostas) | 3 | ✅ Implementada |
 | 6 | [Visualizar o Showroom](#história-6--visualizar-o-showroom) | 3 | ✅ Implementada |
+| 7 | [Tirar dúvidas sobre IoT no chat](#história-7--tirar-dúvidas-sobre-iot-no-chat) | 4 | ✅ Implementada |
 
 ---
 
@@ -56,12 +57,12 @@ Histórias de usuário do Projeto Nexus, com os cenários de validação escrito
 - **Dado** que estou em qualquer página do site
 - **Quando** eu clico no botão flutuante do assistente, no canto da tela
 - **Então** o painel do chat é aberto
-- **E** a primeira pergunta é exibida
+- **E** são exibidas a saudação da NEXUS e as sugestões de pergunta
 
-**Cenário 2: Abrir pela página do Showroom**
+**Cenário 2: Abrir a simulação pela página do Showroom**
 - **Dado** que estou na página `/showroom` sem uma simulação
 - **Quando** eu clico em "Começar simulação"
-- **Então** o painel do chat é aberto
+- **Então** sou levado para o chat da simulação em `/showroom/new`
 
 **Cenário 3: Fechar o chat**
 - **Dado** que o chat está aberto
@@ -79,8 +80,8 @@ Histórias de usuário do Projeto Nexus, com os cenários de validação escrito
 ### Cenários de validação
 
 **Cenário 1: Perguntas carregadas do servidor**
-- **Dado** que abri o chat
-- **Quando** o chat é carregado
+- **Dado** que abri a simulação em `/showroom/new`
+- **Quando** a página é carregada
 - **Então** o sistema busca as perguntas em `GET /chat/perguntas/`
 - **E** mostra a primeira pergunta: "Qual o setor da sua empresa?"
 
@@ -98,8 +99,8 @@ Histórias de usuário do Projeto Nexus, com os cenários de validação escrito
 
 **Cenário 4: Falha ao carregar as perguntas**
 - **Dado** que o servidor está indisponível
-- **Quando** eu abro o chat
-- **Então** é exibida uma mensagem de erro com o botão "Tentar de novo"
+- **Quando** eu abro a simulação
+- **Então** é exibida uma mensagem de erro com o botão "Tentar novamente"
 
 ---
 
@@ -137,7 +138,7 @@ Histórias de usuário do Projeto Nexus, com os cenários de validação escrito
 - **Dado** que já respondi algumas perguntas
 - **Quando** eu clico em "Voltar"
 - **Então** volto para a pergunta anterior e posso alterar a resposta
-- **Quando** eu clico em "Recomeçar"
+- **Quando** eu clico em "Recomeçar" e confirmo
 - **Então** as respostas são apagadas e o chat volta para a primeira pergunta
 
 **Cenário 6: Validação também no servidor**
@@ -210,9 +211,49 @@ Histórias de usuário do Projeto Nexus, com os cenários de validação escrito
 - **Dado** um link de Showroom com um id que não existe
 - **Quando** eu abro o link
 - **Então** é exibida a mensagem de simulação não encontrada
-- **E** o botão "Refazer simulação", que abre o chat
+- **E** o botão "Refazer simulação", que leva para `/showroom/new`
 
 **Cenário 4: Entrar em contato**
 - **Dado** que estou no Showroom
 - **Quando** eu clico na chamada para contato
 - **Então** sou levado para a página `/contato`
+
+---
+
+## História 7 – Tirar dúvidas sobre IoT no chat
+
+**Como** visitante do site,
+**eu quero** fazer perguntas sobre IoT para a assistente NEXUS no chat,
+**para que** eu entenda como a tecnologia pode ajudar a minha operação antes de falar com a equipe.
+
+### Cenários de validação
+
+**Cenário 1: Pergunta sobre IoT**
+- **Dado** que abri o chat pelo botão flutuante
+- **Quando** eu pergunto "O que é MQTT?" ou escolho uma sugestão
+- **Então** o chat responde à pergunta em português
+
+**Cenário 2: Pergunta de continuação**
+- **Dado** que perguntei "O que é MQTT?"
+- **Quando** eu peço "Dê um exemplo"
+- **Então** o chat mostra um exemplo sobre MQTT
+
+**Cenário 3: Assunto fora do tema**
+- **Dado** que abri o chat
+- **Quando** eu pergunto algo sem relação com IoT ou com o site, como uma receita de bolo
+- **Então** o chat informa que só ajuda com IoT e sugere temas de pergunta
+
+**Cenário 4: Funcionamento sem IA**
+- **Dado** que a API de IA não está configurada ou não responde
+- **Quando** eu envio uma pergunta sobre IoT
+- **Então** o chat responde usando a base local de respostas
+
+**Cenário 5: Com a IA configurada**
+- **Dado** que a chave da API de IA está configurada
+- **Quando** eu envio uma pergunta sobre IoT
+- **Então** a resposta é gerada pela IA, considerando a conversa
+
+**Cenário 6: Muitas mensagens seguidas**
+- **Dado** que já enviei 20 mensagens no último minuto
+- **Quando** eu envio mais uma
+- **Então** é exibida a mensagem "Muitas mensagens seguidas." pedindo para aguardar
