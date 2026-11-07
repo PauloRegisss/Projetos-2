@@ -1,0 +1,36 @@
+name: História de usuário
+description: Uma nova funcionalidade, no formato usado no historias.md.
+labels: [enhancement]
+body:
+  - type: input
+    id: como
+    attributes:
+      label: Como
+      placeholder: tomador de decisão do negócio
+    validations:
+      required: true
+  - type: input
+    id: quero
+    attributes:
+      label: Eu quero
+      placeholder: comparar duas simulações
+    validations:
+      required: true
+  - type: input
+    id: para
+    attributes:
+      label: Para que
+      placeholder: eu veja qual cenário traz mais economia
+    validations:
+      required: true
+  - type: textarea
+    id: cenarios
+    attributes:
+      label: Cenários de validação (BDD)
+      value: |
+        **Cenário 1:**
+        - **Dado** que ...
+        - **Quando** ...
+        - **Então** ...
+    validations:
+      required: true
