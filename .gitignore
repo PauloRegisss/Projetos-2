@@ -135,3 +135,9 @@ tools/custom-gcl.exe.hash
 !packages/typescript/vendor/**/*.txt
 !tsc/testdata/submoduleAccepted.txt
 !tsc/testdata/submoduleTriaged.txt
+
+# Python e testes E2E
+.venv/
+__pycache__/
+.pytest_cache/
+e2e/artefatos/
