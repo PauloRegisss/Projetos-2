@@ -1,5 +1,7 @@
 # Projeto Nexus
 
+[![CI/CD](https://github.com/PauloRegisss/Projetos-2/actions/workflows/ci.yml/badge.svg)](https://github.com/PauloRegisss/Projetos-2/actions/workflows/ci.yml)
+
 > Projeto desenvolvido em parceria com a **BzuTech** (empresa de IoT), como parte da disciplina de Projetos do 2º período — CESAR School.
 
 ## 📌 Tema
@@ -90,7 +92,7 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 
 > **📌 História 2 – Abrir o chatbot**<br>
 > **Como** tomador de decisão do negócio, **quero** abrir a tela do chatbot conversacional, **para** iniciar a avaliação do impacto do IoT na minha empresa.<br>
-> **Critérios de aceitação:** botão flutuante abre o chat, exceto na tela da simulação, que já é um chat; "Começar simulação" leva para a simulação em `/showroom/new`; o chat fecha pelo botão ou pela tecla Esc.<br>
+> **Critérios de aceitação:** botão flutuante abre o chat; o chat fecha pelo botão ou pela tecla Esc.<br>
 > **Issues:** #16, #21
 
 > **📌 História 3 – Receber as perguntas**<br>
@@ -98,30 +100,79 @@ https://www.youtube.com/watch?v=sYD3GoiuwKU
 > **Critérios de aceitação:** perguntas carregadas do backend (`GET /chat/perguntas/`); uma pergunta por vez, com barra de progresso; campo adequado a cada tipo (texto, número ou opções).<br>
 > **Issues:** #16, #21
 
-> **📌 História 4 – Responder às perguntas**<br>
-> **Como** usuário da plataforma, **quero** responder às perguntas do chatbot, **para** que a IA receba os dados reais da minha empresa.<br>
-> **Critérios de aceitação:** resposta inválida não avança e mostra o motivo; é possível voltar e recomeçar; o backend valida de novo (`POST /chat/simular/`) e recusa dados inválidos com erro por campo.<br>
-> **Issues:** #17, #21, #22
-
-> **📌 História 5 – Gerar o Showroom**<br>
-> **Como** usuário, **quero** que os dados informados sejam processados e gerem um Showroom Interativo, **para** que o impacto do IoT no meu negócio seja calculado automaticamente.<br>
-> **Critérios de aceitação:** métricas com e sem IoT calculadas no backend; análise personalizada gerada por IA, com texto padrão se a IA estiver indisponível; simulação salva com id próprio; limite de 5 simulações por minuto.<br>
-> **Issues:** #18, #19, #20, #24
-
-> **📌 História 6 – Visualizar o Showroom**<br>
-> **Como** tomador de decisão do negócio, **quero** visualizar o Showroom gerado, **para** comparar as métricas da minha empresa com e sem IoT.<br>
-> **Critérios de aceitação:** economia mensal e anual; comparativo de energia, manutenção, paradas e desperdício; análise e aviso de estimativa; link próprio (`/showroom/<id>`) que pode ser recarregado e compartilhado; mensagem amigável para simulação inexistente.<br>
-> **Issues:** #23
-
-> **📌 História 7 – Tirar dúvidas sobre IoT no chat**<br>
-> **Como** visitante do site, **quero** fazer perguntas sobre IoT para a assistente NEXUS, **para** entender como a tecnologia pode ajudar a minha operação.<br>
-> **Critérios de aceitação:** o chat responde às perguntas sobre IoT usando a IA quando há chave configurada e uma base local de respostas quando não há ou quando a IA falha; assuntos fora do tema são recusados com uma sugestão de pergunta; limite de 20 mensagens por minuto.<br>
-> **Issues:** #25
+As histórias 4, 5 e 6 foram planejadas nesta entrega e concluídas na [Entrega 4](#entregável-4-fds).
 
 ### Screencasts
 
 - **Screencast de explicação do código Django:** https://youtu.be/BoUk_r2xlSQ
 - **Screencast do deploy das histórias de usuário:** _(link do YouTube)_
+
+## Entregável 4 FDS
+
+- **Print da Sprint 4:** _(adicionar o print do quadro da Sprint 4 em `Prints/` e trocar esta linha pela imagem)_
+
+- **Histórias de usuário:** cenários BDD em **[historias.md](./historias.md)**.
+
+- **Como contribuir:** **[CONTRIBUTING.md](./CONTRIBUTING.md)**, com o passo a passo para rodar, testar e enviar mudanças.
+
+### Histórias implementadas
+
+As histórias 4, 5 e 6 foram planejadas na Entrega 3 e concluídas nesta sprint, com o novo visual do chat e do Showroom, a correção do botão "Refazer simulação", o contraste no tema claro e as animações. A história 7 é nova.
+
+> **📌 História 4 – Responder às perguntas**<br>
+> **Como** usuário da plataforma, **quero** responder às perguntas do chatbot, **para** que a IA receba os dados reais da minha empresa.<br>
+> **Critérios de aceitação:** resposta inválida não avança e mostra o motivo; é possível voltar e recomeçar (com confirmação); cada resposta deixa o sinal ao fundo mais limpo; o backend valida de novo (`POST /chat/simular/`) e recusa dados inválidos com erro por campo.<br>
+> **Teste E2E:** [`test_historia_4_responder.py`](./e2e/test_historia_4_responder.py) · **Issues:** #17, #21, #22
+
+> **📌 História 5 – Gerar o Showroom**<br>
+> **Como** usuário, **quero** que os dados informados sejam processados e gerem um Showroom Interativo, **para** que o impacto do IoT no meu negócio seja calculado automaticamente.<br>
+> **Critérios de aceitação:** métricas com e sem IoT calculadas no backend; quem já usa sensores tem ganho menor que quem monitora manualmente; análise gerada por IA, com texto padrão se a IA estiver indisponível; simulação salva com id próprio; limite de 5 simulações por minuto.<br>
+> **Teste E2E:** [`test_historia_5_gerar_showroom.py`](./e2e/test_historia_5_gerar_showroom.py) · **Issues:** #18, #19, #20, #24
+
+> **📌 História 6 – Visualizar o Showroom**<br>
+> **Como** tomador de decisão do negócio, **quero** visualizar o Showroom gerado, **para** comparar as métricas da minha empresa com e sem IoT.<br>
+> **Critérios de aceitação:** economia mensal e anual; comparativo de energia, manutenção, paradas e desperdício; análise e aviso de estimativa; link próprio (`/showroom/<id>`) que pode ser recarregado e compartilhado; simulação inexistente mostra aviso e o botão "Refazer simulação"; chamada para a página de contato.<br>
+> **Teste E2E:** [`test_historia_6_visualizar_showroom.py`](./e2e/test_historia_6_visualizar_showroom.py) · **Issues:** #23
+
+> **📌 História 7 – Tirar dúvidas sobre IoT no chat**<br>
+> **Como** visitante do site, **quero** fazer perguntas sobre IoT para a assistente NEXUS, **para** entender como a tecnologia pode ajudar a minha operação.<br>
+> **Critérios de aceitação:** o chat responde às perguntas sobre IoT usando a IA quando há chave configurada e uma base local de respostas quando não há ou quando a IA falha; pedir "um exemplo" continua o assunto anterior; assuntos fora do tema são recusados com uma sugestão de pergunta; limite de 20 mensagens por minuto.<br>
+> **Teste E2E:** [`test_historia_7_duvidas_iot.py`](./e2e/test_historia_7_duvidas_iot.py) · **Issues:** #25
+
+### Testes de sistema (E2E)
+
+Os cenários BDD de cada história viraram testes automatizados com **Selenium** e **pytest**, na pasta [`e2e/`](./e2e). Eles abrem o Chrome, navegam pelo site como um usuário e conferem o resultado, do navegador até o banco de dados.
+
+| História | Cenários testados |
+|----------|-------------------|
+| 1 a 3 (regressão) | tema lembrado após recarregar; chat abre e fecha com Esc; simulação começa pela primeira pergunta |
+| 4 | resposta válida avança; número inteiro, campo vazio e limite máximo são recusados; voltar e recomeçar |
+| 5 | gera e abre o Showroom; ganho menor com sensores; análise padrão sem IA |
+| 6 | economia, comparativo e análise; link próprio após recarregar; simulação inexistente; ida ao contato |
+| 7 | pergunta sobre IoT; pedido de exemplo continua o assunto; assunto fora do tema é recusado |
+
+```bash
+bun run e2e        # roda os 13 testes, sem abrir janela (é o que o CI usa)
+bun run e2e:demo   # abre o Chrome devagar, com uma legenda para cada cenário
+```
+
+### CI/CD
+
+O pipeline [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) roda em todo push e pull request:
+
+```text
+push / PR ──► Backend: testes Django + migrations ─┐
+          └─► Frontend: tipos + build ─────────────┴─► Testes E2E (Selenium) ─► Deploy no Render
+```
+
+Na `main`, o Render só publica o novo commit depois que todos os checks passam (`autoDeployTrigger: checksPass` no [`render.yaml`](./render.yaml)). Se um teste falhar, a versão no ar continua a anterior.
+
+### Screencasts
+
+- **Deploy das novas histórias:** _(link do YouTube)_
+- **Execução dos testes de sistema (Selenium):** _(link do YouTube)_
+- **CI/CD, do build aos testes e ao deploy:** _(link do YouTube)_
+- **Explicação do código Django das novas histórias:** _(link do YouTube)_
 
 ## 🛠️ Tecnologias
 
@@ -258,6 +309,14 @@ cd apps/backend
 .venv/bin/python manage.py test
 ```
 
+Para rodar os testes de sistema com Selenium (precisa do Google Chrome instalado):
+
+```bash
+bun run e2e
+```
+
+Detalhes e opções em [CONTRIBUTING.md](./CONTRIBUTING.md#6-testes).
+
 ### 🏭 Build
 
 Para gerar a build do projeto:
@@ -280,6 +339,10 @@ PORT=3000 bun run frontend:start
 
 > Os comandos `bun run` do frontend usam o runtime do Bun, porque as rotas `/api` falham no Node 26. Quem rodar o frontend direto pelo Node deve usar a versão 22, a mesma do deploy (ver `.node-version`).
 
+
+## 🤝 Como contribuir
+
+Quer ajudar? O **[CONTRIBUTING.md](./CONTRIBUTING.md)** explica como rodar o projeto, o padrão de branches e commits, como escrever testes e como funciona o CI/CD. Para reportar um problema ou sugerir uma história, abra uma [issue](https://github.com/PauloRegisss/Projetos-2/issues/new/choose).
 
 ## 📄 Licença
 

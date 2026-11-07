@@ -2,15 +2,17 @@
 
 Histórias de usuário do Projeto Nexus, com os cenários de validação escritos em BDD (Dado / Quando / Então).
 
-| # | História | Entrega | Status |
-|---|----------|---------|--------|
-| 1 | [Alternar tema claro/escuro](#história-1--alternar-tema-claroescuro) | 3 | ✅ Implementada |
-| 2 | [Abrir o chatbot](#história-2--abrir-o-chatbot) | 3 | ✅ Implementada |
-| 3 | [Receber as perguntas do chatbot](#história-3--receber-as-perguntas-do-chatbot) | 3 | ✅ Implementada |
-| 4 | [Responder às perguntas](#história-4--responder-às-perguntas) | 3 | ✅ Implementada |
-| 5 | [Gerar o Showroom a partir das respostas](#história-5--gerar-o-showroom-a-partir-das-respostas) | 3 | ✅ Implementada |
-| 6 | [Visualizar o Showroom](#história-6--visualizar-o-showroom) | 3 | ✅ Implementada |
-| 7 | [Tirar dúvidas sobre IoT no chat](#história-7--tirar-dúvidas-sobre-iot-no-chat) | 4 | ✅ Implementada |
+| # | História | Entrega | Status | Teste de sistema (E2E) |
+|---|----------|---------|--------|------------------------|
+| 1 | [Alternar tema claro/escuro](#história-1--alternar-tema-claroescuro) | 3 | ✅ Implementada | [test_historia_1_a_3.py](./e2e/test_historia_1_a_3.py) |
+| 2 | [Abrir o chatbot](#história-2--abrir-o-chatbot) | 3 | ✅ Implementada | [test_historia_1_a_3.py](./e2e/test_historia_1_a_3.py) |
+| 3 | [Receber as perguntas do chatbot](#história-3--receber-as-perguntas-do-chatbot) | 3 | ✅ Implementada | [test_historia_1_a_3.py](./e2e/test_historia_1_a_3.py) |
+| 4 | [Responder às perguntas](#história-4--responder-às-perguntas) | 4 | ✅ Implementada | [test_historia_4_responder.py](./e2e/test_historia_4_responder.py) |
+| 5 | [Gerar o Showroom a partir das respostas](#história-5--gerar-o-showroom-a-partir-das-respostas) | 4 | ✅ Implementada | [test_historia_5_gerar_showroom.py](./e2e/test_historia_5_gerar_showroom.py) |
+| 6 | [Visualizar o Showroom](#história-6--visualizar-o-showroom) | 4 | ✅ Implementada | [test_historia_6_visualizar_showroom.py](./e2e/test_historia_6_visualizar_showroom.py) |
+| 7 | [Tirar dúvidas sobre IoT no chat](#história-7--tirar-dúvidas-sobre-iot-no-chat) | 4 | ✅ Implementada | [test_historia_7_duvidas_iot.py](./e2e/test_historia_7_duvidas_iot.py) |
+
+Os cenários que dependem só do servidor (validação direta da API, mesmas respostas gerando o mesmo resultado e limite de requisições) são cobertos pelos testes do Django em [`apps/backend/chatbot/tests.py`](./apps/backend/chatbot/tests.py).
 
 ---
 
