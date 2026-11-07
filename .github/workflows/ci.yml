@@ -1,0 +1,112 @@
+# CI/CD do Projeto Nexus.
+# Cada push e pull request roda os testes do backend, o typecheck e o build do frontend e os
+# testes de sistema com Selenium. Na main, o Render só publica o commit depois que todos esses
+# checks passam (autoDeployTrigger: checksPass, no render.yaml).
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  backend:
+    name: Backend · testes Django
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: chave-usada-somente-no-ci
+      DEBUG: "True"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: apps/backend/requirements.txt
+      - name: Instalar dependências
+        run: pip install -r apps/backend/requirements.txt
+      - name: Verificar migrations pendentes
+        working-directory: apps/backend
+        run: python manage.py makemigrations --check --dry-run
+      - name: Rodar testes
+        working-directory: apps/backend
+        run: python manage.py test
+
+  frontend:
+    name: Frontend · tipos e build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Instalar dependências
+        run: bun install --frozen-lockfile
+      - name: Checar tipos
+        working-directory: apps/frontend
+        run: bunx tsc --noEmit
+      - name: Gerar build
+        run: bun run frontend:build
+
+  e2e:
+    name: Testes de sistema · Selenium
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_BIN: python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            apps/backend/requirements.txt
+            e2e/requirements.txt
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Instalar dependências
+        run: |
+          bun install --frozen-lockfile
+          pip install -r apps/backend/requirements.txt -r e2e/requirements.txt
+      - name: Rodar testes E2E
+        run: bun run e2e
+      - name: Guardar prints das falhas
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prints-e2e
+          path: e2e/artefatos/
+          if-no-files-found: ignore
+
+  deploy:
+    name: Deploy · Render
+    needs: [e2e]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Liberar o deploy
+        run: |
+          {
+            echo "## Pronto para produção"
+            echo ""
+            echo "Backend, frontend e testes E2E passaram no commit \`${GITHUB_SHA::7}\`."
+            echo "O Render publica este commit automaticamente porque os checks passaram."
+            echo ""
+            echo "- Frontend: https://nexus-frontend-5ip8.onrender.com"
+            echo "- Backend: https://nexus-backend-d6i9.onrender.com/health/"
+          } >> "$GITHUB_STEP_SUMMARY"

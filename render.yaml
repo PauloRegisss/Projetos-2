@@ -3,6 +3,8 @@ services:
       name: nexus-backend
       runtime: python
       plan: free
+      # Só publica depois que o GitHub Actions passar (ver .github/workflows/ci.yml).
+      autoDeployTrigger: checksPass
       healthCheckPath: /health/
       buildCommand: pip install -r apps/backend/requirements.txt && python apps/backend/manage.py collectstatic --noinput
       startCommand: python apps/backend/manage.py migrate --noinput && python apps/backend/manage.py create_superuser_from_env && gunicorn --chdir apps/backend --bind 0.0.0.0:$PORT --workers ${GUNICORN_WORKERS:-1} --threads 4 --access-logfile - --error-logfile - --capture-output projeto.wsgi:application
@@ -40,6 +42,7 @@ services:
       name: nexus-frontend
       runtime: node
       plan: free
+      autoDeployTrigger: checksPass
       buildCommand: npm install && npm run --workspace apps/frontend build
       startCommand: npm run --workspace apps/frontend start
       envVars:
