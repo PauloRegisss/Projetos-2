@@ -109,7 +109,7 @@ As histórias 4, 5 e 6 foram planejadas nesta entrega e concluídas na [Entrega 
 
 ## Entregável 4 FDS
 
-- **Print da Sprint 4:** _(adicionar o print do quadro da Sprint 4 em `Prints/` e trocar esta linha pela imagem)_
+- **Print da Sprint 4:** https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-11-08_215917767.png**
 
 - **Histórias de usuário:** cenários BDD em **[historias.md](./historias.md)**.
 
