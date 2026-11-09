@@ -112,6 +112,9 @@ As histórias 4, 5 e 6 foram planejadas nesta entrega e concluídas na [Entrega 
 - **Print da Sprint:**
 - ![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-11-08_215917767.png)
 
+- **Print do Backlog:**
+![Backlog Image](https://github.com/PauloRegisss/Projetos-2/blob/main/Prints/imagem_2026-11-08_220426367.png)
+
 - **Histórias de usuário:** cenários BDD em **[historias.md](./historias.md)**.
 
 - **Como contribuir:** **[CONTRIBUTING.md](./CONTRIBUTING.md)**, com o passo a passo para rodar, testar e enviar mudanças.
