@@ -12,14 +12,30 @@ FATOR_MONITORAMENTO = {
 HORAS_POR_MES = 744
 
 METRICAS = [
-    {"key": "energia", "label": "Gasto com energia", "unidade": "R$/mês",
-     "reducao": REDUCAO_ENERGIA},
-    {"key": "manutencao", "label": "Custo de manutenção", "unidade": "R$/mês",
-     "reducao": REDUCAO_MANUTENCAO},
-    {"key": "paradas", "label": "Horas de parada", "unidade": "h/mês",
-     "reducao": REDUCAO_PARADAS},
-    {"key": "desperdicio", "label": "Desperdício", "unidade": "%",
-     "reducao": REDUCAO_DESPERDICIO},
+    {
+        "key": "energia",
+        "label": "Gasto com energia",
+        "unidade": "R$/mês",
+        "reducao": REDUCAO_ENERGIA,
+    },
+    {
+        "key": "manutencao",
+        "label": "Custo de manutenção",
+        "unidade": "R$/mês",
+        "reducao": REDUCAO_MANUTENCAO,
+    },
+    {
+        "key": "paradas",
+        "label": "Horas de parada",
+        "unidade": "h/mês",
+        "reducao": REDUCAO_PARADAS,
+    },
+    {
+        "key": "desperdicio",
+        "label": "Desperdício",
+        "unidade": "%",
+        "reducao": REDUCAO_DESPERDICIO,
+    },
 ]
 
 
@@ -40,13 +56,15 @@ def calcular_metricas(respostas: dict) -> dict:
         sem_iot = respostas[m["key"]]
         com_iot = _com_iot(sem_iot, m["reducao"], fator)
         ganho[m["key"]] = sem_iot - com_iot
-        metricas.append({
-            "key": m["key"],
-            "label": m["label"],
-            "unidade": m["unidade"],
-            "sem_iot": sem_iot,
-            "com_iot": com_iot,
-        })
+        metricas.append(
+            {
+                "key": m["key"],
+                "label": m["label"],
+                "unidade": m["unidade"],
+                "sem_iot": sem_iot,
+                "com_iot": com_iot,
+            }
+        )
 
     faturamento = respostas["faturamento"]
     economia_mensal = round(

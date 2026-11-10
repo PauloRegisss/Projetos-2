@@ -40,7 +40,6 @@ def simular_view(request: HttpRequest):
             {"error": "Muitas simulações enviadas. Tente novamente em instantes."},
             status=429,
         )
-
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
@@ -56,7 +55,7 @@ def simular_view(request: HttpRequest):
 
     metricas = calcular_metricas(respostas)
     resultado = {**metricas, "analise": gerar_analise(respostas, metricas)}
-    simulacao = Simulacao.objects.create(respostas=respostas, resultado=resultado)
+    simulacao = Simulacao.objects.create(respostas=respostas, resultado=resultado)  # ty: ignore[unresolved-attribute]
     return JsonResponse(_serializar(simulacao))
 
 

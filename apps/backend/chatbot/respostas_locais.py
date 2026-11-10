@@ -39,7 +39,14 @@ TEMAS = [
     },
     {
         "nome": "sensores",
-        "termos": ("sensor", "atuador", "telemetria", "dispositivo", "medir", "medicao"),
+        "termos": (
+            "sensor",
+            "atuador",
+            "telemetria",
+            "dispositivo",
+            "medir",
+            "medicao",
+        ),
         "resposta": (
             "Sensores medem algo do mundo físico, como temperatura, vibração, umidade ou "
             "consumo de energia, e transformam essa medida em dados. Atuadores fazem o caminho "
@@ -84,8 +91,16 @@ TEMAS = [
     {
         "nome": "conectividade",
         "termos": (
-            "conectividade", "wifi", "wi fi", "bluetooth", "zigbee", "nb iot", "4g", "5g",
-            "rede", "internet no campo",
+            "conectividade",
+            "wifi",
+            "wi fi",
+            "bluetooth",
+            "zigbee",
+            "nb iot",
+            "4g",
+            "5g",
+            "rede",
+            "internet no campo",
         ),
         "resposta": (
             "A melhor conexão depende da distância, do consumo de energia e do volume de dados. "
@@ -115,8 +130,15 @@ TEMAS = [
     {
         "nome": "seguranca",
         "termos": (
-            "seguranca", "hacker", "ataque", "invasao", "senha", "vulnerab", "privacidade",
-            "lgpd", "criptograf",
+            "seguranca",
+            "hacker",
+            "ataque",
+            "invasao",
+            "senha",
+            "vulnerab",
+            "privacidade",
+            "lgpd",
+            "criptograf",
         ),
         "resposta": (
             "Em IoT, as principais medidas de segurança são trocar senhas padrão, usar "
@@ -146,8 +168,18 @@ TEMAS = [
     {
         "nome": "custos",
         "termos": (
-            "cust", "preco", "economi", "reduz", "retorno", "investimento", "roi", "vale a pena",
-            "caro", "barato", "desperdicio", "gasto",
+            "cust",
+            "preco",
+            "economi",
+            "reduz",
+            "retorno",
+            "investimento",
+            "roi",
+            "vale a pena",
+            "caro",
+            "barato",
+            "desperdicio",
+            "gasto",
         ),
         "resposta": (
             "O IoT reduz custos ao mostrar onde há perda: energia gasta sem necessidade, paradas "
@@ -177,7 +209,13 @@ TEMAS = [
     {
         "nome": "implantacao",
         "termos": (
-            "implant", "comecar", "por onde", "primeiro passo", "instalar", "adotar", "piloto",
+            "implant",
+            "comecar",
+            "por onde",
+            "primeiro passo",
+            "instalar",
+            "adotar",
+            "piloto",
             "quanto tempo",
         ),
         "resposta": (
@@ -193,7 +231,15 @@ TEMAS = [
     },
     {
         "nome": "dados",
-        "termos": ("dados", "dashboard", "painel", "monitoramento", "monitorar", "alerta", "tempo real"),
+        "termos": (
+            "dados",
+            "dashboard",
+            "painel",
+            "monitoramento",
+            "monitorar",
+            "alerta",
+            "tempo real",
+        ),
         "resposta": (
             "O monitoramento com IoT reúne os dados dos sensores em um painel, com o estado atual "
             "e o histórico da operação. Com isso, a equipe recebe alertas quando algo sai do "
@@ -219,7 +265,15 @@ TEMAS = [
     },
     {
         "nome": "agro",
-        "termos": ("agro", "agricultura", "fazenda", "lavoura", "irrigacao", "plantacao", "rural"),
+        "termos": (
+            "agro",
+            "agricultura",
+            "fazenda",
+            "lavoura",
+            "irrigacao",
+            "plantacao",
+            "rural",
+        ),
         "resposta": (
             "No agronegócio, o IoT ajuda a acompanhar solo, clima, irrigação, máquinas e "
             "armazenagem. Com esses dados, o produtor pode usar melhor a água e os insumos e "
@@ -233,8 +287,16 @@ TEMAS = [
     {
         "nome": "logistica",
         "termos": (
-            "logistica", "frota", "caminh", "transporte", "rastre", "veiculo", "frio", "frigor",
-            "armazem", "estoque",
+            "logistica",
+            "frota",
+            "caminh",
+            "transporte",
+            "rastre",
+            "veiculo",
+            "frio",
+            "frigor",
+            "armazem",
+            "estoque",
         ),
         "resposta": (
             "Na logística, o IoT permite rastrear veículos e cargas, acompanhar o consumo de "
@@ -262,9 +324,20 @@ TEMAS = [
     {
         "nome": "outros_setores",
         "termos": (
-            "hospital", "saude", "varejo", "loja", "supermercado", "predio", "condominio",
-            "casa inteligente", "casas inteligentes", "cidade inteligente", "cidades inteligentes",
-            "setor", "exemplos de uso", "casos de uso",
+            "hospital",
+            "saude",
+            "varejo",
+            "loja",
+            "supermercado",
+            "predio",
+            "condominio",
+            "casa inteligente",
+            "casas inteligentes",
+            "cidade inteligente",
+            "cidades inteligentes",
+            "setor",
+            "exemplos de uso",
+            "casos de uso",
         ),
         "resposta": (
             "O IoT aparece em muitos setores. Na saúde, monitora equipamentos e a temperatura de "
@@ -292,7 +365,14 @@ TEMAS = [
     },
     {
         "nome": "contato",
-        "termos": ("contato", "especialista", "falar com", "equipe", "orcamento", "atendente"),
+        "termos": (
+            "contato",
+            "especialista",
+            "falar com",
+            "equipe",
+            "orcamento",
+            "atendente",
+        ),
         "resposta": (
             "Para falar com a equipe, use a página /contato. Sua mensagem fica disponível para a "
             "equipe, que pode entender o seu cenário com mais detalhes."
@@ -304,7 +384,14 @@ TEMAS = [
     },
     {
         "nome": "nexus",
-        "termos": ("nexus", "bzutech", "quem e voce", "quem sao voces", "o que voce faz", "projeto"),
+        "termos": (
+            "nexus",
+            "bzutech",
+            "quem e voce",
+            "quem sao voces",
+            "o que voce faz",
+            "projeto",
+        ),
         "resposta": (
             "A NEXUS é um projeto criado em parceria com a BzuTech, empresa de IoT, para mostrar às "
             "empresas o valor de coletar dados da operação. Aqui você pode tirar dúvidas sobre IoT "

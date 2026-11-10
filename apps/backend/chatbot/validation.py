@@ -1,17 +1,17 @@
 import math
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 from .questions import QUESTIONS
 
-Erros = Dict[str, List[Dict[str, str]]]
+Erros = dict[str, list[dict[str, str]]]
 
 
-def _erro(message: str, code: str) -> List[Dict[str, str]]:
+def _erro(message: str, code: str) -> list[dict[str, str]]:
     # Mesmo formato de `form.errors.get_json_data()`, usado no /contato/.
     return [{"message": message, "code": code}]
 
 
-def _validar_numero(question: Dict[str, Any], value: Any) -> Tuple[Any, Any]:
+def _validar_numero(question: dict[str, Any], value: Any) -> tuple[Any, Any]:
     # `bool` é subclasse de `int` em Python, então precisa ser recusado à parte.
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         return None, _erro("Informe um número.", "invalid")
@@ -27,7 +27,7 @@ def _validar_numero(question: Dict[str, Any], value: Any) -> Tuple[Any, Any]:
     return value, None
 
 
-def _validar_texto(question: Dict[str, Any], value: Any) -> Tuple[Any, Any]:
+def _validar_texto(question: dict[str, Any], value: Any) -> tuple[Any, Any]:
     if not isinstance(value, str) or not value.strip():
         return None, _erro("Este campo é obrigatório.", "required")
     value = value.strip()
@@ -38,7 +38,7 @@ def _validar_texto(question: Dict[str, Any], value: Any) -> Tuple[Any, Any]:
     return value, None
 
 
-def _validar_opcao(question: Dict[str, Any], value: Any) -> Tuple[Any, Any]:
+def _validar_opcao(question: dict[str, Any], value: Any) -> tuple[Any, Any]:
     if value not in question["choices"]:
         return None, _erro("Escolha uma das opções.", "invalid_choice")
     return value, None
@@ -51,24 +51,24 @@ VALIDADORES = {
 }
 
 
-def validar_respostas(data: Dict[str, Any]) -> Tuple[Dict[str, Any], Erros]:
+def validar_respostas(data: dict[str, Any]) -> tuple[dict[str, Any], Erros]:
     """Valida as respostas do chat contra `QUESTIONS`.
 
     Retorna as respostas limpas (só as chaves conhecidas) e os erros por campo.
     """
-    respostas: Dict[str, Any] = {}
+    respostas: dict[str, Any] = {}
     erros: Erros = {}
 
     for question in QUESTIONS:
         key = question["key"]
-        if key not in data or data[key] is None:
-            erros[key] = _erro("Este campo é obrigatório.", "required")
+        if key not in data or data[key] is None:  # ty: ignore[invalid-argument-type]
+            erros[key] = _erro("Este campo é obrigatório.", "required")  # ty: ignore[invalid-assignment]
             continue
 
-        value, erro = VALIDADORES[question["type"]](question, data[key])
+        value, erro = VALIDADORES[question["type"]](question, data[key])  # ty: ignore[invalid-argument-type]
         if erro:
-            erros[key] = erro
+            erros[key] = erro  # ty: ignore[invalid-assignment]
         else:
-            respostas[key] = value
+            respostas[key] = value  # ty: ignore[invalid-assignment]
 
     return respostas, erros

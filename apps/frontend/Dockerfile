@@ -9,7 +9,7 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-ARG WAKU_PUBLIC_BACKEND_URL=http://localhost:8000
+ARG WAKU_PUBLIC_BACKEND_URL=http://backend:8000
 ENV WAKU_PUBLIC_BACKEND_URL=${WAKU_PUBLIC_BACKEND_URL}
 
 RUN bun run --filter './apps/frontend' build
@@ -18,11 +18,14 @@ FROM oven/bun:1-slim AS runtime
 
 ENV NODE_ENV=production \
     PORT=3000 \
-    HOST=0.0.0.0
+    HOST=0.0.0.0 \
+    WAKU_PUBLIC_BACKEND_URL=http://backend:8000
 
 WORKDIR /app
 
-COPY --from=build /app /app
+COPY --from=build --chown=bun:bun /app /app
+
+USER bun
 
 EXPOSE 3000
 

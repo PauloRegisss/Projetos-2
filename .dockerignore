@@ -1,0 +1,30 @@
+# Segredos e configuração local
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# Controle de versão e ferramentas locais
+.git
+.github
+.vscode
+.idea
+.DS_Store
+
+# Dependências e ambientes Python/Node locais
+**/node_modules
+**/.venv
+**/venv
+**/__pycache__
+**/*.py[cod]
+
+# Saídas geradas localmente; cada imagem cria seus próprios artefatos
+apps/frontend/dist
+apps/backend/staticfiles
+apps/backend/db.sqlite3
+coverage
+.cache
+e2e/artefatos
+
+# Arquivos de log
+*.log
