@@ -88,25 +88,39 @@ class Site:
     def existe(self, seletor):
         return bool(self.driver.find_elements(By.CSS_SELECTOR, seletor))
 
-    # ----- interação -----------------------------------------------------------
     def clicar(self, seletor=None, texto=None, dentro="body"):
         """Clica num elemento por seletor ou pelo texto exato. Tenta de novo enquanto a página hidrata."""
+        motivo = {"ultimo": "elemento não encontrado"}
 
         def tentar(_):
             try:
                 alvo = self._achar(seletor, texto, dentro)
                 if alvo is None:
+                    motivo["ultimo"] = "elemento não encontrado"
                     return False
-                self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'})", alvo)
-                alvo.click()
+                self.driver.execute_script(
+                    "arguments[0].scrollIntoView({block: 'center', behavior: 'instant'})", alvo
+                )
+                try:
+                    alvo.click()
+                except ElementClickInterceptedException:
+                    # algo cobre o elemento: clica direto pelo DOM
+                    self.driver.execute_script("arguments[0].click()", alvo)
                 return True
-            except (ElementClickInterceptedException, StaleElementReferenceException):
+            except StaleElementReferenceException:
+                motivo["ultimo"] = "elemento recriado pela página"
                 return False
 
         try:
             self.esperar(tentar)
         except TimeoutException as erro:
-            raise AssertionError(f"Não foi possível clicar em {texto or seletor}.") from erro
+            pagina = self.driver.execute_script(
+                "return [location.pathname, Math.round(scrollY), document.body.scrollHeight]"
+            )
+            raise AssertionError(
+                f"Não foi possível clicar em {texto or seletor} "
+                f"(último motivo: {motivo['ultimo']}; página, rolagem e altura: {pagina})."
+            ) from erro
         self.pausar()
 
     def clicar_ate(self, seletor, condicao, texto=None):
