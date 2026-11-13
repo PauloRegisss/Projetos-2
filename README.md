@@ -10,7 +10,7 @@ Educar empresas sobre a importância de coletar dados operacionais por meio de I
 
 ## 🌐 Acesse o Projeto
 
-🔗 **Link do deploy:** [nexus-frontend-5ip8.onrender.com](https://nexus-frontend-5ip8.onrender.com/)
+🔗 **Link do deploy:** [https://nexus-frontend.rihosting.com.br/](https://nexus-frontend.rihosting.com.br/)
 
 ## 📝 Descrição do Projeto
 
@@ -173,10 +173,10 @@ Na `main`, o Render só publica o novo commit depois que todos os checks passam 
 
 ### Screencasts
 
-- **Deploy das novas histórias:** _(link do YouTube)_
+- **Deploy das novas histórias:** [https://youtu.be/HQnkRT_HJfQ?is=zjaZDiJr8kxW2zdg](https://youtu.be/HQnkRT_HJfQ?is=zjaZDiJr8kxW2zdg)
 - **Execução dos testes de sistema (Selenium):** _(link do YouTube)_
 - **CI/CD, do build aos testes e ao deploy:** _(link do YouTube)_
-- **Explicação do código Django das novas histórias:** _(link do YouTube)_
+- **Explicação do código Django das novas histórias:** [https://www.youtube.com/watch?v=qsbaunRax94](https://www.youtube.com/watch?v=qsbaunRax94)
 
 ## 🛠️ Tecnologias
 
