@@ -174,8 +174,7 @@ Na `main`, o Render só publica o novo commit depois que todos os checks passam 
 ### Screencasts
 
 - **Deploy das novas histórias:** [https://youtu.be/HQnkRT_HJfQ?is=zjaZDiJr8kxW2zdg](https://youtu.be/HQnkRT_HJfQ?is=zjaZDiJr8kxW2zdg)
-- **Execução dos testes de sistema (Selenium):** _(link do YouTube)_
-- **CI/CD, do build aos testes e ao deploy:** _(link do YouTube)_
+- **Execução dos testes de sistema (Selenium) / CI/CD, do build aos testes e ao deploy:** [https://www.youtube.com/watch?v=p8O7-11exMw](https://www.youtube.com/watch?v=p8O7-11exMw)
 - **Explicação do código Django das novas histórias:** [https://www.youtube.com/watch?v=qsbaunRax94](https://www.youtube.com/watch?v=qsbaunRax94)
 
 ## 🛠️ Tecnologias
