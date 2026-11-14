@@ -67,7 +67,7 @@ export default function AboutPage() {
 						>
 							A NEXUS é um projeto de IoT que mostra como máquinas, ambientes e
 							sistemas podem trabalhar juntos para tornar operações mais
-							inteligentes, seguras, eficientes e conectadas.
+							inteligentes, seguras, eficientes e conectadas
 						</p>
 					</Parallax>
 				</section>
